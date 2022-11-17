@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import 'antd/dist/antd.css';
 import logo from '../../Assets/logo.png';
 import * as SC from './StyledMainPageComponents';
@@ -12,111 +12,86 @@ import useAuth from "../../Hooks/useAuth";
 import { useMutation } from '@tanstack/react-query';
 import { ThreeDots } from 'react-loader-spinner';
 import { Color } from '../../Constants/Constant';
-import {ColorRing} from 'react-loader-spinner';
-
+import { ColorRing } from 'react-loader-spinner';
+import { groupInfo } from '../../API/api'
 const { Search } = Input;
 const { Meta } = Card;
 
 
 
 export default function MainPage() {
-
-    const [title, setTitle] = useState("My Groups");
     const [showAddButton, setShowAddButton] = useState(true);
     const [visible, setVisible] = useState(false);
     const [form] = Form.useForm();
+    const [data, setData] = useState([]);
+    const [rawData, setRawData] = useState([]);
     const { auth } = useAuth();
+    const [search, setSearch] = useState("");
+    const [filter, setFilter] = useState("My Groups");
+
+    // const fetchData = async () => {
+    //     try {
+    //         const response = await groupInfo();
+    //         setData(response.data);
+    //         console.log("after", data);
+    //         // filterAndSearchData();
+    //     } catch (error) {
+    //         console.error(error.message);
+    //     }
+
+
+    // }
+
+    const filterAndSearchData = (allData) => {
+        console.log("alldata", allData);
+        let filteredData = []
+        for (let i = 0; i < allData.length; i++) {
+            if (allData[i].groupName.toString().includes(search)) {
+                if ((filter === "My Groups" && allData[i].creatorID === auth.user._id) || (filter !== "My Groups" && allData[i].creatorID !== auth.user._id)) {
+                    filteredData.push(allData[i])
+                }
+            }
+        }
+        console.log("filterdata", filteredData);
+        setData(filteredData);
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await groupInfo();
+                setRawData(response.data);
+                console.log("after", data);
+                // filterAndSearchData();
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+        fetchData();
+    }, [])
+
+    useEffect(() => {
+        filterAndSearchData(rawData);
+    }, [search, filter, rawData]);
+    
 
     // handle search
-    const onSearch = (value) => console.log(value);
+    const onSearch = (value) => setSearch(value);
     // const onClick = () => console.log('click');
 
     // handle filter
     const handleChange = (value) => {
         console.log(`selected ${value}`);
         if (value === 'self') {
-            setTitle("My Groups");
+            setFilter("My Groups");
             setShowAddButton(true);
         } else {
-            setTitle("Other Groups");
+            setFilter("Other Groups");
             setShowAddButton(false);
         }
     };
 
-    const data = [
-        {
-            title: 'Title 1',
-        },
-        {
-            title: 'Title 2',
-        },
-        {
-            title: 'Title 3',
-        },
-        {
-            title: 'Title 4',
-        },
-        {
-            title: 'Title 5',
-        },
-        {
-            title: 'Title 6',
-        },
-        {
-            title: 'Title 1',
-        },
-        {
-            title: 'Title 2',
-        },
-        {
-            title: 'Title 3',
-        },
-        {
-            title: 'Title 4',
-        },
-        {
-            title: 'Title 5',
-        },
-        {
-            title: 'Title 6',
-        },
-        {
-            title: 'Title 1',
-        },
-        {
-            title: 'Title 2',
-        },
-        {
-            title: 'Title 3',
-        },
-        {
-            title: 'Title 4',
-        },
-        {
-            title: 'Title 5',
-        },
-        {
-            title: 'Title 6',
-        },
-        {
-            title: 'Title 1',
-        },
-        {
-            title: 'Title 2',
-        },
-        {
-            title: 'Title 3',
-        },
-        {
-            title: 'Title 4',
-        },
-        {
-            title: 'Title 5',
-        },
-        {
-            title: 'Title 6',
-        },
-    ];
+
 
     const showModal = () => {
         setVisible(true)
@@ -158,6 +133,13 @@ export default function MainPage() {
                 setVisible(false);
                 form.resetFields();
                 showSuccessMessage();
+                const fetchData = async () => {
+                    const response = await groupInfo();
+                    setRawData(response.data);
+                }
+
+                fetchData();
+
             },
 
         }
@@ -167,7 +149,8 @@ export default function MainPage() {
         try {
             await mutateAsync({
                 groupName: values.groupname,
-                creatorID: auth.user._id
+                creatorID: auth.user._id,
+                creatorEmail: auth.user.email
             });
         } catch (error) {
 
@@ -259,7 +242,7 @@ export default function MainPage() {
             </SC.StyledUtilitiesContainer>
 
             <SC.StyledGroupTitleContainer>
-                <SC.StyledGroupTitle>{title}</SC.StyledGroupTitle>
+                <SC.StyledGroupTitle>{filter}</SC.StyledGroupTitle>
             </SC.StyledGroupTitleContainer>
 
             <div
@@ -314,8 +297,8 @@ export default function MainPage() {
                                 >
                                     <Meta
                                         avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-                                        title={item.title}
-                                        description="This is the description"
+                                        title={item.groupName}
+                                        description={item.creatorEmail}
                                     />
                                 </Card>
                             </List.Item>
