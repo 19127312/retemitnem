@@ -5,6 +5,8 @@ export const StyledPageContainer = styled.div`
     flex-direction: column;
     height: 100vh;
     width: 100vw;
+    max-width: 100%;
+    overflow-x: hidden;
 `;
 
 export const StyledIconContainer = styled.div`
@@ -46,19 +48,20 @@ export const StyledSearchSortContainer = styled.div`
 `;
 
 export const StyledItemMarginHorizonalRightContainer = styled.div`
-    margin: 0px 25px 0px 0px;
+    margin: 0px 35px 0px 0px;
 `;
 
 export const StyledItemMarginHorizonalLeftContainer = styled.div`
-    margin: 0px 0px 0px 25px;
+    margin: 0px 0px 0px 35px;
 `;
 
 export const StyledGroupTitleContainer = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 25px 25px;
+    margin: 15px 0px 0px 35px ;
 `;
+
 
 // text
 
@@ -89,3 +92,4 @@ export const StyledGroupTitle = styled.h1`
     line-height: 30px; 
     color: #171A1FFF; 
 `
+

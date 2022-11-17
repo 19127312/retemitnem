@@ -2,8 +2,8 @@ import axios from 'axios';
 
 
 const api = axios.create({
-    baseURL: process.env.REACT_APP_URL_API,
-    // baseURL: "http://localhost:3000",
+    // baseURL: process.env.REACT_APP_URL_API,
+    baseURL: "http://localhost:3000",
 });
 
 export const PATH = {
@@ -12,6 +12,7 @@ export const PATH = {
     GET_NEW_ACCESS_TOKEN: '/auth/access-token',
     GET_NEW_REFRESH_TOKEN: '/auth/refresh-token',
     GET_PROFILE: '/user/profile',
+    CREATE_GROUP: '/group/add'
 }
 
 api.interceptors.request.use(async (config) => {
@@ -68,3 +69,13 @@ export const refreshAccessToken = async () => {
     }
 };
 
+export const createGroup = async ({groupName, creatorID}) => {
+
+    try {
+        const response = await api.post(PATH.CREATE_GROUP, { groupName, creatorID });
+        return response;
+    } catch (error) {
+        throw Error(error.response.data);
+    }
+    
+}
