@@ -6,10 +6,10 @@ const AuthContext = createContext({});
 export const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState({ user: null, accessToken: null });
     useEffect(() => {
-        if (auth.accessToken) {
+        if (auth?.accessToken) {
             localStorage.setItem("accessToken", auth.accessToken);
         }
-        if (auth.refreshToken) {
+        if (auth?.refreshToken) {
             localStorage.setItem("refreshToken", auth.refreshToken);
         }
     }, [auth]);

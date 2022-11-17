@@ -5,7 +5,7 @@ import { Color } from '../../Constants/Constant'
 import loginPagePicture from '../../Assets/loginPagePicture.png'
 import logo from '../../Assets/logo.png'
 import { login, loginGG } from '../../API/api'
-import { useNavigate, } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { Icon } from 'react-icons-kit'
 import { eye } from 'react-icons-kit/feather/eye'
@@ -15,12 +15,15 @@ import * as SC from './StyledAuthComponents'
 import { useGoogleLogin } from '@react-oauth/google';
 import GoogleLoginBtn from '../../Assets/GoogleLoginBtn.png'
 
-export default function LoginPage() {
+export default function LoginPage({ route }) {
+    const { state } = useLocation();
+    const { message } = state
+
     const { setAuth } = useContext(AuthContext);
     const { register, formState: { errors }, handleSubmit } = useForm();
     const navigate = useNavigate();
 
-    const [serverError, setServerError] = useState("")
+    const [serverError, setServerError] = useState(message ? message : "")
 
     const [type, setType] = useState('password');
     const [icon, setIcon] = useState(eyeOff);
@@ -52,6 +55,7 @@ export default function LoginPage() {
     );
 
     const onSubmit = async (values) => {
+        setServerError("");
         try {
             await mutateAsync({
                 fullName: values.fullName,
@@ -69,12 +73,9 @@ export default function LoginPage() {
     const loginWithGoogle = useGoogleLogin({
         onSuccess: async tokenResponse => {
             const response = await loginGG(tokenResponse.access_token);
-            //  axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
-            //     headers: {
-            //         Authorization: `Bearer ${tokenResponse.access_token}`
-            //     }
-            // })
-            console.log(response)
+
+            const { accessToken, user, refreshToken } = response.data;
+            setAuth({ user, accessToken, refreshToken });
 
         },
         onError: error => console.log(error),

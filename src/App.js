@@ -8,16 +8,6 @@ import CheckingAuthRoutes from './Components/RoutesChecking/CheckingAuthRoutes';
 import MainPage from './Components/MainPage/MainPage';
 const queryClient = new QueryClient()
 function App() {
-  const navigate = useNavigate();
-
-
-  const logout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    navigate("/login", { replace: true });
-    window.location.reload();
-  }
-
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -30,7 +20,7 @@ function App() {
         </Route>
 
         <Route element={<PrivateRoutes />} >
-          <Route path="/" element={<MainPage/>} />
+          <Route path="/" element={<MainPage />} />
 
         </Route>
 

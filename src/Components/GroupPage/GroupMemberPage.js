@@ -1,5 +1,5 @@
 import React from 'react';
-import "antd/dist/antd.css";
+import "antd/dist/antd.min.css";
 import { Button, Form, Input, Popconfirm, Table, Dropdown } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useContext, useEffect, useRef, useState } from 'react';
