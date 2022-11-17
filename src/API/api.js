@@ -16,7 +16,8 @@ export const PATH = {
     GOOGLE_LOGIN: '/auth/google_login',
     GOOGLE_REGISTER: '/auth/google_register',
     GOOGLE_TEST: 'https://www.googleapis.com/oauth2/v3/userinfo',
-    CREATE_GROUP: '/group/add'
+    CREATE_GROUP: '/group/add',
+    GROUP_INFO: '/group/info'
 
 }
 
@@ -97,13 +98,23 @@ export const refreshAccessToken = async () => {
     }
 };
 
-export const createGroup = async ({ groupName, creatorID }) => {
+export const createGroup = async ({ groupName, creatorID, creatorEmail }) => {
 
     try {
-        const response = await api.post(PATH.CREATE_GROUP, { groupName, creatorID });
+        const response = await api.post(PATH.CREATE_GROUP, { groupName, creatorID, creatorEmail });
         return response;
     } catch (error) {
         throw Error(error.response.data);
     }
 
+}
+
+export const groupInfo = async () => {
+
+    try {
+        const response = await api.get(PATH.GROUP_INFO);
+        return response;
+    } catch (error) {
+        throw Error(error.response.data);
+    }
 }
