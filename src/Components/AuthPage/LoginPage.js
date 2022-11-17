@@ -4,7 +4,7 @@ import AuthContext from '../../Context/AuthProvider'
 import { Color } from '../../Constants/Constant'
 import loginPagePicture from '../../Assets/loginPagePicture.png'
 import logo from '../../Assets/logo.png'
-import { login } from '../../API/api'
+import { login, loginGG } from '../../API/api'
 import { useNavigate, } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { Icon } from 'react-icons-kit'
@@ -12,6 +12,8 @@ import { eye } from 'react-icons-kit/feather/eye'
 import { eyeOff } from 'react-icons-kit/feather/eyeOff'
 import { useMutation } from '@tanstack/react-query'
 import * as SC from './StyledAuthComponents'
+import { useGoogleLogin } from '@react-oauth/google';
+import GoogleLoginBtn from '../../Assets/GoogleLoginBtn.png'
 
 export default function LoginPage() {
     const { setAuth } = useContext(AuthContext);
@@ -64,13 +66,26 @@ export default function LoginPage() {
         navigate("/register", { replace: true });
     }
 
+    const loginWithGoogle = useGoogleLogin({
+        onSuccess: async tokenResponse => {
+            const response = await loginGG(tokenResponse.access_token);
+            //  axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+            //     headers: {
+            //         Authorization: `Bearer ${tokenResponse.access_token}`
+            //     }
+            // })
+            console.log(response)
+
+        },
+        onError: error => console.log(error),
+    });
     return (
         <SC.AuthContainer>
 
             <SC.AuthFormWrapper>
                 <SC.StyledLogoContainer>
                     <img src={logo} alt="logo" />
-                    <SC.StyledLogoName>Team Name</SC.StyledLogoName>
+                    <SC.StyledLogoName>Retemitnem</SC.StyledLogoName>
                 </SC.StyledLogoContainer>
                 <SC.StyledHeadline>Login to your account</SC.StyledHeadline>
                 {serverError && <SC.StyledError>{serverError}</SC.StyledError>}
@@ -128,11 +143,14 @@ export default function LoginPage() {
 
                 <SC.StyledQuestionSignUp>Already have an account ?</SC.StyledQuestionSignUp>
                 <SC.StyledSignMode onClick={gotoSignup}>Sign Up</SC.StyledSignMode>
+                <SC.StyledQuestionGoogleLogin>Or sign up with</SC.StyledQuestionGoogleLogin>
+                <img src={GoogleLoginBtn} alt="googleLogin" onClick={loginWithGoogle} />
+
             </SC.AuthFormWrapper>
             <SC.AuthContainerImage >
                 <img src={loginPagePicture} alt="Login Page " />
                 <SC.StyledImagePhrase>Welcome to Education Platform</SC.StyledImagePhrase>
-                <SC.StyledImageSecondPhrase>For student and teacher</SC.StyledImageSecondPhrase>
+                <SC.StyledImageSecondPhrase>For everyone</SC.StyledImageSecondPhrase>
 
             </SC.AuthContainerImage>
         </SC.AuthContainer>

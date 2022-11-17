@@ -200,6 +200,10 @@ export const StyledQuestionSignUp = styled.p`
     font-weight: 400;
     margin: 0.5rem 0;
 `
+export const StyledQuestionGoogleLogin = styled(StyledQuestionSignUp)`
+    
+    margin: 1.5rem 0 0.5rem 0;
+`
 export const StyledSignMode = styled(StyledQuestionSignUp)`
     color: ${Color.primary};
     cursor: pointer;

@@ -12,6 +12,8 @@ import { Icon } from 'react-icons-kit'
 import { eye } from 'react-icons-kit/feather/eye'
 import { eyeOff } from 'react-icons-kit/feather/eyeOff'
 import { useMutation } from '@tanstack/react-query'
+import GoogleLoginBtn from '../../Assets/GoogleLoginBtn.png'
+import { useGoogleLogin } from '@react-oauth/google';
 
 export default function SingupPage() {
     const { setAuth } = useContext(AuthContext);
@@ -64,13 +66,17 @@ export default function SingupPage() {
         navigate("/login", { replace: true });
     }
 
+    const signinWithGoogle = () => {
+
+    }
+
     return (
         <SC.AuthContainer>
 
             <SC.AuthFormWrapper>
                 <SC.StyledLogoContainer>
                     <img src={logo} alt="logo" />
-                    <SC.StyledLogoName>Team Name</SC.StyledLogoName>
+                    <SC.StyledLogoName>Retemitnem</SC.StyledLogoName>
                 </SC.StyledLogoContainer>
                 <SC.StyledHeadline> Create an account</SC.StyledHeadline>
                 {serverError && <SC.StyledError>{serverError}</SC.StyledError>}
@@ -119,8 +125,6 @@ export default function SingupPage() {
 
                     </SC.StyledInputBox>
 
-
-
                     {
                         isLoading ? <ThreeDots
                             height="80"
@@ -138,11 +142,14 @@ export default function SingupPage() {
 
                 <SC.StyledQuestionSignUp>Already have an account ?</SC.StyledQuestionSignUp>
                 <SC.StyledSignMode onClick={gotoLogin}>Sign In</SC.StyledSignMode>
+                <SC.StyledQuestionGoogleLogin>Or sign up with</SC.StyledQuestionGoogleLogin>
+                <img src={GoogleLoginBtn} alt="googleLogin" onClick={signinWithGoogle} />
+
             </SC.AuthFormWrapper>
             <SC.AuthContainerImage >
                 <img src={loginPagePicture} alt="Login Page " />
                 <SC.StyledImagePhrase>Welcome to Education Platform</SC.StyledImagePhrase>
-                <SC.StyledImageSecondPhrase>For student and teacher</SC.StyledImageSecondPhrase>
+                <SC.StyledImageSecondPhrase>For everyone</SC.StyledImageSecondPhrase>
 
             </SC.AuthContainerImage>
         </SC.AuthContainer>

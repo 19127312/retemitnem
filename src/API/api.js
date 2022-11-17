@@ -2,8 +2,8 @@ import axios from 'axios';
 
 
 const api = axios.create({
-    baseURL: process.env.REACT_APP_URL_API,
-    // baseURL: "http://localhost:3000",
+    // baseURL: process.env.REACT_APP_URL_API,
+    baseURL: "http://localhost:3000",
 });
 
 export const PATH = {
@@ -12,6 +12,9 @@ export const PATH = {
     GET_NEW_ACCESS_TOKEN: '/auth/access-token',
     GET_NEW_REFRESH_TOKEN: '/auth/refresh-token',
     GET_PROFILE: '/user/profile',
+    GOOGLE_LOGIN: '/auth/google_login',
+    GOOGLE_REGISTER: '/auth/google_register',
+    GOOGLE_TEST: 'https://www.googleapis.com/oauth2/v3/userinfo',
 }
 
 api.interceptors.request.use(async (config) => {
@@ -33,7 +36,28 @@ export const login = async ({ email, password }) => {
         throw Error(error.response.data);
     }
 }
-
+export const loginGG = async (token) => {
+    try {
+        const response = await api.post(PATH.GOOGLE_LOGIN, {
+            token
+        });
+        return response;
+    } catch (error) {
+        throw Error(error.response.data);
+    }
+}
+export const registerGG = async (token) => {
+    try {
+        const response = await api.post(PATH.GOOGLE_REGISTER, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response;
+    } catch (error) {
+        throw Error(error.response.data);
+    }
+}
 
 export const signup = async ({ fullName, email, password }) => {
     try {
