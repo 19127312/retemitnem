@@ -7,6 +7,6 @@ export default function CheckingAuthRoutes() {
     const location = useLocation();
 
     return (
-        auth.user ? <Navigate to="/" state={{ from: location }} replace /> : <Outlet />
+        auth?.user ? <Navigate to="/" state={{ from: location }} replace /> : <Outlet />
     )
 }

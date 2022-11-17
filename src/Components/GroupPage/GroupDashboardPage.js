@@ -1,5 +1,5 @@
 import React from 'react';
-import "antd/dist/antd.css";
+import "antd/dist/antd.min.css";
 import { Button, Input, Table, Space, Select, Popconfirm } from 'antd';
 import { useContext, useEffect, useRef, useState } from 'react';
 import * as SC from "./StyledGroupPageComponents";

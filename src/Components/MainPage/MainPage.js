@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import 'antd/dist/antd.css';
+import React, { useState, useContext } from "react";
+import 'antd/dist/antd.min.css';
 import logo from '../../Assets/logo.png';
 import * as SC from './StyledMainPageComponents';
 import settings from '../../Assets/settings.svg'
@@ -12,7 +12,9 @@ import useAuth from "../../Hooks/useAuth";
 import { useMutation } from '@tanstack/react-query';
 import { ThreeDots } from 'react-loader-spinner';
 import { Color } from '../../Constants/Constant';
-import {ColorRing} from 'react-loader-spinner';
+import { ColorRing } from 'react-loader-spinner';
+import { useNavigate } from 'react-router-dom';
+import AuthContext from '../../Context/AuthProvider'
 
 const { Search } = Input;
 const { Meta } = Card;
@@ -20,12 +22,13 @@ const { Meta } = Card;
 
 
 export default function MainPage() {
+    const navigate = useNavigate();
+    const { auth, setAuth } = useContext(AuthContext);
 
     const [title, setTitle] = useState("My Groups");
     const [showAddButton, setShowAddButton] = useState(true);
     const [visible, setVisible] = useState(false);
     const [form] = Form.useForm();
-    const { auth } = useAuth();
 
     // handle search
     const onSearch = (value) => console.log(value);
@@ -173,6 +176,11 @@ export default function MainPage() {
 
         }
     }
+    const logout = () => {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        setAuth(null)
+    }
     return (
         <SC.StyledPageContainer>
             <SC.StyledUpperBarContainer>
@@ -182,10 +190,10 @@ export default function MainPage() {
                 </SC.StyledIconContainer>
                 <SC.StyledIconContainer>
                     <SC.StyledUserInfoContainer>
-                        <SC.StyledUserName>Craig Denis</SC.StyledUserName>
-                        <SC.StyledEmailName>craigdenis@email.com</SC.StyledEmailName>
+                        <SC.StyledUserName>{auth.user.fullName}</SC.StyledUserName>
+                        <SC.StyledEmailName>{auth.user.email}</SC.StyledEmailName>
                     </SC.StyledUserInfoContainer>
-                    <SC.StyledImageContainer src={settings} alt="settings" />
+                    <SC.StyledImageContainer src={settings} alt="settings" onClick={logout} />
                 </SC.StyledIconContainer>
             </SC.StyledUpperBarContainer>
 

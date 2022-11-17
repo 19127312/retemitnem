@@ -36,7 +36,8 @@ export const login = async ({ email, password }) => {
         const response = await api.post(PATH.LOGIN, { email, password });
         return response;
     } catch (error) {
-        throw Error(error.response.data);
+        console.log(error);
+        throw Error(error.response.data.message);
     }
 }
 export const loginGG = async (token) => {
@@ -46,7 +47,8 @@ export const loginGG = async (token) => {
         });
         return response;
     } catch (error) {
-        throw Error(error.response.data);
+
+        throw Error(error);
     }
 }
 export const registerGG = async (token) => {
