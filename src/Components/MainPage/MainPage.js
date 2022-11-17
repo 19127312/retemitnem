@@ -1,5 +1,5 @@
 
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import 'antd/dist/antd.min.css';
 
 import logo from '../../Assets/logo.png';
@@ -10,10 +10,7 @@ import { Button, Input, Select, Avatar, Card, List, Form, Modal, Space, message 
 import { ShareAltOutlined } from '@ant-design/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { createGroup } from "../../API/api";
-import useAuth from "../../Hooks/useAuth";
 import { useMutation } from '@tanstack/react-query';
-import { ThreeDots } from 'react-loader-spinner';
-import { Color } from '../../Constants/Constant';
 import { ColorRing } from 'react-loader-spinner';
 
 import { useNavigate } from 'react-router-dom';
@@ -27,7 +24,6 @@ const { Meta } = Card;
 
 export default function MainPage() {
 
-    const navigate = useNavigate();
     const { auth, setAuth } = useContext(AuthContext);
 
     const [title, setTitle] = useState("My Groups");
