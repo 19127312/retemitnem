@@ -73,12 +73,83 @@ export const StyledTabs = styled(Tabs)`
   }
 
   .ant-tabs-content-holder {
-    border-width: 1px;
+    border-width: 0px;
     border-color: #f0f0f0;
     border-style: solid;
     border-top-style: none;
     padding: 1rem;
   }
-
- 
 `;
+export const StyledBannerContainer = styled.div`
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background: #535CE8FF;
+    width: 100%; 
+    height: 165px; 
+    border: solid 1.5px gray;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 18px 50px -10px;
+`;
+
+export const StyledGroupNameDashboard = styled.div`
+  font-family: Public Sans;
+  font-size: 32px; 
+  line-height: 48px; 
+  color: #FFFFFF;
+`;
+
+export const StyledOwnerSlideNameDashboard = styled.div`
+  font-family: Public Sans;
+  font-size: 14px; 
+  line-height: 22px; 
+  color: #FFFFFF;
+`;
+
+export const StyledDashboardContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const StyledButtonDashboardContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-top: 40px;
+  justify-content: space-between;
+
+`;
+
+export const StyledToolBarDashboardContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  
+  
+`;
+
+export const StyledItemMarginHorizonalRightContainer = styled.div`
+    margin: 0px 0px 0px 20px;
+`;
+
+export const StyledItemSlideListContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+export const StyledItemInfoSlideListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const StyledImagePlay = styled.img`
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+`;
+
+export const StyledMarginTaleDashboard = styled.div`
+  margin-top: 10px;
+`;
+

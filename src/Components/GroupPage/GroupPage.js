@@ -2,6 +2,7 @@ import React from 'react';
 import "antd/dist/antd.css";
 import { Tabs } from 'antd';
 import GroupMemberPage from './GroupMemberPage'
+import GroupDashboardPage from './GroupDashboardPage'
 import * as SC from "./StyledGroupPageComponents";
 import logo from "../../Assets/logo.png";
 import { ShareAltOutlined } from '@ant-design/icons'
@@ -28,7 +29,7 @@ export const GroupPage = () => {
                         width: "80%"
                     }}>
                     <Tabs.TabPane tab="Dashboard" key="1">
-                        <GroupMemberPage />
+                        <GroupDashboardPage />
                     </Tabs.TabPane>
                     <Tabs.TabPane tab="Member" key="2">
                         <GroupMemberPage />
