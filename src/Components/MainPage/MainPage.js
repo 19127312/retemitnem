@@ -31,9 +31,7 @@ export default function MainPage() {
     const { auth, setAuth } = useContext(AuthContext);
 
     const [title, setTitle] = useState("My Groups");
-    const [showAddButton, setShowAddButton] = useState(true);
-    const [visible, setVisible] = useState(false);
-    const [form] = Form.useForm();
+
     const [showAddButton, setShowAddButton] = useState(true);
     const [visible, setVisible] = useState(false);
     const [form] = Form.useForm();
@@ -86,7 +84,7 @@ export default function MainPage() {
     useEffect(() => {
         filterAndSearchData(rawData);
     }, [search, filter, rawData]);
-    
+
 
     // handle search
     const onSearch = (value) => setSearch(value);
