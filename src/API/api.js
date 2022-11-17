@@ -12,9 +12,12 @@ export const PATH = {
     GET_NEW_ACCESS_TOKEN: '/auth/access-token',
     GET_NEW_REFRESH_TOKEN: '/auth/refresh-token',
     GET_PROFILE: '/user/profile',
+
     GOOGLE_LOGIN: '/auth/google_login',
     GOOGLE_REGISTER: '/auth/google_register',
     GOOGLE_TEST: 'https://www.googleapis.com/oauth2/v3/userinfo',
+    CREATE_GROUP: '/group/add'
+
 }
 
 api.interceptors.request.use(async (config) => {
@@ -92,3 +95,13 @@ export const refreshAccessToken = async () => {
     }
 };
 
+export const createGroup = async ({ groupName, creatorID }) => {
+
+    try {
+        const response = await api.post(PATH.CREATE_GROUP, { groupName, creatorID });
+        return response;
+    } catch (error) {
+        throw Error(error.response.data);
+    }
+
+}

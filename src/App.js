@@ -5,6 +5,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import PrivateRoutes from './Components/RoutesChecking/PrivateRoutes';
 import SingupPage from "./Components/AuthPage/SignupPage"
 import CheckingAuthRoutes from './Components/RoutesChecking/CheckingAuthRoutes';
+import MainPage from './Components/MainPage/MainPage';
 const queryClient = new QueryClient()
 function App() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ function App() {
         </Route>
 
         <Route element={<PrivateRoutes />} >
-          <Route path="/" element={<div onClick={logout}>mainPage</div>} />
+          <Route path="/" element={<MainPage/>} />
 
         </Route>
 

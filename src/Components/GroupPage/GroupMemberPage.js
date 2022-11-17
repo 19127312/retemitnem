@@ -1,7 +1,7 @@
 import React from 'react';
 import "antd/dist/antd.css";
 import { Button, Form, Input, Popconfirm, Table, Dropdown } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import { useContext, useEffect, useRef, useState } from 'react';
 
 const EditableContext = React.createContext(null);
@@ -132,7 +132,7 @@ export const GroupMemberPage = () => {
             render: (_, record) =>
                 dataSource.length >= 1 ? (
                     <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
-                        {record.role == "Owner" ? <a></a> : <a>Delete</a>} 
+                        {record.role == "Owner" ? <a></a> : <a>Delete</a>}
                     </Popconfirm>
                 ) : null,
         },
@@ -195,15 +195,7 @@ export const GroupMemberPage = () => {
     });
     return (
         <div>
-            <Button
-                onClick={handleAdd}
-                type="primary"
-                style={{
-                    marginBottom: 16,
-                }}
-            >
-                Add a row
-            </Button>
+            <Button onClick={handleAdd} type="primary" shape="round" icon={<PlusOutlined />} style={{ marginBottom: 16 }}>Add member</Button>
             <Table
                 components={components}
                 rowClassName={() => 'editable-row'}
