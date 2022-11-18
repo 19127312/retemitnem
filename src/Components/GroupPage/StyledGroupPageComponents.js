@@ -6,9 +6,13 @@ export const StyledPageContainer = styled.div`
 `;
 
 export const StyledTopContainer = styled.div`
+    // display: flex;
+    // flex-direction: row;
+    // justify-content: space-between;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin: 10px 25px;
 `;
 
 export const StyledLogoContainer = styled.div`

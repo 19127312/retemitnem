@@ -16,6 +16,13 @@ export const StyledIconContainer = styled.div`
     align-items: center;
 `;
 
+export const StyledLogoContainer = styled.div`
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    margin-left : 10px;
+    justify-content: flex-start;
+`;
 export const StyledUpperBarContainer = styled.div`
     display: flex;
     flex-direction: row;
@@ -65,12 +72,12 @@ export const StyledGroupTitleContainer = styled.div`
 
 // text
 
-export const StyledLogoName = styled.h1`
-    font-family: Sora; /* Heading */
-    font-size: 18px; 
-    line-height: 28px; 
-    color: #171A1FFF;
-`;
+// export const StyledLogoName = styled.h1`
+//     font-family: Sora; /* Heading */
+//     font-size: 18px; 
+//     line-height: 28px; 
+//     color: #171A1FFF;
+// `;
 
 export const StyledUserName = styled.h1`
     font-family: Public Sans;
@@ -92,4 +99,13 @@ export const StyledGroupTitle = styled.h1`
     line-height: 30px; 
     color: #171A1FFF; 
 `
+
+export const StyledLogoName = styled.h1`
+    font-size: 18px;
+    font-family: "Sora", sans-serif;
+    line-height: 1rem;
+    align-self: start;
+    margin-left: 10px;
+    margin-top: 20px;
+`;
 
