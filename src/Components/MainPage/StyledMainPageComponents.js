@@ -1,111 +1,109 @@
 import styled from "styled-components";
 
 export const StyledPageContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    width: 100vw;
-    max-width: 100%;
-    overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  max-width: 100%;
+  overflow-x: hidden;
 `;
 
 export const StyledIconContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const StyledLogoContainer = styled.div`
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-    margin-left : 10px;
-    justify-content: flex-start;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  margin-left: 10px;
+  justify-content: flex-start;
 `;
 export const StyledUpperBarContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin: 10px 25px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 10px 25px;
 `;
 
 export const StyledUserInfoContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
 `;
 
 export const StyledImageContainer = styled.img`
-    padding: 10px 10px;
-`
+  padding: 10px 10px;
+`;
 
 export const StyledUtilitiesContainer = styled.div`
-    margin-top: 25px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+  margin-top: 25px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 export const StyledSearchSortContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 
 export const StyledItemMarginHorizonalRightContainer = styled.div`
-    margin: 0px 35px 0px 0px;
+  margin: 0px 35px 0px 0px;
 `;
 
 export const StyledItemMarginHorizonalLeftContainer = styled.div`
-    margin: 0px 0px 0px 35px;
+  margin: 0px 0px 0px 35px;
 `;
 
 export const StyledGroupTitleContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin: 15px 0px 0px 35px ;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 15px 0px 0px 35px;
 `;
-
 
 // text
 
 // export const StyledLogoName = styled.h1`
 //     font-family: Sora; /* Heading */
-//     font-size: 18px; 
-//     line-height: 28px; 
+//     font-size: 18px;
+//     line-height: 28px;
 //     color: #171A1FFF;
 // `;
 
 export const StyledUserName = styled.h1`
-    font-family: Public Sans;
-    font-size: 14px; 
-    line-height: 22px; 
-    color: #171A1FFF;
+  font-family: Public Sans;
+  font-size: 14px;
+  line-height: 22px;
+  color: #171a1fff;
 `;
 
 export const StyledEmailName = styled.h1`
-    font-family: Public Sans; /* Body */
-    font-size: 12px; 
-    line-height: 20px; 
-    color: #565E6CFF;
+  font-family: Public Sans; /* Body */
+  font-size: 12px;
+  line-height: 20px;
+  color: #565e6cff;
 `;
 
 export const StyledGroupTitle = styled.h1`
-    font-family: Public Sans; /* Body */
-    font-size: 20px; 
-    line-height: 30px; 
-    color: #171A1FFF; 
-`
-
-export const StyledLogoName = styled.h1`
-    font-size: 18px;
-    font-family: "Sora", sans-serif;
-    line-height: 1rem;
-    align-self: start;
-    margin-left: 10px;
-    margin-top: 20px;
+  font-family: Public Sans; /* Body */
+  font-size: 20px;
+  line-height: 30px;
+  color: #171a1fff;
 `;
 
+export const StyledLogoName = styled.h1`
+  font-size: 18px;
+  font-family: "Sora", sans-serif;
+  line-height: 1rem;
+  align-self: start;
+  margin-left: 10px;
+  margin-top: 20px;
+`;
