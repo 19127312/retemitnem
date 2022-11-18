@@ -53,7 +53,7 @@ export default function LoginPage() {
       setAuth({ user, accessToken, refreshToken });
     },
   });
-  const a = 1;
+
   const onSubmit = async (values) => {
     setMessageSignUp("");
     try {

@@ -32,7 +32,6 @@
     "_lint": "eslint --config ./.eslintrc.js --ext js --ext jsx --ext tsx --ext ts",
     "lint": "npm run _lint -- ./src/",
     "lint:fix": "npm run _lint -- --fix ./src/",
-    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,scss,md,json}' --config ./.prettierrc",
     "postinstall": "husky install"
   },
   "eslintConfig": {
@@ -56,7 +55,6 @@
   "lint-staged": {
     "*.js": [
       "npm run lint",
-      "npm run format",
       "git add ."
     ]
   },
