@@ -17,7 +17,6 @@ import GoogleLoginBtn from "../../Assets/GoogleLoginBtn.png";
 
 export default function LoginPage() {
   const { state } = useLocation();
-
   const { message } = state;
 
   const { setAuth } = useContext(AuthContext);
