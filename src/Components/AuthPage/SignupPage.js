@@ -1,6 +1,5 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import { ThreeDots } from 'react-loader-spinner'
-import AuthContext from '../../Context/AuthProvider'
 import { Color } from '../../Constants/Constant'
 import loginPagePicture from '../../Assets/loginPagePicture.png'
 import logo from '../../Assets/logo.png'
@@ -16,7 +15,6 @@ import GoogleLoginBtn from '../../Assets/GoogleLoginBtn.png'
 import { useGoogleLogin } from '@react-oauth/google';
 
 export default function SingupPage() {
-    const { setAuth } = useContext(AuthContext);
     const { register, formState: { errors }, handleSubmit } = useForm();
 
     const navigate = useNavigate();

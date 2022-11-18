@@ -23,7 +23,8 @@ export default function LoginPage({ route }) {
     const { register, formState: { errors }, handleSubmit } = useForm();
     const navigate = useNavigate();
 
-    const [serverError, setServerError] = useState(message ? message : "")
+    const [serverError, setServerError] = useState("")
+    const [messageSignUp, setMessageSignUp] = useState(message ? message : "")
 
     const [type, setType] = useState('password');
     const [icon, setIcon] = useState(eyeOff);
@@ -55,7 +56,7 @@ export default function LoginPage({ route }) {
     );
 
     const onSubmit = async (values) => {
-        setServerError("");
+        setMessageSignUp("");
         try {
             await mutateAsync({
                 fullName: values.fullName,
@@ -90,6 +91,7 @@ export default function LoginPage({ route }) {
                 </SC.StyledLogoContainer>
                 <SC.StyledHeadline>Login to your account</SC.StyledHeadline>
                 {serverError && <SC.StyledError>{serverError}</SC.StyledError>}
+                {messageSignUp && <SC.StyledSignupMessage>{messageSignUp}</SC.StyledSignupMessage>}
 
                 <SC.AuthFormContainer onSubmit={handleSubmit(onSubmit)}>
 

@@ -110,6 +110,7 @@ export const StyledLogoContainer = styled.div`
     left: 30px;
     display: flex;
     align-items: center;
+    justify-content: center;
 `
 
 export const StyledLogoName = styled.h1`
@@ -131,7 +132,11 @@ export const StyledError = styled.p`
     font-family: 'Public Sans', sans-serif;
     color: ${Color.error100};
 `
-
+export const StyledSignupMessage = styled.p`
+    font-size: 1rem;
+    font-family: 'Public Sans', sans-serif;
+    color: ${Color.primary};
+`
 export const AuthContainer = styled.div`
     height: 100vh;
     display: flex;

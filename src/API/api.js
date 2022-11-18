@@ -2,8 +2,7 @@ import axios from 'axios';
 
 
 const api = axios.create({
-    // baseURL: process.env.REACT_APP_URL_API,
-    baseURL: "http://localhost:3000",
+    baseURL: process.env.REACT_APP_URL_API,
 });
 
 export const PATH = {
@@ -12,10 +11,8 @@ export const PATH = {
     GET_NEW_ACCESS_TOKEN: '/auth/access-token',
     GET_NEW_REFRESH_TOKEN: '/auth/refresh-token',
     GET_PROFILE: '/user/profile',
-
     GOOGLE_LOGIN: '/auth/google_login',
     GOOGLE_REGISTER: '/auth/google_register',
-    GOOGLE_TEST: 'https://www.googleapis.com/oauth2/v3/userinfo',
     CREATE_GROUP: '/group/add',
     GROUP_INFO: '/group/info',
     USER_INFO: '/user/info'
