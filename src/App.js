@@ -6,6 +6,7 @@ import PrivateRoutes from './Components/RoutesChecking/PrivateRoutes';
 import SingupPage from "./Components/AuthPage/SignupPage"
 import CheckingAuthRoutes from './Components/RoutesChecking/CheckingAuthRoutes';
 import MainPage from './Components/MainPage/MainPage';
+import GroupPage from './Components/GroupPage/GroupPage';
 const queryClient = new QueryClient()
 function App() {
 
@@ -21,7 +22,7 @@ function App() {
 
         <Route element={<PrivateRoutes />} >
           <Route path="/" element={<MainPage />} />
-
+          <Route path="/group/:id" element={<GroupPage />} />
         </Route>
 
         <Route path="*" element={<div>404</div>} />

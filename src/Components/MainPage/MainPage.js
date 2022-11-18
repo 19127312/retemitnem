@@ -15,7 +15,7 @@ import { ColorRing } from 'react-loader-spinner';
 
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../Context/AuthProvider'
-import { groupInfo } from '../../API/api'
+import { groupInfo, userInfo } from '../../API/api'
 
 const { Search } = Input;
 const { Meta } = Card;
@@ -25,9 +25,6 @@ const { Meta } = Card;
 export default function MainPage() {
 
     const { auth, setAuth } = useContext(AuthContext);
-
-    const [title, setTitle] = useState("My Groups");
-
     const [showAddButton, setShowAddButton] = useState(true);
     const [visible, setVisible] = useState(false);
     const [form] = Form.useForm();
@@ -35,31 +32,25 @@ export default function MainPage() {
     const [rawData, setRawData] = useState([]);
     const [search, setSearch] = useState("");
     const [filter, setFilter] = useState("My Groups");
-
-    // const fetchData = async () => {
-    //     try {
-    //         const response = await groupInfo();
-    //         setData(response.data);
-    //         console.log("after", data);
-    //         // filterAndSearchData();
-    //     } catch (error) {
-    //         console.error(error.message);
-    //     }
-
-
-    // }
+    const navigate = useNavigate();
+    const checkExist = (element, userID) => {
+        for (let i = 0; i < element.members.length; i++) {
+            if (element.members[i].memberID === userID) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     const filterAndSearchData = (allData) => {
-        console.log("alldata", allData);
         let filteredData = []
         for (let i = 0; i < allData.length; i++) {
             if (allData[i].groupName.toString().includes(search)) {
-                if ((filter === "My Groups" && allData[i].creatorID === auth.user._id) || (filter !== "My Groups" && allData[i].creatorID !== auth.user._id)) {
+                if ((filter === "My Groups" && allData[i].creatorID === auth.user._id) || (filter !== "My Groups" && allData[i].creatorID !== auth.user._id && checkExist(allData[i], auth.user._id))) {
                     filteredData.push(allData[i])
                 }
             }
         }
-        console.log("filterdata", filteredData);
         setData(filteredData);
     }
 
@@ -68,7 +59,6 @@ export default function MainPage() {
             try {
                 const response = await groupInfo();
                 setRawData(response.data);
-                console.log("after", data);
                 // filterAndSearchData();
             } catch (error) {
                 console.error(error.message);
@@ -156,8 +146,7 @@ export default function MainPage() {
         try {
             await mutateAsync({
                 groupName: values.groupname,
-                creatorID: auth.user._id,
-                creatorEmail: auth.user.email
+                creatorID: auth.user._id
             });
         } catch (error) {
 
@@ -171,10 +160,16 @@ export default function MainPage() {
     return (
         <SC.StyledPageContainer>
             <SC.StyledUpperBarContainer>
-                <SC.StyledIconContainer>
+                {/* <SC.StyledIconContainer>
                     <SC.StyledImageContainer src={logo} alt="logo" />
                     <SC.StyledLogoName>Team space</SC.StyledLogoName>
-                </SC.StyledIconContainer>
+                </SC.StyledIconContainer> */}
+
+                <SC.StyledLogoContainer>
+                    <img src={logo} alt="logo" />
+                    <SC.StyledLogoName><b>Team Name</b></SC.StyledLogoName>
+                </SC.StyledLogoContainer>
+
                 <SC.StyledIconContainer>
                     <SC.StyledUserInfoContainer>
                         <SC.StyledUserName>{auth.user.fullName}</SC.StyledUserName>
@@ -293,8 +288,10 @@ export default function MainPage() {
                         renderItem={item => (
                             <List.Item>
                                 {/* <Card title={item.title}>Card content</Card> */}
+                                {/* <div onClick={() => alert("Hello from here")}> */}
                                 <Card
                                     // style={{ width: 300 }}
+                                    hoverable
                                     cover={
                                         <img
                                             alt="example"
@@ -302,17 +299,23 @@ export default function MainPage() {
                                         />
                                     }
                                     actions={[
-                                        <ShareAltOutlined key="share" onClick={() => {
+                                        <ShareAltOutlined key="share" onClick={(e) => {
+                                            e.stopPropagation();
                                             console.log(item)
                                         }} />
                                     ]}
+                                    onClick={() => {
+                                        navigate(`/group/${item._id}`, { replace: false, state: { item } });
+                                    }
+                                    }
                                 >
                                     <Meta
                                         avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
                                         title={item.groupName}
-                                        description={item.creatorEmail}
+                                        description={item.creatorName}
                                     />
                                 </Card>
+                                {/* </div> */}
                             </List.Item>
                         )}
                     />

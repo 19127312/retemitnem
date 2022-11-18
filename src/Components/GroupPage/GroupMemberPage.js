@@ -92,8 +92,10 @@ const EditableCell = ({
     }
     return <td {...restProps}>{childNode}</td>;
 };
-export const GroupMemberPage = () => {
-    const [dataSource, setDataSource] = useState([
+export const GroupMemberPage = (memberPayload) => {
+    const [dataSource, setDataSource] = useState(
+        
+        [
         {
             key: '0',
             name: 'Edward King 0',
@@ -106,7 +108,9 @@ export const GroupMemberPage = () => {
             role: 'Member',
             address: 'London, Park Lane no. 1',
         },
-    ]);
+    ]
+    
+    );
     const [count, setCount] = useState(2);
     const handleDelete = (key) => {
         const newData = dataSource.filter((item) => item.key !== key);

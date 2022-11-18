@@ -5,7 +5,8 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import * as SC from "./StyledGroupPageComponents";
 import { PlusOutlined, AudioOutlined, DownOutlined } from '@ant-design/icons';
 import playSlide from '../../Assets/playSlide.png'
-export const GroupDashboardPage = () => {
+export const GroupDashboardPage = ({dashBoardPayload}) => {
+
     const { Search } = Input;
     const suffix = (
         <AudioOutlined
@@ -97,8 +98,8 @@ export const GroupDashboardPage = () => {
     return (
         <SC.StyledDashboardContainer>
             <SC.StyledBannerContainer>
-                <SC.StyledGroupNameDashboard><b>Group Name</b></SC.StyledGroupNameDashboard>
-                <SC.StyledOwnerSlideNameDashboard><i>Owner Name</i></SC.StyledOwnerSlideNameDashboard>
+                <SC.StyledGroupNameDashboard><b>{dashBoardPayload.groupName}</b></SC.StyledGroupNameDashboard>
+                <SC.StyledOwnerSlideNameDashboard><i>{dashBoardPayload.creatorName}</i></SC.StyledOwnerSlideNameDashboard>
             </SC.StyledBannerContainer>
             <SC.StyledButtonDashboardContainer>
                 <Button type="primary" shape="round" icon={<PlusOutlined />} style={{ marginBottom: 16 }}>Add slide</Button>
