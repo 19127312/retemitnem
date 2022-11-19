@@ -22,6 +22,7 @@ export const StyledLogoContainer = styled.div`
   margin-top: 10px;
   margin-left: 10px;
   justify-content: flex-start;
+  cursor: pointer;
 `;
 export const StyledUpperBarContainer = styled.div`
   display: flex;
@@ -33,7 +34,7 @@ export const StyledUpperBarContainer = styled.div`
 export const StyledUserInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-end;
 `;
 
@@ -69,6 +70,14 @@ export const StyledGroupTitleContainer = styled.div`
   margin: 15px 0px 0px 35px;
 `;
 
+export const StyledCenterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 15px 10px 15px 10px;
+  align-items: center;
+`;
+
 // text
 
 // export const StyledLogoName = styled.h1`
@@ -83,6 +92,7 @@ export const StyledUserName = styled.h1`
   font-size: 14px;
   line-height: 22px;
   color: #171a1fff;
+  margin: 0px 0px 0px 0px;
 `;
 
 export const StyledEmailName = styled.h1`
@@ -90,6 +100,7 @@ export const StyledEmailName = styled.h1`
   font-size: 12px;
   line-height: 20px;
   color: #565e6cff;
+  margin: 0px 0px 0px 0px;
 `;
 
 export const StyledGroupTitle = styled.h1`
