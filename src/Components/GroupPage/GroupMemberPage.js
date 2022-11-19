@@ -220,3 +220,46 @@ export function GroupMemberPage() {
   );
 }
 export default GroupMemberPage;
+// import "./App.css";
+// import { useState } from "react";
+// import { ReactMultiEmail } from "react-multi-email";
+// import "react-multi-email/style.css";
+// const styles = {
+//   fontFamily: "sans-serif",
+//   width: "500px",
+//   border: "1px solid #eee",
+//   background: "#f3f3f3",
+//   padding: "25px",
+//   margin: "20px",
+// };
+
+// function App() {
+//   const [emails, setEmails] = useState([]);
+//   return (
+//     <div>
+//       <div style={styles}>
+//         <h3>react-multi-email</h3>
+//         <ReactMultiEmail
+//           placeholder="Input your Email Address"
+//           emails={emails}
+//           onChange={(_emails) => {
+//             setEmails(_emails);
+//           }}
+//           getLabel={(email, index, removeEmail) => {
+//             return (
+//               <div data-tag key={index}>
+//                 {email}
+//                 <span data-tag-handle onClick={() => removeEmail(index)}>
+//                   ×
+//                 </span>
+//               </div>
+//             );
+//           }}
+//         />
+//         <br />
+//         <h4>react-multi-email value</h4>
+//         <p>{emails.join(", ") || "empty"}</p>
+//       </div>
+//     </div>
+//   );
+// }

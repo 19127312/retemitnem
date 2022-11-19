@@ -11,7 +11,7 @@ export const PATH = {
   GET_NEW_REFRESH_TOKEN: "/auth/refresh-token",
   GET_PROFILE: "/user/profile",
   GOOGLE_LOGIN: "/auth/google_login",
-  GOOGLE_REGISTER: "/auth/google_register",
+  GOOGLE_SIGNUP: "/auth/google_signup",
   CREATE_GROUP: "/group/add",
   GROUP_INFO: "/group/info",
   USER_INFO: "/user/info",
@@ -47,16 +47,14 @@ export const loginGG = async (token) => {
     throw Error(error);
   }
 };
-export const registerGG = async (token) => {
+export const signupGG = async (token) => {
   try {
-    const response = await api.post(PATH.GOOGLE_REGISTER, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    const response = await api.post(PATH.GOOGLE_SIGNUP, {
+      token,
     });
     return response;
   } catch (error) {
-    throw Error(error.response.data);
+    throw Error(error);
   }
 };
 
