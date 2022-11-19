@@ -1,8 +1,7 @@
-import React from "react";
 import "antd/dist/antd.min.css";
 import { Tabs } from "antd";
 import { ShareAltOutlined } from "@ant-design/icons";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import GroupMemberPage from "./GroupMemberPage";
 import GroupDashboardPage from "./GroupDashboardPage";
 import * as SC from "./StyledGroupPageComponents";
@@ -11,14 +10,17 @@ import logo from "../../Assets/logo.png";
 export function GroupPage() {
   const { state } = useLocation();
   const { item } = state;
+  const navigate = useNavigate();
 
   return (
     <SC.StyledPageContainer>
       <SC.StyledTopContainer>
-        <SC.StyledLogoContainer>
+        <SC.StyledLogoContainer
+          onClick={() => navigate(`/`, { replace: false })}
+        >
           <img src={logo} alt="logo" />
           <SC.StyledLogoName>
-            <b>Team Name</b>
+            <b>Retemitnem</b>
           </SC.StyledLogoName>
         </SC.StyledLogoContainer>
 
