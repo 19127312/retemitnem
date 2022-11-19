@@ -170,7 +170,7 @@ export default function MainPage() {
         <SC.StyledLogoContainer>
           <img src={logo} alt="logo" />
           <SC.StyledLogoName>
-            <b>Team Name</b>
+            <b>Retemitnem</b>
           </SC.StyledLogoName>
         </SC.StyledLogoContainer>
 

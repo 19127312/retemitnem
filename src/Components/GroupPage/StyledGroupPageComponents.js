@@ -22,6 +22,7 @@ export const StyledLogoContainer = styled.div`
   margin-top: 10px;
   margin-left: 10px;
   justify-content: flex-start;
+  cursor: pointer;
 `;
 
 export const StyledLogoName = styled.h1`
