@@ -8,7 +8,7 @@ import { eyeOff } from "react-icons-kit/feather/eyeOff";
 import { useMutation } from "@tanstack/react-query";
 import { useGoogleLogin } from "@react-oauth/google";
 import GoogleLoginBtn from "../../Assets/GoogleLoginBtn.png";
-import { signup, signupGG } from "../../API/api";
+import { signup, loginGG } from "../../API/api";
 import * as SC from "./StyledAuthComponents";
 import logo from "../../Assets/logo.png";
 import loginPagePicture from "../../Assets/loginPagePicture.png";
@@ -69,7 +69,7 @@ export default function SingupPage() {
 
   const signupWithGoogle = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      const response = await signupGG(tokenResponse.access_token);
+      const response = await loginGG(tokenResponse.access_token);
 
       const { accessToken, user, refreshToken } = response.data;
       setAuth({ user, accessToken, refreshToken });
