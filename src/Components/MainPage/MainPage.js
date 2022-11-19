@@ -18,10 +18,9 @@ import {
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useMutation } from "@tanstack/react-query";
 import { ColorRing } from "react-loader-spinner";
-
 import { useNavigate } from "react-router-dom";
 import { createGroup, groupInfo } from "../../API/api";
-import settings from "../../Assets/settings.svg";
+import logoutIcon from "../../Assets/logout.svg";
 import * as SC from "./StyledMainPageComponents";
 import logo from "../../Assets/logo.png";
 import AuthContext from "../../Context/AuthProvider";
@@ -31,13 +30,13 @@ const { Meta } = Card;
 
 export default function MainPage() {
   const { auth, setAuth } = useContext(AuthContext);
-  const [showAddButton, setShowAddButton] = useState(true);
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
   const [rawData, setRawData] = useState([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("My Groups");
+  const [loadingGroups, setLoadingGroups] = useState(false);
   const navigate = useNavigate();
   const checkExist = (element, userID) => {
     for (let i = 0; i < element.members.length; i++) {
@@ -68,8 +67,10 @@ export default function MainPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoadingGroups(true);
         const response = await groupInfo();
         setRawData(response.data);
+        setLoadingGroups(false);
         // filterAndSearchData();
       } catch (error) {
         console.error(error.message);
@@ -91,10 +92,8 @@ export default function MainPage() {
     console.log(`selected ${value}`);
     if (value === "self") {
       setFilter("My Groups");
-      setShowAddButton(true);
     } else {
       setFilter("Other Groups");
-      setShowAddButton(false);
     }
   };
 
@@ -162,12 +161,9 @@ export default function MainPage() {
   return (
     <SC.StyledPageContainer>
       <SC.StyledUpperBarContainer>
-        {/* <SC.StyledIconContainer>
-                    <SC.StyledImageContainer src={logo} alt="logo" />
-                    <SC.StyledLogoName>Team space</SC.StyledLogoName>
-                </SC.StyledIconContainer> */}
-
-        <SC.StyledLogoContainer>
+        <SC.StyledLogoContainer
+          onClick={() => navigate(`/`, { replace: true })}
+        >
           <img src={logo} alt="logo" />
           <SC.StyledLogoName>
             <b>Retemitnem</b>
@@ -180,8 +176,8 @@ export default function MainPage() {
             <SC.StyledEmailName>{auth.user.email}</SC.StyledEmailName>
           </SC.StyledUserInfoContainer>
           <SC.StyledImageContainer
-            src={settings}
-            alt="settings"
+            src={logoutIcon}
+            alt="logout"
             onClick={logout}
           />
         </SC.StyledIconContainer>
@@ -189,27 +185,15 @@ export default function MainPage() {
 
       <SC.StyledUtilitiesContainer>
         <SC.StyledItemMarginHorizonalLeftContainer>
-          {showAddButton ? (
-            <Button
-              type="primary"
-              shape="round"
-              icon={<PlusOutlined />}
-              size="large"
-              onClick={showModal}
-            >
-              New Group
-            </Button>
-          ) : (
-            <Button
-              disabled="true"
-              type="primary"
-              shape="round"
-              icon={<PlusOutlined />}
-              size="large"
-            >
-              New Group
-            </Button>
-          )}
+          <Button
+            type="primary"
+            shape="round"
+            icon={<PlusOutlined />}
+            size="large"
+            onClick={showModal}
+          >
+            New Group
+          </Button>
         </SC.StyledItemMarginHorizonalLeftContainer>
 
         <Modal visible={visible} onOk={form.submit} onCancel={handleCancel}>
@@ -309,6 +293,20 @@ export default function MainPage() {
           // endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
           scrollableTarget="scrollableDiv"
         >
+          {loadingGroups ? (
+            <SC.StyledCenterContainer>
+              <ColorRing
+                style={{ margin: "100px 0px 0px 200px" }}
+                visible
+                height="100"
+                width="100"
+                ariaLabel="blocks-loading"
+                wrapperStyle={{}}
+                wrapperClass="blocks-wrapper"
+                colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+              />
+            </SC.StyledCenterContainer>
+          ) : null}
           <List
             grid={{
               gutter: 16,

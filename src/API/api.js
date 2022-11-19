@@ -15,6 +15,7 @@ export const PATH = {
   CREATE_GROUP: "/group/add",
   GROUP_INFO: "/group/info",
   USER_INFO: "/user/info",
+  CHANGE_ROLE: "/group/role",
 };
 
 api.interceptors.request.use(
@@ -117,6 +118,19 @@ export const groupInfo = async () => {
 export const userInfo = async ({ id }) => {
   try {
     const response = await api.get(PATH.USER_INFO, { id });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const changeRole = async ({ groupID, memberID, role }) => {
+  try {
+    const response = await api.post(PATH.CHANGE_ROLE, {
+      groupID,
+      memberID,
+      role,
+    });
     return response;
   } catch (error) {
     throw Error(error.response.data);

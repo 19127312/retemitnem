@@ -1,11 +1,21 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import "antd/dist/antd.min.css";
-import { Button, Form, Input, Popconfirm, Table, Modal, Space } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
 import { ColorRing } from "react-loader-spinner";
 import { ReactMultiEmail } from "react-multi-email";
 import * as SC from "./StyledGroupPageComponents";
 import "react-multi-email/style.css";
+import {
+  Button,
+  Dropdown,
+  Form,
+  Input,
+  Popconfirm,
+  Table,
+  Space,
+  Menu,
+} from "antd";
+import { PlusOutlined, DownOutlined } from "@ant-design/icons";
+import { changeRole } from "../../API/api";
 
 const EditableContext = React.createContext(null);
 function EditableRow({ index, ...props }) {
@@ -18,16 +28,7 @@ function EditableRow({ index, ...props }) {
     </Form>
   );
 }
-// const items = [
-//   {
-//     key: "1",
-//     label: "Action 1",
-//   },
-//   {
-//     key: "2",
-//     label: "Action 2",
-//   },
-// ];
+
 function EditableCell({
   title,
   editable,
@@ -97,6 +98,7 @@ function EditableCell({
   }
   return <td {...restProps}>{childNode}</td>;
 }
+
 const styles = {
   fontFamily: "sans-serif",
   width: "420px",
@@ -127,9 +129,44 @@ export function GroupMemberPage() {
     setVisible(false);
   };
 
+export function GroupMemberPage({ memberPayload }) {
+  const [count, setCount] = useState(2);
+
+  const members = memberPayload.members.map((item) => {
+    return {
+      name: item.memberName,
+      role: item.role,
+      email: item.memberEmail,
+      id: item.memberID,
+    };
+  });
+  const [dataSource, setDataSource] = useState(members);
+
+  const handleChangeRole = async ({ key }, record) => {
+    console.log(key);
+    console.log(record);
+    const respone = await changeRole({
+      groupID: memberPayload._id,
+      memberID: record.id,
+      role: key.key,
+    });
+    console.log(respone);
+    // const newData = await groupInfo
+  };
+
+  const menu = (record) => {
+    console.log("record", record);
+    return (
+      <Menu onClick={(key) => handleChangeRole({ key }, record)}>
+        <Menu.Item key="co-owner">Co-owner</Menu.Item>
+        <Menu.Item key="member">Member</Menu.Item>
+      </Menu>
+    );
+  };
   const handleDelete = (key) => {
-    const newData = dataSource.filter((item) => item.key !== key);
-    setDataSource(newData);
+    // const newData = dataSource.filter((item) => item.key !== key);
+    // setDataSource(newData);
+    console.log(key);
   };
   const defaultColumns = [
     {
@@ -142,21 +179,34 @@ export function GroupMemberPage() {
       dataIndex: "role",
     },
     {
-      title: "address",
-      dataIndex: "address",
+      title: "Email",
+      dataIndex: "email",
+      width: "30%",
     },
     {
       title: "Operation",
       dataIndex: "operation",
-      render: (_, record) =>
-        dataSource.length >= 1 ? (
+      render: (_, record) => (
+        <Space size="middle">
           <Popconfirm
             title="Sure to delete?"
-            onConfirm={() => handleDelete(record.key)}
+            onConfirm={() => handleDelete(record)}
           >
-            {record.role === "Owner" ? null : <a href="google.com">Delete</a>}
+            {record.role === "owner" ? null : <a href={() => false}>Delete</a>}
           </Popconfirm>
-        ) : null,
+          {record.role === "owner" ? null : (
+            <Dropdown overlay={menu(record)} trigger={["click"]}>
+              <a
+                href={() => false}
+                onClick={(e) => e.preventDefault()}
+                style={{ color: "#d46b08", fontWeight: "bold" }}
+              >
+                Change role <DownOutlined />
+              </a>
+            </Dropdown>
+          )}
+        </Space>
+      ),
     },
     // {
     //     title: 'operation',
