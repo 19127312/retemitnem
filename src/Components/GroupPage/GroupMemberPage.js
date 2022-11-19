@@ -1,9 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import "antd/dist/antd.min.css";
-import { ColorRing } from "react-loader-spinner";
 import { ReactMultiEmail } from "react-multi-email";
-import * as SC from "./StyledGroupPageComponents";
-import "react-multi-email/style.css";
+
+import "antd/dist/antd.min.css";
 import {
   Button,
   Dropdown,
@@ -13,9 +11,14 @@ import {
   Table,
   Space,
   Menu,
+  Modal,
 } from "antd";
 import { PlusOutlined, DownOutlined } from "@ant-design/icons";
+import { ColorRing } from "react-loader-spinner";
+
 import { changeRole } from "../../API/api";
+import * as SC from "./StyledGroupPageComponents";
+import "react-multi-email/style.css";
 
 const EditableContext = React.createContext(null);
 function EditableRow({ index, ...props }) {
@@ -28,7 +31,15 @@ function EditableRow({ index, ...props }) {
     </Form>
   );
 }
-
+const styles = {
+  fontFamily: "sans-serif",
+  width: "420px",
+  borderRadius: "10px",
+  border: "1px solid #eee",
+  background: "#eaf8ff",
+  padding: "25px",
+  margin: "20px",
+};
 function EditableCell({
   title,
   editable,
@@ -98,39 +109,9 @@ function EditableCell({
   }
   return <td {...restProps}>{childNode}</td>;
 }
-
-const styles = {
-  fontFamily: "sans-serif",
-  width: "420px",
-  borderRadius: "10px",
-  border: "1px solid #eee",
-  background: "#eaf8ff",
-  padding: "25px",
-  margin: "20px",
-};
-export function GroupMemberPage() {
-  const [visible, setVisible] = useState(false);
-  const [emails, setEmails] = useState([]);
-  const [dataSource, setDataSource] = useState([
-    {
-      key: "0",
-      name: "Edward King 0",
-      role: "Owner",
-      address: "London, Park Lane no. 0",
-    },
-    {
-      key: "1",
-      name: "Edward King 1",
-      role: "Member",
-      address: "London, Park Lane no. 1",
-    },
-  ]);
-  const handleCancel = () => {
-    setVisible(false);
-  };
-
 export function GroupMemberPage({ memberPayload }) {
-  const [count, setCount] = useState(2);
+  const [emails, setEmails] = useState([]);
+  const [visible, setVisible] = useState(false);
 
   const members = memberPayload.members.map((item) => {
     return {
@@ -224,16 +205,14 @@ export function GroupMemberPage({ memberPayload }) {
     //     )
     // },
   ];
+  const handleCancel = () => {
+    setVisible(false);
+  };
   const handleAdd = () => {
-    // const newData = {
-    //   key: count,
-    //   name: `Edward King ${count}`,
-    //   role: "owner",
-    //   address: `London, Park Lane no. ${count}`,
-    // };
-    // setDataSource([...dataSource, newData]);
-    // setCount(count + 1);
     setVisible(true);
+  };
+  const handleOk = () => {
+    console.log("values", emails);
   };
   const handleSave = (row) => {
     const newData = [...dataSource];
@@ -266,12 +245,6 @@ export function GroupMemberPage({ memberPayload }) {
       }),
     };
   });
-  const handleOk = () => {
-    console.log("values", emails);
-  };
-  // const onEmailsChange = (email, index, removeEmail) => {
-
-  // };
   return (
     <div>
       <Button
