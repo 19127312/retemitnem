@@ -17,7 +17,6 @@ module.exports = {
   plugins: ["react"],
   rules: {
     "react/jsx-props-no-spreading": "off",
-    "react/jsx-filename-extension": [0],
     "import/extensions": "off",
     "prettier/prettier": [
       "error",
@@ -31,7 +30,13 @@ module.exports = {
     "import/prefer-default-export": "off",
     "import/no-named-as-default": 0,
     "react/react-in-jsx-scope": "off",
-    "react/jsx-filename-extension": [1, { extensions: [".js", ".jsx"] }], //should add ".ts" if typescript project
+    "react/jsx-filename-extension": [1, { extensions: [".js", ".jsx"] }],
     "no-plusplus": "off",
+    "react/no-unstable-nested-components": [
+      "off",
+      {
+        allowAsProps: true,
+      },
+    ],
   },
 };

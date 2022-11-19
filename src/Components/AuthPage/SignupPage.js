@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -6,15 +6,18 @@ import { Icon } from "react-icons-kit";
 import { eye } from "react-icons-kit/feather/eye";
 import { eyeOff } from "react-icons-kit/feather/eyeOff";
 import { useMutation } from "@tanstack/react-query";
-// import { useGoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
 import GoogleLoginBtn from "../../Assets/GoogleLoginBtn.png";
-import { signup } from "../../API/api";
+import { signup, signupGG } from "../../API/api";
 import * as SC from "./StyledAuthComponents";
 import logo from "../../Assets/logo.png";
 import loginPagePicture from "../../Assets/loginPagePicture.png";
 import { Color } from "../../Constants/Constant";
+import AuthContext from "../../Context/AuthProvider";
 
 export default function SingupPage() {
+  const { setAuth } = useContext(AuthContext);
+
   const {
     register,
     formState: { errors },
@@ -64,7 +67,15 @@ export default function SingupPage() {
     navigate("/login", { replace: true, state: { message: "" } });
   };
 
-  const signinWithGoogle = () => {};
+  const signupWithGoogle = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      const response = await signupGG(tokenResponse.access_token);
+
+      const { accessToken, user, refreshToken } = response.data;
+      setAuth({ user, accessToken, refreshToken });
+    },
+    onError: (error) => console.log(error),
+  });
 
   return (
     <SC.AuthContainer>
@@ -169,7 +180,7 @@ export default function SingupPage() {
           type="image"
           src={GoogleLoginBtn}
           alt="googleLogin"
-          onClick={signinWithGoogle}
+          onClick={signupWithGoogle}
         />
       </SC.AuthFormWrapper>
       <SC.AuthContainerImage>

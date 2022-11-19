@@ -155,3 +155,19 @@ export const StyledImagePlay = styled.img`
 export const StyledMarginTaleDashboard = styled.div`
   margin-top: 10px;
 `;
+
+export const StyledGroupTitle = styled.h1`
+  font-family: Public Sans; /* Body */
+  font-size: 20px;
+  line-height: 30px;
+  color: #171a1fff;
+`;
+
+export const StyledEmailInputContainer = styled.div`
+  font-family: Public Sans; /* Body */";
+  width: "600px";
+  border: "1px solid #eee";
+  background: "#f3f3f3";
+  padding: "25px";
+  margin: "20px";
+`;

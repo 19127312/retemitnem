@@ -1,5 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import "antd/dist/antd.min.css";
+import { ColorRing } from "react-loader-spinner";
+import { ReactMultiEmail } from "react-multi-email";
+import * as SC from "./StyledGroupPageComponents";
+import "react-multi-email/style.css";
 import {
   Button,
   Dropdown,
@@ -94,6 +98,37 @@ function EditableCell({
   }
   return <td {...restProps}>{childNode}</td>;
 }
+
+const styles = {
+  fontFamily: "sans-serif",
+  width: "420px",
+  borderRadius: "10px",
+  border: "1px solid #eee",
+  background: "#eaf8ff",
+  padding: "25px",
+  margin: "20px",
+};
+export function GroupMemberPage() {
+  const [visible, setVisible] = useState(false);
+  const [emails, setEmails] = useState([]);
+  const [dataSource, setDataSource] = useState([
+    {
+      key: "0",
+      name: "Edward King 0",
+      role: "Owner",
+      address: "London, Park Lane no. 0",
+    },
+    {
+      key: "1",
+      name: "Edward King 1",
+      role: "Member",
+      address: "London, Park Lane no. 1",
+    },
+  ]);
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
 export function GroupMemberPage({ memberPayload }) {
   const [count, setCount] = useState(2);
 
@@ -190,14 +225,15 @@ export function GroupMemberPage({ memberPayload }) {
     // },
   ];
   const handleAdd = () => {
-    const newData = {
-      key: count,
-      name: `Edward King ${count}`,
-      role: "owner",
-      address: `London, Park Lane no. ${count}`,
-    };
-    setDataSource([...dataSource, newData]);
-    setCount(count + 1);
+    // const newData = {
+    //   key: count,
+    //   name: `Edward King ${count}`,
+    //   role: "owner",
+    //   address: `London, Park Lane no. ${count}`,
+    // };
+    // setDataSource([...dataSource, newData]);
+    // setCount(count + 1);
+    setVisible(true);
   };
   const handleSave = (row) => {
     const newData = [...dataSource];
@@ -230,6 +266,12 @@ export function GroupMemberPage({ memberPayload }) {
       }),
     };
   });
+  const handleOk = () => {
+    console.log("values", emails);
+  };
+  // const onEmailsChange = (email, index, removeEmail) => {
+
+  // };
   return (
     <div>
       <Button
@@ -241,6 +283,48 @@ export function GroupMemberPage({ memberPayload }) {
       >
         Add member
       </Button>
+      <Modal visible={visible} onOk={handleOk} onCancel={handleCancel}>
+        <SC.StyledGroupTitle>Add new member</SC.StyledGroupTitle>
+        <Space>
+          <div style={styles}>
+            <ReactMultiEmail
+              placeholder="Input your Email Address"
+              emails={emails}
+              onChange={(_emails) => {
+                setEmails(_emails);
+              }}
+              getLabel={(email, index, removeEmail) => {
+                return (
+                  <div data-tag key={index}>
+                    {email}
+                    <span
+                      data-tag-handle
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => removeEmail(index)}
+                      onKeyDown={() => removeEmail(index)}
+                    >
+                      ×
+                    </span>
+                  </div>
+                );
+              }}
+            />
+          </div>
+
+          {false ? (
+            <ColorRing
+              visible
+              height="25"
+              width="25"
+              ariaLabel="blocks-loading"
+              wrapperStyle={{}}
+              wrapperClass="blocks-wrapper"
+              colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+            />
+          ) : null}
+        </Space>
+      </Modal>
       <Table
         components={components}
         rowClassName={() => "editable-row"}
