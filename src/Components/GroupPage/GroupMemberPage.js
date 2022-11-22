@@ -273,10 +273,10 @@ export function GroupMemberPage({ memberPayload }) {
     message.success("Send link successfully");
   };
 
-  const { isLoading, mutateAsync } = useMutation(sendlinktoemail, {
+  const sendLinkToEmailMutation = useMutation(sendlinktoemail, {
     onError: (error) => {
       setVisible(false);
-      message.error(error.response.data.message);
+      // message.error(error.response.data.message);
       console.log(error);
     },
     onSuccess: () => {
@@ -287,7 +287,7 @@ export function GroupMemberPage({ memberPayload }) {
 
   const handleOk = async () => {
     try {
-      await mutateAsync({
+      await sendLinkToEmailMutation.mutateAsync({
         groupID: memberPayload._id,
         emailList: emails,
       });
@@ -366,7 +366,7 @@ export function GroupMemberPage({ memberPayload }) {
             />
           </div>
 
-          {isLoading ? (
+          {sendLinkToEmailMutation.isLoading ? (
             <ColorRing
               visible
               height="25"

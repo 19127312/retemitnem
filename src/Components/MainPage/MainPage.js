@@ -340,7 +340,9 @@ export default function MainPage() {
                       key="share"
                       onClick={(e) => {
                         e.stopPropagation();
-                        navigator.clipboard.writeText(item._id);
+                        navigator.clipboard.writeText(
+                          `${window.location.host}/joinLink/${item._id}`
+                        );
                         showCopySuccessMessage();
                       }}
                     />,
