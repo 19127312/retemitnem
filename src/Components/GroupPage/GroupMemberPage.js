@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { ReactMultiEmail } from "react-multi-email";
-
 import "antd/dist/antd.min.css";
 import {
   Button,
@@ -14,10 +13,11 @@ import {
   Modal,
   message,
 } from "antd";
+import { useMutation } from "@tanstack/react-query";
 import { PlusOutlined, DownOutlined } from "@ant-design/icons";
 import { ColorRing } from "react-loader-spinner";
+import { changeRole, sendlinktoemail, deleteMember } from "../../API/api";
 import { useMutation } from "@tanstack/react-query";
-import { changeRole, deleteMember } from "../../API/api";
 import * as SC from "./StyledGroupPageComponents";
 import "react-multi-email/style.css";
 
@@ -270,8 +270,31 @@ export function GroupMemberPage({ memberPayload }) {
   const handleAdd = () => {
     setVisible(true);
   };
-  const handleOk = () => {
-    console.log("values", emails);
+  const showSendEmailSuccessMessage = () => {
+    message.success("Send link successfully");
+  };
+
+  const { isLoading, mutateAsync } = useMutation(sendlinktoemail, {
+    onError: (error) => {
+      setVisible(false);
+      message.error(error.response.data.message);
+      console.log(error);
+    },
+    onSuccess: () => {
+      setVisible(false);
+      showSendEmailSuccessMessage();
+    },
+  });
+
+  const handleOk = async () => {
+    try {
+      await mutateAsync({
+        groupID: memberPayload._id,
+        emailList: emails,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
   const handleSave = (row) => {
     const newData = [...dataSource];
@@ -344,7 +367,7 @@ export function GroupMemberPage({ memberPayload }) {
             />
           </div>
 
-          {false ? (
+          {isLoading ? (
             <ColorRing
               visible
               height="25"
