@@ -16,6 +16,7 @@ export const PATH = {
   GROUP_INFO: "/group/info",
   USER_INFO: "/user/info",
   CHANGE_ROLE: "/group/role",
+  SEND_LINK_TO_EMAIL: "/group/sendlinktoemail",
 };
 
 api.interceptors.request.use(
@@ -130,6 +131,18 @@ export const changeRole = async ({ groupID, memberID, role }) => {
       groupID,
       memberID,
       role,
+    });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const sendlinktoemail = async ({ groupID, emailList }) => {
+  try {
+    const response = await api.post(PATH.SEND_LINK_TO_EMAIL, {
+      groupID,
+      emailList,
     });
     return response;
   } catch (error) {
