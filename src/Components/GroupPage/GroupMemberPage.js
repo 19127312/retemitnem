@@ -19,6 +19,7 @@ import { ColorRing } from "react-loader-spinner";
 import { changeRole, sendlinktoemail, deleteMember } from "../../API/api";
 import * as SC from "./StyledGroupPageComponents";
 import "react-multi-email/style.css";
+import AuthContext from "../../Context/AuthProvider";
 
 const EditableContext = React.createContext(null);
 function EditableRow({ index, ...props }) {
@@ -113,7 +114,8 @@ export function GroupMemberPage({ memberPayload }) {
   const [emails, setEmails] = useState([]);
   const [visible, setVisible] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
-
+  const { auth } = useContext(AuthContext);
+  console.log(auth);
   const members = memberPayload.members.map((item) => {
     return {
       name: item.memberName,
@@ -123,7 +125,10 @@ export function GroupMemberPage({ memberPayload }) {
     };
   });
   const [dataSource, setDataSource] = useState(members);
-
+  const currentMember = members.filter((item) => {
+    return item.id === auth.user._id;
+  });
+  console.log(currentMember);
   const showChangeRoleSuccessMessage = () => {
     message.success("Change role successfully");
   };
@@ -195,6 +200,23 @@ export function GroupMemberPage({ memberPayload }) {
       memberID: record.id,
     });
   };
+  const defaultLimitedColumns = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      width: "30%",
+    },
+    {
+      title: "Role",
+      dataIndex: "role",
+      width: "10%",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      width: "30%",
+    },
+  ];
   const defaultColumns = [
     {
       title: "Name",
@@ -247,21 +269,6 @@ export function GroupMemberPage({ memberPayload }) {
         </Space>
       ),
     },
-    // {
-    //     title: 'operation',
-    //     dataIndex: 'operation',
-    //     render: () => (
-    //         <Dropdown
-    //             menu={{
-    //                 items,
-    //             }}
-    //         >
-    //             <a>
-    //                 More <DownOutlined />
-    //             </a>
-    //         </Dropdown>
-    //     )
-    // },
   ];
   const handleCancel = () => {
     setVisible(false);
@@ -311,6 +318,21 @@ export function GroupMemberPage({ memberPayload }) {
       cell: EditableCell,
     },
   };
+  const limitedColumns = defaultLimitedColumns.map((col) => {
+    if (!col.editable) {
+      return col;
+    }
+    return {
+      ...col,
+      onCell: (record) => ({
+        record,
+        editable: col.editable,
+        dataIndex: col.dataIndex,
+        title: col.title,
+        handleSave,
+      }),
+    };
+  });
   const columns = defaultColumns.map((col) => {
     if (!col.editable) {
       return col;
@@ -384,7 +406,11 @@ export function GroupMemberPage({ memberPayload }) {
         rowClassName={() => "editable-row"}
         bordered
         dataSource={dataSource}
-        columns={columns}
+        columns={
+          !currentMember[0].role.toString().includes("member")
+            ? columns
+            : limitedColumns
+        }
       />
     </div>
   );
