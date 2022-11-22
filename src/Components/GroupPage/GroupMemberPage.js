@@ -16,7 +16,8 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { PlusOutlined, DownOutlined } from "@ant-design/icons";
 import { ColorRing } from "react-loader-spinner";
-import { changeRole, sendlinktoemail } from "../../API/api";
+import { changeRole, sendlinktoemail, deleteMember } from "../../API/api";
+import { useMutation } from "@tanstack/react-query";
 import * as SC from "./StyledGroupPageComponents";
 import "react-multi-email/style.css";
 
@@ -112,6 +113,7 @@ function EditableCell({
 export function GroupMemberPage({ memberPayload }) {
   const [emails, setEmails] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
 
   const members = memberPayload.members.map((item) => {
     return {
@@ -123,20 +125,63 @@ export function GroupMemberPage({ memberPayload }) {
   });
   const [dataSource, setDataSource] = useState(members);
 
+  const showChangeRoleSuccessMessage = () => {
+    message.success("Change role successfully");
+  };
+
+  const showDeleteSuccessMessage = () => {
+    message.success("Delete member successfully");
+  };
+
+  const changeRoleMutation = useMutation(changeRole, {
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (response) => {
+      console.log(response);
+      const updatedMembers = response.data.members.map((item) => {
+        return {
+          name: item.memberName,
+          role: item.role,
+          email: item.memberEmail,
+          id: item.memberID,
+        };
+      });
+      setDataSource(updatedMembers);
+      showChangeRoleSuccessMessage();
+    },
+  });
+
+  const deleteMemberMutation = useMutation(deleteMember, {
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (response) => {
+      console.log(response);
+      const updatedMembers = response.data.members.map((item) => {
+        return {
+          name: item.memberName,
+          role: item.role,
+          email: item.memberEmail,
+          id: item.memberID,
+        };
+      });
+      setDataSource(updatedMembers);
+      showDeleteSuccessMessage();
+    },
+  });
+
   const handleChangeRole = async ({ key }, record) => {
-    console.log(key);
-    console.log(record);
-    const respone = await changeRole({
+    setSelectedRow(record.id);
+    await changeRoleMutation.mutateAsync({
       groupID: memberPayload._id,
       memberID: record.id,
       role: key.key,
     });
-    console.log(respone);
-    // const newData = await groupInfo
   };
 
   const menu = (record) => {
-    console.log("record", record);
+    // console.log("record", record);
     return (
       <Menu onClick={(key) => handleChangeRole({ key }, record)}>
         <Menu.Item key="co-owner">Co-owner</Menu.Item>
@@ -144,10 +189,12 @@ export function GroupMemberPage({ memberPayload }) {
       </Menu>
     );
   };
-  const handleDelete = (key) => {
-    // const newData = dataSource.filter((item) => item.key !== key);
-    // setDataSource(newData);
-    console.log(key);
+  const handleDelete = async (record) => {
+    setSelectedRow(record.id);
+    await deleteMemberMutation.mutateAsync({
+      groupID: memberPayload._id,
+      memberID: record.id,
+    });
   };
   const defaultColumns = [
     {
@@ -158,6 +205,7 @@ export function GroupMemberPage({ memberPayload }) {
     {
       title: "Role",
       dataIndex: "role",
+      width: "10%",
     },
     {
       title: "Email",
@@ -186,6 +234,17 @@ export function GroupMemberPage({ memberPayload }) {
               </a>
             </Dropdown>
           )}
+          {changeRoleMutation.isLoading && record.id === selectedRow ? (
+            <ColorRing
+              visible
+              height="15"
+              width="15"
+              ariaLabel="blocks-loading"
+              wrapperStyle={{}}
+              wrapperClass="blocks-wrapper"
+              colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+            />
+          ) : null}
         </Space>
       ),
     },
