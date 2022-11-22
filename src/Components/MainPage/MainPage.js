@@ -1,7 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
 import "antd/dist/antd.min.css";
 
-import { PlusOutlined, ShareAltOutlined } from "@ant-design/icons";
+import {
+  PlusOutlined,
+  ShareAltOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   Input,
@@ -13,21 +17,21 @@ import {
   Modal,
   Space,
   message,
+  Menu,
+  Dropdown,
 } from "antd";
-
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useMutation } from "@tanstack/react-query";
 import { ColorRing } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import { createGroup, groupInfo, addMember } from "../../API/api";
-import logoutIcon from "../../Assets/logout.svg";
+// import logoutIcon from "../../Assets/logout.svg";
 import * as SC from "./StyledMainPageComponents";
 import logo from "../../Assets/logo.png";
 import AuthContext from "../../Context/AuthProvider";
 
 const { Search } = Input;
 const { Meta } = Card;
-
 export default function MainPage() {
   const { auth, setAuth } = useContext(AuthContext);
   const [visible, setVisible] = useState(false);
@@ -47,6 +51,27 @@ export default function MainPage() {
     }
     return false;
   };
+
+  const logout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    setAuth(null);
+  };
+
+  const handleUserMenu = async ({ key }) => {
+    const value = key.key;
+    if (value === "2") {
+      logout();
+    }
+  };
+
+  const userMenu = (
+    <Menu onClick={(key) => handleUserMenu({ key })}>
+      <Menu.Item key="1">Manage your information</Menu.Item>
+      <Menu.Divider />
+      <Menu.Item key="2">Logout</Menu.Item>
+    </Menu>
+  );
 
   const filterAndSearchData = (allData) => {
     const filteredData = [];
@@ -178,11 +203,7 @@ export default function MainPage() {
       console.log(error);
     }
   };
-  const logout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    setAuth(null);
-  };
+
   return (
     <SC.StyledPageContainer>
       <SC.StyledUpperBarContainer>
@@ -200,11 +221,28 @@ export default function MainPage() {
             <SC.StyledUserName>{auth.user.fullName}</SC.StyledUserName>
             <SC.StyledEmailName>{auth.user.email}</SC.StyledEmailName>
           </SC.StyledUserInfoContainer>
-          <SC.StyledImageContainer
+          {/* <SC.StyledImageContainer
             src={logoutIcon}
             alt="logout"
             onClick={logout}
-          />
+          /> */}
+          <div>
+            <Dropdown.Button
+              style={{ float: "right" }}
+              className="dropdown-btn"
+              overlay={userMenu}
+              icon={
+                <UserOutlined
+                  style={{
+                    fontSize: "28px",
+                    backgroundColor: "#f0f0f0",
+                    borderRadius: "50%",
+                  }}
+                />
+                // <Avatar src="https://joeschmoe.io/api/v1/random" />
+              }
+            />
+          </div>
         </SC.StyledIconContainer>
       </SC.StyledUpperBarContainer>
 
@@ -365,7 +403,9 @@ export default function MainPage() {
                       key="share"
                       onClick={(e) => {
                         e.stopPropagation();
-                        navigator.clipboard.writeText(item._id);
+                        navigator.clipboard.writeText(
+                          `${window.location.host}/joinLink/${item._id}`
+                        );
                         showCopySuccessMessage();
                       }}
                     />,
