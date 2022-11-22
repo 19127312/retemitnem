@@ -97,6 +97,10 @@ export default function MainPage() {
     }
   };
 
+  const showCopySuccessMessage = () => {
+    message.info("Copied to clipboard");
+  };
+
   const showModal = () => {
     setVisible(true);
   };
@@ -336,7 +340,8 @@ export default function MainPage() {
                       key="share"
                       onClick={(e) => {
                         e.stopPropagation();
-                        console.log(item);
+                        navigator.clipboard.writeText(item._id);
+                        showCopySuccessMessage();
                       }}
                     />,
                   ]}

@@ -16,6 +16,8 @@ export const PATH = {
   GROUP_INFO: "/group/info",
   USER_INFO: "/user/info",
   CHANGE_ROLE: "/group/role",
+  GROUP_DETAIL: "/group/detail",
+  DELETE_MEMBER: "/group/deletemember",
 };
 
 api.interceptors.request.use(
@@ -130,6 +132,27 @@ export const changeRole = async ({ groupID, memberID, role }) => {
       groupID,
       memberID,
       role,
+    });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const viewGroupInfo = async ({ groupID }) => {
+  try {
+    const respone = await api.get(`${PATH.GROUP_DETAIL}/${groupID}`);
+    return respone;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const deleteMember = async ({ groupID, memberID }) => {
+  try {
+    const response = await api.post(PATH.DELETE_MEMBER, {
+      groupID,
+      memberID,
     });
     return response;
   } catch (error) {
