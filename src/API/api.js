@@ -19,6 +19,7 @@ export const PATH = {
   SEND_LINK_TO_EMAIL: "/group/sendlinktoemail",
   GROUP_DETAIL: "/group/detail",
   DELETE_MEMBER: "/group/deletemember",
+  ADD_MEMBER: "/group/addmember",
 };
 
 api.interceptors.request.use(
@@ -164,6 +165,18 @@ export const viewGroupInfo = async ({ groupID }) => {
 export const deleteMember = async ({ groupID, memberID }) => {
   try {
     const response = await api.post(PATH.DELETE_MEMBER, {
+      groupID,
+      memberID,
+    });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const addMember = async ({ groupID, memberID }) => {
+  try {
+    const response = await api.post(PATH.ADD_MEMBER, {
       groupID,
       memberID,
     });
