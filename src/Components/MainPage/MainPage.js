@@ -19,7 +19,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useMutation } from "@tanstack/react-query";
 import { ColorRing } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
-import { createGroup, groupInfo } from "../../API/api";
+import { createGroup, groupInfo, addMember } from "../../API/api";
 import logoutIcon from "../../Assets/logout.svg";
 import * as SC from "./StyledMainPageComponents";
 import logo from "../../Assets/logo.png";
@@ -35,8 +35,9 @@ export default function MainPage() {
   const [data, setData] = useState([]);
   const [rawData, setRawData] = useState([]);
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("My Groups");
+  const [filter, setFilter] = useState("All Groups");
   const [loadingGroups, setLoadingGroups] = useState(false);
+
   const navigate = useNavigate();
   const checkExist = (element, userID) => {
     for (let i = 0; i < element.members.length; i++) {
@@ -53,9 +54,10 @@ export default function MainPage() {
       if (allData[i].groupName.toString().includes(search)) {
         if (
           (filter === "My Groups" && allData[i].creatorID === auth.user._id) ||
-          (filter !== "My Groups" &&
+          (filter === "Other Groups" &&
             allData[i].creatorID !== auth.user._id &&
-            checkExist(allData[i], auth.user._id))
+            checkExist(allData[i], auth.user._id)) ||
+          (filter === "All Groups" && checkExist(allData[i], auth.user._id))
         ) {
           filteredData.push(allData[i]);
         }
@@ -65,6 +67,22 @@ export default function MainPage() {
   };
 
   useEffect(() => {
+    const joinGroupID = async () => {
+      try {
+        const groupID = localStorage.getItem("groupID");
+
+        if (groupID) {
+          localStorage.removeItem("groupID");
+          await addMember({
+            groupID,
+            memberID: auth.user._id,
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     const fetchData = async () => {
       try {
         setLoadingGroups(true);
@@ -76,6 +94,7 @@ export default function MainPage() {
         console.error(error.message);
       }
     };
+    joinGroupID();
     fetchData();
   }, []);
 
@@ -92,8 +111,10 @@ export default function MainPage() {
     console.log(`selected ${value}`);
     if (value === "self") {
       setFilter("My Groups");
-    } else {
+    } else if (value === "others") {
       setFilter("Other Groups");
+    } else if (value === "all") {
+      setFilter("All Groups");
     }
   };
 
@@ -254,10 +275,14 @@ export default function MainPage() {
           </SC.StyledItemMarginHorizonalRightContainer>
           <SC.StyledItemMarginHorizonalRightContainer>
             <Select
-              defaultValue="self"
+              defaultValue="all"
               onChange={handleChange}
               style={{ width: 200 }}
               options={[
+                {
+                  value: "all",
+                  label: "All Groups",
+                },
                 {
                   value: "self",
                   label: "My Groups",
