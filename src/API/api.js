@@ -20,6 +20,7 @@ export const PATH = {
   GROUP_DETAIL: "/group/detail",
   DELETE_MEMBER: "/group/deletemember",
   ADD_MEMBER: "/group/addmember",
+  LOGOUT: "/auth/logout",
 };
 
 api.interceptors.request.use(
@@ -179,6 +180,17 @@ export const addMember = async ({ groupID, memberID }) => {
     const response = await api.post(PATH.ADD_MEMBER, {
       groupID,
       memberID,
+    });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const logout = async ({ refreshToken }) => {
+  try {
+    const response = await api.post(PATH.LOGOUT, {
+      refreshToken,
     });
     return response;
   } catch (error) {

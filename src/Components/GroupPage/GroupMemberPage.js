@@ -1,18 +1,7 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useState } from "react";
 import { ReactMultiEmail } from "react-multi-email";
 import "antd/dist/antd.min.css";
-import {
-  Button,
-  Dropdown,
-  Form,
-  Input,
-  Popconfirm,
-  Table,
-  Space,
-  Menu,
-  Modal,
-  message,
-} from "antd";
+import { Button, Dropdown, Popconfirm, Table, Space, Menu, Modal } from "antd";
 import { useMutation } from "@tanstack/react-query";
 import { PlusOutlined, DownOutlined } from "@ant-design/icons";
 import { ColorRing } from "react-loader-spinner";
@@ -20,102 +9,15 @@ import { changeRole, sendlinktoemail, deleteMember } from "../../API/api";
 import * as SC from "./StyledGroupPageComponents";
 import "react-multi-email/style.css";
 import AuthContext from "../../Context/AuthProvider";
+import { showMessage } from "../Message";
+import { EditableCell, EditableRow } from "./SettingTable";
 
-const EditableContext = React.createContext(null);
-function EditableRow({ index, ...props }) {
-  const [form] = Form.useForm();
-  return (
-    <Form form={form} component={false}>
-      <EditableContext.Provider value={form}>
-        <tr {...props} />
-      </EditableContext.Provider>
-    </Form>
-  );
-}
-const styles = {
-  fontFamily: "sans-serif",
-  width: "420px",
-  borderRadius: "10px",
-  border: "1px solid #eee",
-  background: "#eaf8ff",
-  padding: "25px",
-  margin: "20px",
-};
-function EditableCell({
-  title,
-  editable,
-  children,
-  dataIndex,
-  record,
-  handleSave,
-  ...restProps
-}) {
-  const [editing, setEditing] = useState(false);
-  const inputRef = useRef(null);
-  const form = useContext(EditableContext);
-  useEffect(() => {
-    if (editing) {
-      inputRef.current.focus();
-    }
-  }, [editing]);
-  const toggleEdit = () => {
-    setEditing(!editing);
-    form.setFieldsValue({
-      [dataIndex]: record[dataIndex],
-    });
-  };
-  const save = async () => {
-    try {
-      const values = await form.validateFields();
-      toggleEdit();
-      handleSave({
-        ...record,
-        ...values,
-      });
-    } catch (errInfo) {
-      console.log("Save failed:", errInfo);
-    }
-  };
-  let childNode = children;
-  if (editable) {
-    childNode = editing ? (
-      <Form.Item
-        style={{
-          margin: 0,
-        }}
-        name={dataIndex}
-        rules={[
-          {
-            required: true,
-            message: `${title} is required.`,
-          },
-        ]}
-      >
-        <Input ref={inputRef} onPressEnter={save} onBlur={save} />
-      </Form.Item>
-    ) : (
-      <div
-        className="editable-cell-value-wrap"
-        style={{
-          paddingRight: 24,
-        }}
-        onClick={toggleEdit}
-        onKeyDown={toggleEdit}
-        role="button"
-        tabIndex={0}
-      >
-        {children}
-      </div>
-    );
-  }
-  return <td {...restProps}>{childNode}</td>;
-}
 export function GroupMemberPage({ memberPayload }) {
   const [emails, setEmails] = useState([]);
   const [visible, setVisible] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const { auth } = useContext(AuthContext);
-  console.log(auth);
+
   const members = memberPayload.members.map((item) => {
     return {
       name: item.memberName,
@@ -128,21 +30,12 @@ export function GroupMemberPage({ memberPayload }) {
   const currentMember = members.filter((item) => {
     return item.id === auth.user._id;
   });
-  console.log(currentMember);
-  const showChangeRoleSuccessMessage = () => {
-    message.success("Change role successfully");
-  };
-
-  const showDeleteSuccessMessage = () => {
-    message.success("Delete member successfully");
-  };
 
   const changeRoleMutation = useMutation(changeRole, {
     onError: (error) => {
       console.log(error);
     },
     onSuccess: (response) => {
-      console.log(response);
       const updatedMembers = response.data.members.map((item) => {
         return {
           name: item.memberName,
@@ -152,7 +45,7 @@ export function GroupMemberPage({ memberPayload }) {
         };
       });
       setDataSource(updatedMembers);
-      showChangeRoleSuccessMessage();
+      showMessage(0, "Change role successfully");
     },
   });
 
@@ -161,7 +54,6 @@ export function GroupMemberPage({ memberPayload }) {
       console.log(error);
     },
     onSuccess: (response) => {
-      console.log(response);
       const updatedMembers = response.data.members.map((item) => {
         return {
           name: item.memberName,
@@ -171,7 +63,7 @@ export function GroupMemberPage({ memberPayload }) {
         };
       });
       setDataSource(updatedMembers);
-      showDeleteSuccessMessage();
+      showMessage(0, "Delete member successfully");
     },
   });
 
@@ -185,7 +77,6 @@ export function GroupMemberPage({ memberPayload }) {
   };
 
   const menu = (record) => {
-    // console.log("record", record);
     return (
       <Menu onClick={(key) => handleChangeRole({ key }, record)}>
         <Menu.Item key="co-owner">Co-owner</Menu.Item>
@@ -276,19 +167,14 @@ export function GroupMemberPage({ memberPayload }) {
   const handleAdd = () => {
     setVisible(true);
   };
-  const showSendEmailSuccessMessage = () => {
-    message.success("Send link successfully");
-  };
-
   const sendLinkToEmailMutation = useMutation(sendlinktoemail, {
     onError: (error) => {
       setVisible(false);
-      // message.error(error.response.data.message);
       console.log(error);
     },
     onSuccess: () => {
       setVisible(false);
-      showSendEmailSuccessMessage();
+      showMessage(0, "Send link successfully");
     },
   });
 
@@ -362,7 +248,7 @@ export function GroupMemberPage({ memberPayload }) {
       <Modal visible={visible} onOk={handleOk} onCancel={handleCancel}>
         <SC.StyledGroupTitle>Add new member</SC.StyledGroupTitle>
         <Space>
-          <div style={styles}>
+          <div style={SC.styles}>
             <ReactMultiEmail
               placeholder="Input your Email Address"
               emails={emails}
