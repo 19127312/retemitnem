@@ -20,6 +20,9 @@ export const PATH = {
   GROUP_DETAIL: "/group/detail",
   DELETE_MEMBER: "/group/deletemember",
   ADD_MEMBER: "/group/addmember",
+  UPDATE_USER_INFO: "/user/changeInfo",
+  UPDATE_NAME: "/user/changename",
+  UPDATE_PASSWORD: "/user/changepassword",
 };
 
 api.interceptors.request.use(
@@ -179,6 +182,50 @@ export const addMember = async ({ groupID, memberID }) => {
     const response = await api.post(PATH.ADD_MEMBER, {
       groupID,
       memberID,
+    });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+// export const changeInfo = async ({
+//   userID,
+//   newName,
+//   oldPassword,
+//   newPassword,
+// }) => {
+//   try {
+//     const response = await api.post(PATH.UPDATE_USER_INFO, {
+//       userID,
+//       newName,
+//       oldPassword,
+//       newPassword,
+//     });
+//     return response;
+//   } catch (error) {
+//     throw Error(error.response.data);
+//   }
+// };
+
+export const changeFullname = async ({ userID, newName }) => {
+  try {
+    const response = await api.post(PATH.UPDATE_NAME, {
+      userID,
+      newName,
+    });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const changePassword = async ({ userID, oldPassword, newPassword }) => {
+  try {
+    const response = await api.post(PATH.UPDATE_PASSWORD, {
+      userID,
+      oldPassword,
+      newPassword,
     });
     return response;
   } catch (error) {
