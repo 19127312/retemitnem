@@ -171,3 +171,13 @@ export const StyledEmailInputContainer = styled.div`
   padding: "25px";
   margin: "20px";
 `;
+
+export const styles = {
+  fontFamily: "sans-serif",
+  width: "420px",
+  borderRadius: "10px",
+  border: "1px solid #eee",
+  background: "#eaf8ff",
+  padding: "25px",
+  margin: "20px",
+};
