@@ -162,7 +162,7 @@ export default function LoginPage() {
         </SC.StyledQuestionSignUp>
         <SC.StyledSignMode onClick={gotoSignup}>Sign Up</SC.StyledSignMode>
         <SC.StyledQuestionGoogleLogin>
-          Or sign up with
+          Or sign in with
         </SC.StyledQuestionGoogleLogin>
         <input
           type="image"

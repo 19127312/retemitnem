@@ -1,22 +1,13 @@
 import React, { useState } from "react";
 import "antd/dist/antd.min.css";
 import { Button, Input, Table, Space, Select } from "antd";
-
 import { PlusOutlined } from "@ant-design/icons";
 import * as SC from "./StyledGroupPageComponents";
 import playSlide from "../../Assets/playSlide.png";
 
 export function GroupDashboardPage({ dashBoardPayload }) {
   const { Search } = Input;
-  // const suffix = (
-  //   <AudioOutlined
-  //     style={{
-  //       fontSize: 16,
-  //       color: "#1890ff",
-  //     }}
-  //   />
-  // );
-  const handleClick = (key) => {
+  const handleClickPlay = (key) => {
     console.log(key.name);
   };
 
@@ -30,7 +21,7 @@ export function GroupDashboardPage({ dashBoardPayload }) {
           <SC.StyledImagePlay
             src={playSlide}
             alt="playSlide"
-            onClick={() => handleClick(record.key)}
+            onClick={() => handleClickPlay(record.key)}
           />
           <SC.StyledItemInfoSlideListContainer>
             <div>{record.name}</div>

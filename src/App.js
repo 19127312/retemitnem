@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Routes, Route } from "react-router-dom";
 import LoginPage from "./Components/AuthPage/LoginPage";
@@ -10,6 +11,9 @@ import JoinLink from "./Components/JoinLink";
 
 const queryClient = new QueryClient();
 function App() {
+  useEffect(() => {
+    document.title = "Retemitnem";
+  }, []);
   return (
     <QueryClientProvider client={queryClient}>
       <Routes>

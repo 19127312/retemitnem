@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
 import "antd/dist/antd.min.css";
-
 import {
   PlusOutlined,
   ShareAltOutlined,
@@ -16,7 +15,6 @@ import {
   Form,
   Modal,
   Space,
-  message,
   Menu,
   Dropdown,
 } from "antd";
@@ -30,14 +28,16 @@ import {
   addMember,
   changeFullname,
   changePassword,
+  logout,
 } from "../../API/api";
-// import logoutIcon from "../../Assets/logout.svg";
 import * as SC from "./StyledMainPageComponents";
 import logo from "../../Assets/logo.png";
 import AuthContext from "../../Context/AuthProvider";
+import { showMessage } from "../Message";
 
 const { Search } = Input;
 const { Meta } = Card;
+
 export default function MainPage() {
   const { auth, setAuth } = useContext(AuthContext);
   const [visible, setVisible] = useState(false);
@@ -62,8 +62,9 @@ export default function MainPage() {
     return false;
   };
 
-  const logout = () => {
+  const logoutAction = async () => {
     localStorage.removeItem("accessToken");
+    await logout({ refreshToken: localStorage.getItem("refreshToken") });
     localStorage.removeItem("refreshToken");
     setAuth(null);
   };
@@ -87,7 +88,7 @@ export default function MainPage() {
   const handleUserMenu = async ({ key }) => {
     const value = key.key;
     if (value === "3") {
-      logout();
+      logoutAction();
     } else if (value === "2") {
       showPasswordModal();
     } else {
@@ -160,11 +161,9 @@ export default function MainPage() {
 
   // handle search
   const onSearch = (value) => setSearch(value);
-  // const onClick = () => console.log('click');
 
   // handle filter
   const handleChange = (value) => {
-    console.log(`selected ${value}`);
     if (value === "self") {
       setFilter("My Groups");
     } else if (value === "others") {
@@ -172,10 +171,6 @@ export default function MainPage() {
     } else if (value === "all") {
       setFilter("All Groups");
     }
-  };
-
-  const showCopySuccessMessage = () => {
-    message.info("Copied to clipboard");
   };
 
   const showModal = () => {
@@ -186,53 +181,33 @@ export default function MainPage() {
     setVisible(false);
     form.resetFields();
   };
-
-  const showSuccessMessage = () => {
-    message.success("Create group successfully");
-  };
-
-  const showUpdateSuccessMessage = () => {
-    message.success("Updated successfully");
-  };
-
-  // const showUnvalidPasswordMessage = () => {
-  //   message.error("");
-  // };
-
-  const showExistNameErrorMessage = () => {
-    message.error("Group name has already been exist");
-  };
-
-  const showUnknownErrorMessage = () => {
-    message.error("Operation failed. Unknown error");
-  };
-
   const createGroupMutation = useMutation(createGroup, {
     onError: (error) => {
       setVisible(false);
       form.resetFields();
-      // alert(error);
-      console.log(error);
       if (error.toString().includes("group name has already been used")) {
-        showExistNameErrorMessage();
+        showMessage(2, "Group name has already been used");
       } else {
-        showUnknownErrorMessage();
+        showMessage(2, "Create failed. Unknown error");
       }
+      setLoadingGroups(false);
     },
     onSuccess: () => {
       setVisible(false);
       form.resetFields();
-      showSuccessMessage();
+      showMessage(0, "Create group successfully");
       const fetchData = async () => {
         const response = await groupInfo();
         setRawData(response.data);
       };
 
       fetchData();
+      setLoadingGroups(false);
     },
   });
 
-  const onSubmit = async (values) => {
+  const onSubmitCreateGroup = async (values) => {
+    setLoadingGroups(true);
     try {
       await createGroupMutation.mutateAsync({
         groupName: values.groupname,
@@ -326,11 +301,6 @@ export default function MainPage() {
             <SC.StyledUserName>{auth.user.fullName}</SC.StyledUserName>
             <SC.StyledEmailName>{auth.user.email}</SC.StyledEmailName>
           </SC.StyledUserInfoContainer>
-          {/* <SC.StyledImageContainer
-            src={logoutIcon}
-            alt="logout"
-            onClick={logout}
-          /> */}
           <div>
             <Dropdown.Button
               style={{ float: "right" }}
@@ -344,7 +314,6 @@ export default function MainPage() {
                     borderRadius: "50%",
                   }}
                 />
-                // <Avatar src="https://joeschmoe.io/api/v1/random" />
               }
             />
           </div>
@@ -367,11 +336,10 @@ export default function MainPage() {
         <Modal visible={visible} onOk={form.submit} onCancel={handleCancel}>
           <Form
             form={form}
-            onFinish={onSubmit}
+            onFinish={onSubmitCreateGroup}
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
           >
-            {/* Any input */}
             <Form.Item>
               <SC.StyledGroupTitle>Create a group</SC.StyledGroupTitle>
             </Form.Item>
@@ -539,10 +507,7 @@ export default function MainPage() {
         <InfiniteScroll
           style={{ overflowX: "hidden" }}
           dataLength={data.length}
-          // next={loadMoreData}
           hasMore={data.length < 12}
-          // loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-          // endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
           scrollableTarget="scrollableDiv"
         >
           {loadingGroups ? (
@@ -572,16 +537,10 @@ export default function MainPage() {
             dataSource={data}
             renderItem={(item) => (
               <List.Item>
-                {/* <Card title={item.title}>Card content</Card> */}
-                {/* <div onClick={() => alert("Hello from here")}> */}
                 <Card
-                  // style={{ width: 300 }}
                   hoverable
                   cover={
-                    <img
-                      alt="example"
-                      src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                    />
+                    <img alt="example" src="https://picsum.photos/262/159" />
                   }
                   actions={[
                     <ShareAltOutlined
@@ -591,7 +550,7 @@ export default function MainPage() {
                         navigator.clipboard.writeText(
                           `${window.location.host}/joinLink/${item._id}`
                         );
-                        showCopySuccessMessage();
+                        showMessage(1, "Link copied to clipboard");
                       }}
                     />,
                   ]}
@@ -608,7 +567,6 @@ export default function MainPage() {
                     description={item.creatorName}
                   />
                 </Card>
-                {/* </div> */}
               </List.Item>
             )}
           />

@@ -23,6 +23,7 @@ export const PATH = {
   UPDATE_USER_INFO: "/user/changeInfo",
   UPDATE_NAME: "/user/changename",
   UPDATE_PASSWORD: "/user/changepassword",
+  LOGOUT: "/auth/logout",
 };
 
 api.interceptors.request.use(
@@ -189,25 +190,6 @@ export const addMember = async ({ groupID, memberID }) => {
   }
 };
 
-// export const changeInfo = async ({
-//   userID,
-//   newName,
-//   oldPassword,
-//   newPassword,
-// }) => {
-//   try {
-//     const response = await api.post(PATH.UPDATE_USER_INFO, {
-//       userID,
-//       newName,
-//       oldPassword,
-//       newPassword,
-//     });
-//     return response;
-//   } catch (error) {
-//     throw Error(error.response.data);
-//   }
-// };
-
 export const changeFullname = async ({ userID, newName }) => {
   try {
     const response = await api.post(PATH.UPDATE_NAME, {
@@ -226,6 +208,17 @@ export const changePassword = async ({ userID, oldPassword, newPassword }) => {
       userID,
       oldPassword,
       newPassword,
+    });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const logout = async ({ refreshToken }) => {
+  try {
+    const response = await api.post(PATH.LOGOUT, {
+      refreshToken,
     });
     return response;
   } catch (error) {
