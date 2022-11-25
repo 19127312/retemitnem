@@ -124,7 +124,9 @@ export default function MainPage() {
   }, []);
 
   useEffect(() => {
+    setLoadingGroups(true);
     filterAndSearchData(rawData);
+    setLoadingGroups(false);
   }, [search, filter, rawData]);
 
   // handle search
