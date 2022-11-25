@@ -24,6 +24,7 @@ export const PATH = {
   UPDATE_NAME: "/user/changename",
   UPDATE_PASSWORD: "/user/changepassword",
   LOGOUT: "/auth/logout",
+  CHECKTYPE: "/user/checkType",
 };
 
 api.interceptors.request.use(
@@ -220,6 +221,15 @@ export const logout = async ({ refreshToken }) => {
     const response = await api.post(PATH.LOGOUT, {
       refreshToken,
     });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const checkType = async ({ userID }) => {
+  try {
+    const response = await api.post(PATH.CHECKTYPE, { userID });
     return response;
   } catch (error) {
     throw Error(error.response.data);

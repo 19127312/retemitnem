@@ -29,6 +29,7 @@ import {
   changeFullname,
   changePassword,
   logout,
+  checkType,
 } from "../../API/api";
 import * as SC from "./StyledMainPageComponents";
 import logo from "../../Assets/logo.png";
@@ -51,8 +52,17 @@ export default function MainPage() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All Groups");
   const [loadingGroups, setLoadingGroups] = useState(false);
-
+  const [type, setType] = useState("local");
   const navigate = useNavigate();
+  useEffect(() => {
+    const checkTypeMenu = async () => {
+      const response = await checkType({ userID: auth.user._id });
+      setType(response.data.type);
+    };
+
+    checkTypeMenu();
+  }, [auth.user._id]);
+
   const checkExist = (element, userID) => {
     for (let i = 0; i < element.members.length; i++) {
       if (element.members[i].memberID === userID) {
@@ -99,7 +109,7 @@ export default function MainPage() {
   const userMenu = (
     <Menu onClick={(key) => handleUserMenu({ key })}>
       <Menu.Item key="1">Change your name</Menu.Item>
-      <Menu.Item key="2">Change your password</Menu.Item>
+      {type === "local" && <Menu.Item key="2">Change your password</Menu.Item>}
       <Menu.Divider />
       <Menu.Item key="3">Logout</Menu.Item>
     </Menu>
