@@ -233,7 +233,7 @@ export default function MainPage() {
     onSuccess: (response) => {
       setVisibleName(false);
       nameForm.resetFields();
-      showUpdateSuccessMessage();
+      showMessage(0, "Update name successfully");
       // update current auth
       setAuth((preState) => ({
         ...preState,
@@ -259,17 +259,19 @@ export default function MainPage() {
       passwordForm.resetFields();
       // alert(error);
       console.log(error);
-      // if (error.toString().includes("group name has already been used")) {
-      //   showExistNameErrorMessage();
-      // } else {
-      //   showUnknownErrorMessage();
-      // }
+      if (error.toString().includes("409")) {
+        showMessage(
+          2,
+          "Update failed. Your input password doesn't match your current password"
+        );
+      } else {
+        showMessage(2, "Update failed. Unknown error");
+      }
     },
     onSuccess: () => {
       setVisiblePassword(false);
       passwordForm.resetFields();
-      showUpdateSuccessMessage();
-      // update current auth
+      showMessage(0, "Update password successfully");
     },
   });
 

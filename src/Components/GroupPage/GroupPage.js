@@ -6,6 +6,7 @@ import GroupMemberPage from "./GroupMemberPage";
 import GroupDashboardPage from "./GroupDashboardPage";
 import * as SC from "./StyledGroupPageComponents";
 import logo from "../../Assets/logo.png";
+import { showMessage } from "../Message";
 
 export function GroupPage() {
   const { state } = useLocation();
@@ -25,7 +26,15 @@ export function GroupPage() {
         </SC.StyledLogoContainer>
 
         <SC.StyledIconShare>
-          <ShareAltOutlined style={{ fontSize: 30 }} />
+          <ShareAltOutlined
+            style={{ fontSize: 30 }}
+            onClick={() => {
+              navigator.clipboard.writeText(
+                `${window.location.host}/joinLink/${item._id}`
+              );
+              showMessage(1, "Link copied to clipboard");
+            }}
+          />
         </SC.StyledIconShare>
       </SC.StyledTopContainer>
       <SC.StyledTabContainer>

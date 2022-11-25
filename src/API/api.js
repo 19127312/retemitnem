@@ -211,7 +211,7 @@ export const changePassword = async ({ userID, oldPassword, newPassword }) => {
     });
     return response;
   } catch (error) {
-    throw Error(error.response.data);
+    throw Error(error);
   }
 };
 
