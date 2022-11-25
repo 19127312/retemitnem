@@ -124,9 +124,7 @@ export default function MainPage() {
   }, []);
 
   useEffect(() => {
-    setLoadingGroups(true);
     filterAndSearchData(rawData);
-    setLoadingGroups(false);
   }, [search, filter, rawData]);
 
   // handle search
@@ -181,6 +179,7 @@ export default function MainPage() {
       } else {
         showUnknownErrorMessage();
       }
+      setLoadingGroups(false);
     },
     onSuccess: () => {
       setVisible(false);
@@ -192,10 +191,12 @@ export default function MainPage() {
       };
 
       fetchData();
+      setLoadingGroups(false);
     },
   });
 
-  const onSubmit = async (values) => {
+  const onSubmitCreateGroup = async (values) => {
+    setLoadingGroups(true);
     try {
       await mutateAsync({
         groupName: values.groupname,
@@ -264,7 +265,7 @@ export default function MainPage() {
         <Modal visible={visible} onOk={form.submit} onCancel={handleCancel}>
           <Form
             form={form}
-            onFinish={onSubmit}
+            onFinish={onSubmitCreateGroup}
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
           >
