@@ -54,14 +54,15 @@ export default function MainPage() {
   const [loadingGroups, setLoadingGroups] = useState(false);
   const [type, setType] = useState("local");
   const navigate = useNavigate();
+
   useEffect(() => {
     const checkTypeMenu = async () => {
-      const response = await checkType({ userID: auth.user._id });
+      const response = await checkType({ userID: auth?.user?._id });
       setType(response.data.type);
     };
 
     checkTypeMenu();
-  }, [auth.user._id]);
+  }, [auth]);
 
   const checkExist = (element, userID) => {
     for (let i = 0; i < element.members.length; i++) {
@@ -78,17 +79,10 @@ export default function MainPage() {
     localStorage.removeItem("refreshToken");
     setAuth(null);
   };
-  const showNameModal = () => {
-    setVisibleName(true);
-  };
 
   const handleNameCancel = () => {
     setVisibleName(false);
     nameForm.resetFields();
-  };
-
-  const showPasswordModal = () => {
-    setVisiblePassword(true);
   };
 
   const handlePasswordCancel = () => {
@@ -100,9 +94,9 @@ export default function MainPage() {
     if (value === "3") {
       logoutAction();
     } else if (value === "2") {
-      showPasswordModal();
+      setVisiblePassword(true);
     } else {
-      showNameModal();
+      setVisibleName(true);
     }
   };
 
@@ -120,11 +114,12 @@ export default function MainPage() {
     for (let i = 0; i < allData.length; i++) {
       if (allData[i].groupName.toString().includes(search)) {
         if (
-          (filter === "My Groups" && allData[i].creatorID === auth.user._id) ||
+          (filter === "My Groups" &&
+            allData[i].creatorID === auth?.user?._id) ||
           (filter === "Other Groups" &&
-            allData[i].creatorID !== auth.user._id &&
-            checkExist(allData[i], auth.user._id)) ||
-          (filter === "All Groups" && checkExist(allData[i], auth.user._id))
+            allData[i].creatorID !== auth?.user?._id &&
+            checkExist(allData[i], auth?.user?._id)) ||
+          (filter === "All Groups" && checkExist(allData[i], auth?.user?._id))
         ) {
           filteredData.push(allData[i]);
         }
@@ -142,7 +137,7 @@ export default function MainPage() {
           localStorage.removeItem("groupID");
           await addMember({
             groupID,
-            memberID: auth.user._id,
+            memberID: auth?.user?._id,
           });
         }
       } catch (error) {
@@ -183,10 +178,6 @@ export default function MainPage() {
     }
   };
 
-  const showModal = () => {
-    setVisible(true);
-  };
-
   const handleCancel = () => {
     setVisible(false);
     form.resetFields();
@@ -221,7 +212,7 @@ export default function MainPage() {
     try {
       await createGroupMutation.mutateAsync({
         groupName: values.groupname,
-        creatorID: auth.user._id,
+        creatorID: auth?.user?._id,
       });
     } catch (error) {
       console.log(error);
@@ -255,7 +246,7 @@ export default function MainPage() {
   const onNameSubmit = async (values) => {
     try {
       await changeNameMutation.mutateAsync({
-        userID: auth.user._id,
+        userID: auth?.user?._id,
         newName: values.fullname,
       });
     } catch (error) {
@@ -288,7 +279,7 @@ export default function MainPage() {
   const onPasswordSubmit = async (values) => {
     try {
       await changePasswordMutation.mutateAsync({
-        userID: auth.user._id,
+        userID: auth?.user?._id,
         oldPassword: values.oldPassword,
         newPassword: values.newPassword,
       });
@@ -310,8 +301,8 @@ export default function MainPage() {
 
         <SC.StyledIconContainer>
           <SC.StyledUserInfoContainer>
-            <SC.StyledUserName>{auth.user.fullName}</SC.StyledUserName>
-            <SC.StyledEmailName>{auth.user.email}</SC.StyledEmailName>
+            <SC.StyledUserName>{auth?.user?.fullName}</SC.StyledUserName>
+            <SC.StyledEmailName>{auth?.user?.email}</SC.StyledEmailName>
           </SC.StyledUserInfoContainer>
           <div>
             <Dropdown.Button
@@ -339,13 +330,13 @@ export default function MainPage() {
             shape="round"
             icon={<PlusOutlined />}
             size="large"
-            onClick={showModal}
+            onClick={() => setVisible(true)}
           >
             New Group
           </Button>
         </SC.StyledItemMarginHorizonalLeftContainer>
 
-        <Modal visible={visible} onOk={form.submit} onCancel={handleCancel}>
+        <Modal open={visible} onOk={form.submit} onCancel={handleCancel}>
           <Form
             form={form}
             onFinish={onSubmitCreateGroup}
@@ -389,7 +380,7 @@ export default function MainPage() {
         </Modal>
 
         <Modal
-          visible={visibleName}
+          open={visibleName}
           onOk={nameForm.submit}
           onCancel={handleNameCancel}
         >
@@ -408,7 +399,7 @@ export default function MainPage() {
               name="fullname"
               label="Full Name"
               autoComplete="off"
-              initialValue={auth.user.fullName}
+              initialValue={auth?.user?.fullName}
               rules={[
                 {
                   required: true,
@@ -421,7 +412,7 @@ export default function MainPage() {
           </Form>
         </Modal>
         <Modal
-          visible={visiblePassword}
+          open={visiblePassword}
           onOk={passwordForm.submit}
           onCancel={handlePasswordCancel}
         >
