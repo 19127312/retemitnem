@@ -1,4 +1,5 @@
 import axios from "axios";
+// import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_URL_API,
@@ -27,6 +28,20 @@ export const PATH = {
   CHECKTYPE: "/user/checkType",
 };
 
+export const refreshAccessToken = async () => {
+  const refreshTokenFromStorage = localStorage.getItem("refreshToken");
+  try {
+    const response = await api.post(PATH.GET_NEW_ACCESS_TOKEN, {
+      refreshToken: refreshTokenFromStorage,
+    });
+    const { accessToken } = response.data;
+    return accessToken;
+  } catch (error) {
+    localStorage.removeItem("refreshToken");
+    return null;
+  }
+};
+
 api.interceptors.request.use(
   async (config) => {
     const accessToken = localStorage.getItem("accessToken");
@@ -37,13 +52,30 @@ api.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error?.response?.status === 403) {
+      const config = error?.config;
+      const newAccessToken = await refreshAccessToken();
+      if (newAccessToken) {
+        localStorage.setItem("accessToken", newAccessToken);
+        config.headers = {
+          ...config.headers,
+          authorization: `Bearer ${newAccessToken}`,
+        };
+      }
+      return axios(config);
+    }
+    return Promise.reject(error);
+  }
+);
 
 export const login = async ({ email, password }) => {
   try {
     const response = await api.post(PATH.LOGIN, { email, password });
     return response;
   } catch (error) {
-    console.log(error);
     throw Error(error.response.data.message);
   }
 };
@@ -86,20 +118,6 @@ export const getProfile = async () => {
     return response;
   } catch (error) {
     throw Error(error.response.data);
-  }
-};
-
-export const refreshAccessToken = async () => {
-  const refreshTokenFromStorage = localStorage.getItem("refreshToken");
-  try {
-    const response = await api.post(PATH.GET_NEW_ACCESS_TOKEN, {
-      refreshToken: refreshTokenFromStorage,
-    });
-    const { accessToken } = response.data;
-    return accessToken;
-  } catch (error) {
-    localStorage.removeItem("refreshToken");
-    return null;
   }
 };
 

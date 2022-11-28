@@ -144,12 +144,14 @@ export const StyledItemSlideListContainer = styled.div`
 export const StyledItemInfoSlideListContainer = styled.div`
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 `;
 
 export const StyledImagePlay = styled.img`
   width: 30px;
   height: 30px;
   margin-right: 10px;
+  cursor: pointer;
 `;
 
 export const StyledMarginTaleDashboard = styled.div`

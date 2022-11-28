@@ -8,17 +8,15 @@ import { AuthProvider } from "./Context/AuthProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_TOKEN_ID}>
-          <Routes>
-            <Route path="/*" element={<App />} />
-          </Routes>
-        </GoogleOAuthProvider>
-      </AuthProvider>
-    </BrowserRouter>
-  </React.StrictMode>
+  <BrowserRouter>
+    <AuthProvider>
+      <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_TOKEN_ID}>
+        <Routes>
+          <Route path="/*" element={<App />} />
+        </Routes>
+      </GoogleOAuthProvider>
+    </AuthProvider>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function
