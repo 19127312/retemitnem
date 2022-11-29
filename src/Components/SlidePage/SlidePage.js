@@ -30,7 +30,7 @@ function SlidePage() {
       },
     ],
   });
-  
+
   useEffect(() => {
     console.log("id", id);
     const data = {
@@ -70,10 +70,10 @@ function SlidePage() {
   useEffect(() => {
     setPresentation((prev) => ({ ...prev, slides }));
   }, [slides]);
-  
+
   useEffect(() => {
-    setChartQuestion(selectedSlide.question);
-    if (selectedSlide.options.length > 0) {
+    setChartQuestion(selectedSlide?.question);
+    if (selectedSlide?.options.length > 0) {
       setChartData({
         labels: selectedSlide.options.map((option) => option.option),
         datasets: [
@@ -95,7 +95,7 @@ function SlidePage() {
       });
     }
   }, [selectedSlide]);
-  
+
   const handleSelectedSlide = (slide, indexSelect) => {
     setSelectedSlide(slide);
     setPresentation((pre) => ({
@@ -103,15 +103,6 @@ function SlidePage() {
       currentSlide: indexSelect,
     }));
   };
-  
-  const handleSelectedSlide = (slide, indexSelect) => {
-    setSelectedSlide(slide);
-    setPresentation((pre) => ({
-      ...pre,
-      currentSlide: indexSelect,
-    }));
-  };
-  
   const handleDeleteSlide = (index) => {
     const newSlide = slides.filter((slide) => slide.key !== index);
     for (let i = index; i < newSlide.length; i++) {
@@ -122,15 +113,15 @@ function SlidePage() {
     }
     setSlides(newSlide);
   };
-  
+
   const handleShare = () => {
     console.log("share slide");
   };
-  
+
   const handlePlay = () => {
     console.log("play slide");
   };
-  
+
   const handleAddSlide = () => {
     const newSlide = {
       question: "",
@@ -140,14 +131,14 @@ function SlidePage() {
     };
     setSlides([...slides, newSlide]);
   };
-  
+
   const handleSetQuestion = (question) => {
     const newSlide = slides;
     newSlide[selectedSlide.key].question = question;
     setSelectedSlide((pre) => ({ ...pre, question }));
     setSlides(newSlide);
   };
-  
+
   const handleOptionChange = (index, value) => {
     const newSlide = slides;
     newSlide[selectedSlide.key].options[index].option = value;
@@ -157,7 +148,7 @@ function SlidePage() {
     }));
     setSlides(newSlide);
   };
-  
+
   const handleOptionDelete = (index) => {
     const newSlide = slides;
     newSlide[selectedSlide.key].options.splice(index, 1);
@@ -175,7 +166,7 @@ function SlidePage() {
     }));
     setSlides(newSlide);
   };
-  
+
   const handleOptionAdd = () => {
     const newSlide = slides;
     newSlide[selectedSlide.key].options.push({
@@ -193,7 +184,7 @@ function SlidePage() {
     }));
     setSlides(newSlide);
   };
-  
+
   return (
     <SC.StyledPageContainer>
       <SC.StyledTopContainer>
@@ -257,10 +248,7 @@ function SlidePage() {
         </SC.StyledLeftContainer>
         <SC.StyledMidContainer>
           <SC.StyledPrensatationTitle>
-
-    
             <BarChart chartData={chartData} chartQuestion={chartQuestion} />
-
           </SC.StyledPrensatationTitle>
         </SC.StyledMidContainer>
         <SC.StyledRightContainer>
