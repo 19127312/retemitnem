@@ -9,6 +9,7 @@ import MainPage from "./Components/MainPage/MainPage";
 import GroupPage from "./Components/GroupPage/GroupPage";
 import SlidePage from "./Components/SlidePage/SlidePage";
 import JoinLink from "./Components/JoinLink";
+import PresentationMemberPage from "./Components/SlidePage/PresentationMemberPage";
 
 const queryClient = new QueryClient();
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path="/slide/:id" element={<SlidePage />} />
           {/* slide ghi thêm ID */}
         </Route>
+        <Route path="/presentation/:id" element={<PresentationMemberPage />} />
         <Route path="/joinlink/:id" element={<JoinLink />} />
         <Route path="*" element={<div>404</div>} />
       </Routes>

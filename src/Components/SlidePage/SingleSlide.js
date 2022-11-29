@@ -3,6 +3,9 @@ import { Dropdown } from "antd";
 import * as SC from "./StyledSlideComponent";
 
 function SingleSlide({ index, selected, onClick, onDelete, question }) {
+  const handleClick = () => {
+    onClick(index);
+  };
   const items = [
     {
       label: "Delete this slide",
@@ -22,7 +25,7 @@ function SingleSlide({ index, selected, onClick, onDelete, question }) {
       }}
       trigger={["contextMenu"]}
     >
-      <SC.StyledSingleSlideContainer onClick={onClick} selected={selected}>
+      <SC.StyledSingleSlideContainer onClick={handleClick} selected={selected}>
         <SC.StyledInsideSlideContainer selected={selected}>
           <SC.StyledNumberSlide>{question}</SC.StyledNumberSlide>
         </SC.StyledInsideSlideContainer>
