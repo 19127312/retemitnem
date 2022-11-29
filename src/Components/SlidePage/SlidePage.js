@@ -11,6 +11,7 @@ import SettingQuestionPage from "./SettingQuestionPage";
 import backleft from "../../Assets/backleft.svg";
 import AuthContext from "../../Context/AuthProvider";
 import Check from "../../Assets/Check.svg";
+import { BarChart } from "./BarChart";
 
 function SlidePage() {
   const { id } = useParams();
@@ -19,7 +20,17 @@ function SlidePage() {
   const [presentation, setPresentation] = useState(null);
   const [slides, setSlides] = useState([]);
   const [selectedSlide, setSelectedSlide] = useState(null);
-
+  const [chartQuestion, setChartQuestion] = useState("");
+  const [chartData, setChartData] = useState({
+    labels: [],
+    datasets: [
+      {
+        data: [],
+        barThickness: 100,
+      },
+    ],
+  });
+  
   useEffect(() => {
     console.log("id", id);
     const data = {
@@ -59,6 +70,32 @@ function SlidePage() {
   useEffect(() => {
     setPresentation((prev) => ({ ...prev, slides }));
   }, [slides]);
+  
+  useEffect(() => {
+    setChartQuestion(selectedSlide.question);
+    if (selectedSlide.options.length > 0) {
+      setChartData({
+        labels: selectedSlide.options.map((option) => option.option),
+        datasets: [
+          {
+            data: selectedSlide.answers.map((answer) => answer.answerCount),
+            barThickness: 100,
+          },
+        ],
+      });
+    } else {
+      setChartData({
+        labels: [],
+        datasets: [
+          {
+            data: [],
+            barThickness: 100,
+          },
+        ],
+      });
+    }
+  }, [selectedSlide]);
+  
   const handleSelectedSlide = (slide, indexSelect) => {
     setSelectedSlide(slide);
     setPresentation((pre) => ({
@@ -66,6 +103,15 @@ function SlidePage() {
       currentSlide: indexSelect,
     }));
   };
+  
+  const handleSelectedSlide = (slide, indexSelect) => {
+    setSelectedSlide(slide);
+    setPresentation((pre) => ({
+      ...pre,
+      currentSlide: indexSelect,
+    }));
+  };
+  
   const handleDeleteSlide = (index) => {
     const newSlide = slides.filter((slide) => slide.key !== index);
     for (let i = index; i < newSlide.length; i++) {
@@ -76,12 +122,15 @@ function SlidePage() {
     }
     setSlides(newSlide);
   };
+  
   const handleShare = () => {
     console.log("share slide");
   };
+  
   const handlePlay = () => {
     console.log("play slide");
   };
+  
   const handleAddSlide = () => {
     const newSlide = {
       question: "",
@@ -91,12 +140,14 @@ function SlidePage() {
     };
     setSlides([...slides, newSlide]);
   };
+  
   const handleSetQuestion = (question) => {
     const newSlide = slides;
     newSlide[selectedSlide.key].question = question;
     setSelectedSlide((pre) => ({ ...pre, question }));
     setSlides(newSlide);
   };
+  
   const handleOptionChange = (index, value) => {
     const newSlide = slides;
     newSlide[selectedSlide.key].options[index].option = value;
@@ -106,6 +157,7 @@ function SlidePage() {
     }));
     setSlides(newSlide);
   };
+  
   const handleOptionDelete = (index) => {
     const newSlide = slides;
     newSlide[selectedSlide.key].options.splice(index, 1);
@@ -123,6 +175,7 @@ function SlidePage() {
     }));
     setSlides(newSlide);
   };
+  
   const handleOptionAdd = () => {
     const newSlide = slides;
     newSlide[selectedSlide.key].options.push({
@@ -140,6 +193,7 @@ function SlidePage() {
     }));
     setSlides(newSlide);
   };
+  
   return (
     <SC.StyledPageContainer>
       <SC.StyledTopContainer>
@@ -203,7 +257,10 @@ function SlidePage() {
         </SC.StyledLeftContainer>
         <SC.StyledMidContainer>
           <SC.StyledPrensatationTitle>
-            {selectedSlide?.question}
+
+    
+            <BarChart chartData={chartData} chartQuestion={chartQuestion} />
+
           </SC.StyledPrensatationTitle>
         </SC.StyledMidContainer>
         <SC.StyledRightContainer>

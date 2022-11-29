@@ -27,7 +27,7 @@ function App() {
         <Route element={<PrivateRoutes />}>
           <Route path="/" element={<MainPage />} />
           <Route path="/group/:id" element={<GroupPage />} />
-          <Route path="/slide" element={<SlidePage />} />
+          <Route path="/slide/:id" element={<SlidePage />} />
           {/* slide ghi thêm ID */}
         </Route>
         <Route path="/presentation/:id" element={<PresentationMemberPage />} />
