@@ -28,6 +28,7 @@ function SettingQuestionPage({
       <SC.StyledQuestionInSlide>Options ?</SC.StyledQuestionInSlide>
       {options?.map((optionItem) => (
         <SingleOption
+          key={optionItem.optionKey}
           index={optionItem.optionKey}
           option={optionItem.option}
           onOptionDelete={(indexDelete) => handleOptionDelete(indexDelete)}

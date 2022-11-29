@@ -5,6 +5,8 @@ import {
   ShareAltOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
+import { TailSpin } from "react-loader-spinner";
+import { useMutation } from "@tanstack/react-query";
 import * as SC from "./StyledSlideComponent";
 import SingleSlide from "./SingleSlide";
 import SettingQuestionPage from "./SettingQuestionPage";
@@ -12,6 +14,11 @@ import backleft from "../../Assets/backleft.svg";
 import AuthContext from "../../Context/AuthProvider";
 import Check from "../../Assets/Check.svg";
 import { BarChart } from "./BarChart";
+import {
+  viewPresentationInfoByPresentationID,
+  updatePresentation,
+} from "../../API/api";
+import { showMessage } from "../Message";
 
 function SlidePage() {
   const { id } = useParams();
@@ -31,45 +38,46 @@ function SlidePage() {
     ],
   });
 
+  const updatePresentationMutation = useMutation(updatePresentation, {
+    onError: (error) => {
+      showMessage(2, error.message);
+    },
+  });
+  const onChangePresentation = async () => {
+    try {
+      if (presentation) {
+        await updatePresentationMutation.mutateAsync({
+          presentation,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    console.log("id", id);
-    const data = {
-      title: "Presentation Title",
-      currentSlide: 0,
-      slides: [
-        {
-          questionType: "MCQ",
-          question: "Hello",
-          options: [
-            { option: "Helo cc", optionKey: 0 },
-            { option: "Helo cl", optionKey: 1 },
-          ],
-          key: 0,
-          answers: [
-            { answerCount: 2, answerKey: 0 },
-            { answerCount: 21, answerKey: 1 },
-          ],
-        },
-        { question: "There", options: [], key: 1 },
-        { question: "You", options: [], key: 2 },
-        { question: "Dump", options: [], key: 3 },
-        { question: "Mortha", options: [], key: 4 },
-        { question: "", options: [], key: 5 },
-        { question: "He", options: [], key: 6 },
-        { question: "Hi", options: [], key: 7 },
-        { question: "Hu", options: [], key: 8 },
-        { question: "Ha", options: [], key: 9 },
-        { question: "Ho", options: [], key: 10 },
-        { question: "Kaa", options: [], key: 11 },
-      ],
+    const fetchData = async () => {
+      try {
+        const response = await viewPresentationInfoByPresentationID({
+          presentationID: id,
+        });
+        setPresentation(response.data);
+        setSlides(response.data.slides);
+        setSelectedSlide(response.data.slides[response.data.currentSlide]);
+      } catch (error) {
+        showMessage(2, error.message);
+      }
     };
-    setPresentation(data);
-    setSlides(data.slides);
-    setSelectedSlide(data.slides[data.currentSlide]);
-  }, []);
+    fetchData();
+  }, [id]);
+
   useEffect(() => {
     setPresentation((prev) => ({ ...prev, slides }));
   }, [slides]);
+
+  useEffect(() => {
+    onChangePresentation();
+  }, [presentation, selectedSlide]);
 
   useEffect(() => {
     setChartQuestion(selectedSlide?.question);
@@ -105,11 +113,21 @@ function SlidePage() {
   };
   const handleDeleteSlide = (index) => {
     const newSlide = slides.filter((slide) => slide.key !== index);
+    if (index < selectedSlide.key) {
+      setPresentation((pre) => ({
+        ...pre,
+        currentSlide: pre.currentSlide - 1,
+      }));
+    }
     for (let i = index; i < newSlide.length; i++) {
       newSlide[i].key -= 1;
     }
     if (selectedSlide.key === index) {
       setSelectedSlide(newSlide[0]);
+      setPresentation((pre) => ({
+        ...pre,
+        currentSlide: 0,
+      }));
     }
     setSlides(newSlide);
   };
@@ -136,7 +154,6 @@ function SlidePage() {
     const newSlide = slides;
     newSlide[selectedSlide.key].question = question;
     setSelectedSlide((pre) => ({ ...pre, question }));
-    setSlides(newSlide);
   };
 
   const handleOptionChange = (index, value) => {
@@ -146,7 +163,6 @@ function SlidePage() {
       ...pre,
       options: newSlide[selectedSlide.key].options,
     }));
-    setSlides(newSlide);
   };
 
   const handleOptionDelete = (index) => {
@@ -164,7 +180,6 @@ function SlidePage() {
       options: newSlide[selectedSlide.key].options,
       answers: newSlide[selectedSlide.key].answers,
     }));
-    setSlides(newSlide);
   };
 
   const handleOptionAdd = () => {
@@ -182,7 +197,6 @@ function SlidePage() {
       options: newSlide[selectedSlide.key].options,
       answers: newSlide[selectedSlide.key].answers,
     }));
-    setSlides(newSlide);
   };
 
   return (
@@ -204,7 +218,20 @@ function SlidePage() {
           </SC.StyledTopLeftInformation>
         </SC.StyledTopSmallContainer>
         <SC.StyledTopSmallContainer>
-          <img src={Check} alt="Check" />
+          {updatePresentationMutation.isLoading ? (
+            <TailSpin
+              height="20"
+              width="20"
+              color="#196cff"
+              ariaLabel="tail-spin-loading"
+              radius="1"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible
+            />
+          ) : (
+            <img src={Check} alt="Check" />
+          )}
           <SC.StyledTopRightSaving>Saved</SC.StyledTopRightSaving>
           <SC.StyledButton
             icon={<ShareAltOutlined />}
@@ -240,7 +267,7 @@ function SlidePage() {
             <SingleSlide
               question={slide.question}
               index={index}
-              selected={selectedSlide.key === index}
+              selected={selectedSlide?.key === index}
               onClick={(indexSelect) => handleSelectedSlide(slide, indexSelect)}
               onDelete={(deleteIndex) => handleDeleteSlide(deleteIndex)}
             />
