@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   CaretRightOutlined,
@@ -11,11 +11,11 @@ import SettingQuestionPage from "./SettingQuestionPage";
 import backleft from "../../Assets/backleft.svg";
 import AuthContext from "../../Context/AuthProvider";
 import Check from "../../Assets/Check.svg";
+import { BarChart } from "./BarChart";
 
 function SlidePage() {
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
-
   const [slides, setSlides] = useState([
     {
       question: "Hello",
@@ -25,8 +25,8 @@ function SlidePage() {
       ],
       key: 0,
       answers: [
-        { answerCount: 2, answerKey: 0 },
-        { answerCount: 21, answerKey: 1 },
+        { answerCount: 22, answerKey: 0 },
+        { answerCount: 211, answerKey: 1 },
       ],
     },
     { question: "There", options: [], key: 1 },
@@ -42,6 +42,41 @@ function SlidePage() {
     { question: "Kaa", options: [], key: 11 },
   ]);
   const [selectedSlide, setSelectedSlide] = useState(slides[0]);
+  const [chartQuestion, setChartQuestion] = useState("");
+  const [chartData, setChartData] = useState({
+    labels: [],
+    datasets: [
+      {
+        data: [],
+        barThickness: 100,
+      },
+    ],
+  });
+  useEffect(() => {
+    setChartQuestion(selectedSlide.question);
+    if (selectedSlide.options.length > 0) {
+      setChartData({
+        labels: selectedSlide.options.map((option) => option.option),
+        datasets: [
+          {
+            data: selectedSlide.answers.map((answer) => answer.answerCount),
+            barThickness: 100,
+          },
+        ],
+      });
+    } else {
+      setChartData({
+        labels: [],
+        datasets: [
+          {
+            data: [],
+            barThickness: 100,
+          },
+        ],
+      });
+    }
+  }, [selectedSlide]);
+
   const handleDelete = (index) => {
     const newSlide = slides.filter((slide) => slide.key !== index);
     for (let i = index; i < newSlide.length; i++) {
@@ -51,6 +86,7 @@ function SlidePage() {
       setSelectedSlide(newSlide[0]);
     }
     setSlides(newSlide);
+    setChartData();
   };
   const handleShare = () => {
     console.log("share slide");
@@ -163,7 +199,7 @@ function SlidePage() {
         </SC.StyledLeftContainer>
         <SC.StyledMidContainer>
           <SC.StyledPrensatationTitle>
-            {selectedSlide.question}
+            <BarChart chartData={chartData} chartQuestion={chartQuestion} />
           </SC.StyledPrensatationTitle>
         </SC.StyledMidContainer>
         <SC.StyledRightContainer>

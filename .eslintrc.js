@@ -15,6 +15,11 @@ module.exports = {
     sourceType: "module",
   },
   plugins: ["react"],
+  settings: {
+    "import/resolver": {
+      node: { extensions: [".js", ".json", ".tsx", ".ts"] },
+    },
+  },
   rules: {
     "react/jsx-props-no-spreading": "off",
     "import/extensions": "off",
