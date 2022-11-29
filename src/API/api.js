@@ -26,6 +26,7 @@ export const PATH = {
   UPDATE_PASSWORD: "/user/changepassword",
   LOGOUT: "/auth/logout",
   CHECKTYPE: "/user/checkType",
+  PRESENTATION_INFO: "presentation/viewByGroupID",
 };
 
 export const refreshAccessToken = async () => {
@@ -248,6 +249,15 @@ export const logout = async ({ refreshToken }) => {
 export const checkType = async ({ userID }) => {
   try {
     const response = await api.post(PATH.CHECKTYPE, { userID });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const viewPresentationInfoByGroupID = async ({ groupID }) => {
+  try {
+    const response = await api.get(`${PATH.PRESENTATION_INFO}/${groupID}`);
     return response;
   } catch (error) {
     throw Error(error.response.data);

@@ -183,3 +183,11 @@ export const styles = {
   padding: "25px",
   margin: "20px",
 };
+
+export const StyledCenterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 15px 10px 15px 10px;
+  align-items: center;
+`;

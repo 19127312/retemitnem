@@ -14,7 +14,7 @@ export function GroupPage() {
   const navigate = useNavigate();
   const items = [
     {
-      label: "Slides",
+      label: "Presentations",
       key: "1",
       children: <GroupDashboardPage dashBoardPayload={item} />,
     }, // remember to pass the key prop
