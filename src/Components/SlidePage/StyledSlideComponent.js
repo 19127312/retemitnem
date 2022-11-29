@@ -220,4 +220,40 @@ export const StyledQuestionPresentation = styled.div`
   font-weight: bold;
   padding: 20px 0px 10px 0px;
   font-family: "Sora", sans-serif;
+  margin-bottom: 20px;
+`;
+export const StyledSubmitButton = styled(Button)`
+  margin-top: 20px;
+  width: 40%;
+  height: 50px;
+  background-color: ${Color.blue400};
+  color: white;
+  border-radius: 10px;
+`;
+
+export const radioStyled = {
+  border: "1px solid black",
+  display: "block",
+  lineHeight: "30px",
+  marginBottom: "10px",
+  borderRadius: "10px",
+  width: "40%",
+  minHeight: "50px",
+  paddingLeft: "20px",
+  fontSize: "16px",
+  fontFamily: "Sora",
+};
+
+export const StyledRadioContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  length: 100%;
+  width: 100%;
+`;
+
+export const StyledChartContainer = styled.div`
+  length: 70%;
+  width: 60%;
 `;
