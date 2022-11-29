@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Radio } from "antd";
 import { useParams } from "react-router-dom";
 import * as SC from "./StyledSlideComponent";
 import logo from "../../Assets/logo.png";
@@ -6,6 +7,7 @@ import logo from "../../Assets/logo.png";
 function PresentationMemberPage() {
   const { id } = useParams();
   const [presentation, setPresentation] = useState(null);
+  const [value, setValue] = useState(null);
   useEffect(() => {
     console.log("id", id);
     const data = {
@@ -40,6 +42,9 @@ function PresentationMemberPage() {
     };
     setPresentation(data);
   }, []);
+  const onChange = (e) => {
+    setValue(e.target.value);
+  };
   return (
     <SC.StyledPresentaionContainer>
       <SC.StyledLogoContainer>
@@ -49,6 +54,15 @@ function PresentationMemberPage() {
       <SC.StyledQuestionPresentation>
         {presentation?.slides[presentation?.currentSlide].question}
       </SC.StyledQuestionPresentation>
+      <Radio.Group onChange={onChange} value={value}>
+        {presentation?.slides[presentation?.currentSlide].options.map(
+          (option) => (
+            <Radio key={option.optionKey} value={option.option}>
+              {option.option}
+            </Radio>
+          )
+        )}
+      </Radio.Group>
     </SC.StyledPresentaionContainer>
   );
 }
