@@ -133,12 +133,12 @@ export function GroupMemberPage({ memberPayload }) {
             title="Sure to delete?"
             onConfirm={() => handleDelete(record)}
           >
-            {record.role === "owner" ? null : <a href={() => false}>Delete</a>}
+            {record.role === "owner" ? null : <a href="null">Delete</a>}
           </Popconfirm>
           {record.role === "owner" ? null : (
             <Dropdown overlay={menu(record)} trigger={["click"]}>
               <a
-                href={() => false}
+                href="null"
                 onClick={(e) => e.preventDefault()}
                 style={{ color: "#d46b08", fontWeight: "bold" }}
               >
@@ -245,7 +245,7 @@ export function GroupMemberPage({ memberPayload }) {
       >
         Add member
       </Button>
-      <Modal visible={visible} onOk={handleOk} onCancel={handleCancel}>
+      <Modal open={visible} onOk={handleOk} onCancel={handleCancel}>
         <SC.StyledGroupTitle>Add new member</SC.StyledGroupTitle>
         <Space>
           <div style={SC.styles}>

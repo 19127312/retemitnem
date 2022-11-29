@@ -6,5 +6,12 @@ export const Color = {
   error200: "#d52b48",
   error300: "#fee9ed",
   gray100: "rgb(244,244,244)",
-  gray300: "rgba(250,250,251,255)",
+  gray200: "#e7e8eb",
+  gray300: "#e8ecec",
+  gray400: "rgba(250,250,251,255)",
+  gray500: "rgba(16, 24, 52, 0.5)",
+  gray600: "#dbdce1",
+  blue100: "#d1e2ff",
+  blue300: "#87b3ff",
+  blue400: "#196cff",
 };

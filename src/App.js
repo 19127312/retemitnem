@@ -7,6 +7,7 @@ import SingupPage from "./Components/AuthPage/SignupPage";
 import CheckingAuthRoutes from "./Components/RoutesChecking/CheckingAuthRoutes";
 import MainPage from "./Components/MainPage/MainPage";
 import GroupPage from "./Components/GroupPage/GroupPage";
+import SlidePage from "./Components/SlidePage/SlidePage";
 import JoinLink from "./Components/JoinLink";
 
 const queryClient = new QueryClient();
@@ -25,6 +26,8 @@ function App() {
         <Route element={<PrivateRoutes />}>
           <Route path="/" element={<MainPage />} />
           <Route path="/group/:id" element={<GroupPage />} />
+          <Route path="/slide" element={<SlidePage />} />
+          {/* slide ghi thêm ID */}
         </Route>
         <Route path="/joinlink/:id" element={<JoinLink />} />
         <Route path="*" element={<div>404</div>} />

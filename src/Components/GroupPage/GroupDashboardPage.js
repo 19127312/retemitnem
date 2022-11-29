@@ -2,15 +2,21 @@ import React, { useState } from "react";
 import "antd/dist/antd.min.css";
 import { Button, Input, Table, Space, Select } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+
 import * as SC from "./StyledGroupPageComponents";
 import playSlide from "../../Assets/playSlide.png";
 
 export function GroupDashboardPage({ dashBoardPayload }) {
+  const navigate = useNavigate();
   const { Search } = Input;
   const handleClickPlay = (key) => {
     console.log(key.name);
   };
-
+  const handleNavigateSlidePage = (key) => {
+    console.log("Choose presentation", key);
+    navigate(`/slide`, { replace: false });
+  };
   const columns = [
     {
       title: "Name",
@@ -23,7 +29,9 @@ export function GroupDashboardPage({ dashBoardPayload }) {
             alt="playSlide"
             onClick={() => handleClickPlay(record.key)}
           />
-          <SC.StyledItemInfoSlideListContainer>
+          <SC.StyledItemInfoSlideListContainer
+            onClick={() => handleNavigateSlidePage(record.key)}
+          >
             <div>{record.name}</div>
             <div>{record.number} slide</div>
           </SC.StyledItemInfoSlideListContainer>

@@ -1,4 +1,5 @@
 import axios from "axios";
+// import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_URL_API,
@@ -20,7 +21,25 @@ export const PATH = {
   GROUP_DETAIL: "/group/detail",
   DELETE_MEMBER: "/group/deletemember",
   ADD_MEMBER: "/group/addmember",
+  UPDATE_USER_INFO: "/user/changeInfo",
+  UPDATE_NAME: "/user/changename",
+  UPDATE_PASSWORD: "/user/changepassword",
   LOGOUT: "/auth/logout",
+  CHECKTYPE: "/user/checkType",
+};
+
+export const refreshAccessToken = async () => {
+  const refreshTokenFromStorage = localStorage.getItem("refreshToken");
+  try {
+    const response = await api.post(PATH.GET_NEW_ACCESS_TOKEN, {
+      refreshToken: refreshTokenFromStorage,
+    });
+    const { accessToken } = response.data;
+    return accessToken;
+  } catch (error) {
+    localStorage.removeItem("refreshToken");
+    return null;
+  }
 };
 
 api.interceptors.request.use(
@@ -33,13 +52,30 @@ api.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error?.response?.status === 403) {
+      const config = error?.config;
+      const newAccessToken = await refreshAccessToken();
+      if (newAccessToken) {
+        localStorage.setItem("accessToken", newAccessToken);
+        config.headers = {
+          ...config.headers,
+          authorization: `Bearer ${newAccessToken}`,
+        };
+      }
+      return axios(config);
+    }
+    return Promise.reject(error);
+  }
+);
 
 export const login = async ({ email, password }) => {
   try {
     const response = await api.post(PATH.LOGIN, { email, password });
     return response;
   } catch (error) {
-    console.log(error);
     throw Error(error.response.data.message);
   }
 };
@@ -82,20 +118,6 @@ export const getProfile = async () => {
     return response;
   } catch (error) {
     throw Error(error.response.data);
-  }
-};
-
-export const refreshAccessToken = async () => {
-  const refreshTokenFromStorage = localStorage.getItem("refreshToken");
-  try {
-    const response = await api.post(PATH.GET_NEW_ACCESS_TOKEN, {
-      refreshToken: refreshTokenFromStorage,
-    });
-    const { accessToken } = response.data;
-    return accessToken;
-  } catch (error) {
-    localStorage.removeItem("refreshToken");
-    return null;
   }
 };
 
@@ -187,11 +209,45 @@ export const addMember = async ({ groupID, memberID }) => {
   }
 };
 
+export const changeFullname = async ({ userID, newName }) => {
+  try {
+    const response = await api.post(PATH.UPDATE_NAME, {
+      userID,
+      newName,
+    });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const changePassword = async ({ userID, oldPassword, newPassword }) => {
+  try {
+    const response = await api.post(PATH.UPDATE_PASSWORD, {
+      userID,
+      oldPassword,
+      newPassword,
+    });
+    return response;
+  } catch (error) {
+    throw Error(error);
+  }
+};
+
 export const logout = async ({ refreshToken }) => {
   try {
     const response = await api.post(PATH.LOGOUT, {
       refreshToken,
     });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const checkType = async ({ userID }) => {
+  try {
+    const response = await api.post(PATH.CHECKTYPE, { userID });
     return response;
   } catch (error) {
     throw Error(error.response.data);

@@ -22,7 +22,15 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useMutation } from "@tanstack/react-query";
 import { ColorRing } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
-import { createGroup, groupInfo, addMember, logout } from "../../API/api";
+import {
+  createGroup,
+  groupInfo,
+  addMember,
+  changeFullname,
+  changePassword,
+  logout,
+  checkType,
+} from "../../API/api";
 import * as SC from "./StyledMainPageComponents";
 import logo from "../../Assets/logo.png";
 import AuthContext from "../../Context/AuthProvider";
@@ -34,14 +42,28 @@ const { Meta } = Card;
 export default function MainPage() {
   const { auth, setAuth } = useContext(AuthContext);
   const [visible, setVisible] = useState(false);
+  const [visibleName, setVisibleName] = useState(false);
+  const [visiblePassword, setVisiblePassword] = useState(false);
   const [form] = Form.useForm();
+  const [nameForm] = Form.useForm();
+  const [passwordForm] = Form.useForm();
   const [data, setData] = useState([]);
   const [rawData, setRawData] = useState([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All Groups");
   const [loadingGroups, setLoadingGroups] = useState(false);
-
+  const [type, setType] = useState("local");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkTypeMenu = async () => {
+      const response = await checkType({ userID: auth?.user?._id });
+      setType(response.data.type);
+    };
+
+    checkTypeMenu();
+  }, [auth]);
+
   const checkExist = (element, userID) => {
     for (let i = 0; i < element.members.length; i++) {
       if (element.members[i].memberID === userID) {
@@ -58,18 +80,32 @@ export default function MainPage() {
     setAuth(null);
   };
 
+  const handleNameCancel = () => {
+    setVisibleName(false);
+    nameForm.resetFields();
+  };
+
+  const handlePasswordCancel = () => {
+    setVisiblePassword(false);
+    nameForm.resetFields();
+  };
   const handleUserMenu = async ({ key }) => {
     const value = key.key;
-    if (value === "2") {
+    if (value === "3") {
       logoutAction();
+    } else if (value === "2") {
+      setVisiblePassword(true);
+    } else {
+      setVisibleName(true);
     }
   };
 
   const userMenu = (
     <Menu onClick={(key) => handleUserMenu({ key })}>
-      <Menu.Item key="1">Manage your information</Menu.Item>
+      <Menu.Item key="1">Change your name</Menu.Item>
+      {type === "local" && <Menu.Item key="2">Change your password</Menu.Item>}
       <Menu.Divider />
-      <Menu.Item key="2">Logout</Menu.Item>
+      <Menu.Item key="3">Logout</Menu.Item>
     </Menu>
   );
 
@@ -78,11 +114,12 @@ export default function MainPage() {
     for (let i = 0; i < allData.length; i++) {
       if (allData[i].groupName.toString().includes(search)) {
         if (
-          (filter === "My Groups" && allData[i].creatorID === auth.user._id) ||
+          (filter === "My Groups" &&
+            allData[i].creatorID === auth?.user?._id) ||
           (filter === "Other Groups" &&
-            allData[i].creatorID !== auth.user._id &&
-            checkExist(allData[i], auth.user._id)) ||
-          (filter === "All Groups" && checkExist(allData[i], auth.user._id))
+            allData[i].creatorID !== auth?.user?._id &&
+            checkExist(allData[i], auth?.user?._id)) ||
+          (filter === "All Groups" && checkExist(allData[i], auth?.user?._id))
         ) {
           filteredData.push(allData[i]);
         }
@@ -100,7 +137,7 @@ export default function MainPage() {
           localStorage.removeItem("groupID");
           await addMember({
             groupID,
-            memberID: auth.user._id,
+            memberID: auth?.user?._id,
           });
         }
       } catch (error) {
@@ -141,16 +178,11 @@ export default function MainPage() {
     }
   };
 
-  const showModal = () => {
-    setVisible(true);
-  };
-
   const handleCancel = () => {
     setVisible(false);
     form.resetFields();
   };
-
-  const { isLoading, mutateAsync } = useMutation(createGroup, {
+  const createGroupMutation = useMutation(createGroup, {
     onError: (error) => {
       setVisible(false);
       form.resetFields();
@@ -178,15 +210,83 @@ export default function MainPage() {
   const onSubmitCreateGroup = async (values) => {
     setLoadingGroups(true);
     try {
-      await mutateAsync({
+      await createGroupMutation.mutateAsync({
         groupName: values.groupname,
-        creatorID: auth.user._id,
+        creatorID: auth?.user?._id,
       });
     } catch (error) {
       console.log(error);
     }
   };
 
+  const changeNameMutation = useMutation(changeFullname, {
+    onError: (error) => {
+      setVisibleName(false);
+      nameForm.resetFields();
+      // alert(error);
+      console.log(error);
+      // if (error.toString().includes("group name has already been used")) {
+      //   showExistNameErrorMessage();
+      // } else {
+      //   showUnknownErrorMessage();
+      // }
+    },
+    onSuccess: (response) => {
+      setVisibleName(false);
+      nameForm.resetFields();
+      showMessage(0, "Update name successfully");
+      // update current auth
+      setAuth((preState) => ({
+        ...preState,
+        user: { ...preState.user, fullName: response.data.fullName },
+      }));
+    },
+  });
+
+  const onNameSubmit = async (values) => {
+    try {
+      await changeNameMutation.mutateAsync({
+        userID: auth?.user?._id,
+        newName: values.fullname,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const changePasswordMutation = useMutation(changePassword, {
+    onError: (error) => {
+      setVisiblePassword(false);
+      passwordForm.resetFields();
+      // alert(error);
+      console.log(error);
+      if (error.toString().includes("409")) {
+        showMessage(
+          2,
+          "Update failed. Your input password doesn't match your current password"
+        );
+      } else {
+        showMessage(2, "Update failed. Unknown error");
+      }
+    },
+    onSuccess: () => {
+      setVisiblePassword(false);
+      passwordForm.resetFields();
+      showMessage(0, "Update password successfully");
+    },
+  });
+
+  const onPasswordSubmit = async (values) => {
+    try {
+      await changePasswordMutation.mutateAsync({
+        userID: auth?.user?._id,
+        oldPassword: values.oldPassword,
+        newPassword: values.newPassword,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <SC.StyledPageContainer>
       <SC.StyledUpperBarContainer>
@@ -201,8 +301,8 @@ export default function MainPage() {
 
         <SC.StyledIconContainer>
           <SC.StyledUserInfoContainer>
-            <SC.StyledUserName>{auth.user.fullName}</SC.StyledUserName>
-            <SC.StyledEmailName>{auth.user.email}</SC.StyledEmailName>
+            <SC.StyledUserName>{auth?.user?.fullName}</SC.StyledUserName>
+            <SC.StyledEmailName>{auth?.user?.email}</SC.StyledEmailName>
           </SC.StyledUserInfoContainer>
           <div>
             <Dropdown.Button
@@ -230,13 +330,13 @@ export default function MainPage() {
             shape="round"
             icon={<PlusOutlined />}
             size="large"
-            onClick={showModal}
+            onClick={() => setVisible(true)}
           >
             New Group
           </Button>
         </SC.StyledItemMarginHorizonalLeftContainer>
 
-        <Modal visible={visible} onOk={form.submit} onCancel={handleCancel}>
+        <Modal open={visible} onOk={form.submit} onCancel={handleCancel}>
           <Form
             form={form}
             onFinish={onSubmitCreateGroup}
@@ -257,7 +357,7 @@ export default function MainPage() {
                 >
                   <Input style={{ width: 160 }} placeholder="Please input" />
                 </Form.Item>
-                {isLoading ? (
+                {createGroupMutation.isLoading ? (
                   <ColorRing
                     visible
                     height="25"
@@ -279,6 +379,86 @@ export default function MainPage() {
           </Form>
         </Modal>
 
+        <Modal
+          open={visibleName}
+          onOk={nameForm.submit}
+          onCancel={handleNameCancel}
+        >
+          <Form
+            form={nameForm}
+            onFinish={onNameSubmit}
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
+            scrollToFirstError
+          >
+            {/* Any input */}
+            <Form.Item>
+              <SC.StyledGroupTitle>Update your Full Name</SC.StyledGroupTitle>
+            </Form.Item>
+            <Form.Item
+              name="fullname"
+              label="Full Name"
+              autoComplete="off"
+              initialValue={auth?.user?.fullName}
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your full name",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </Form>
+        </Modal>
+        <Modal
+          open={visiblePassword}
+          onOk={passwordForm.submit}
+          onCancel={handlePasswordCancel}
+        >
+          <Form
+            form={passwordForm}
+            onFinish={onPasswordSubmit}
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
+            scrollToFirstError
+          >
+            <Form.Item>
+              <SC.StyledGroupTitle>Update your Password</SC.StyledGroupTitle>
+            </Form.Item>
+            <Form.Item
+              name="oldPassword"
+              label="Current Password"
+              autoComplete="off"
+              hasFeedback
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your current password!",
+                },
+                { min: 6, message: "Password must be minimum 6 characters." },
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+
+            <Form.Item
+              name="newPassword"
+              label="New Password"
+              autoComplete="off"
+              hasFeedback
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your new password!",
+                },
+                { min: 6, message: "Password must be minimum 6 characters." },
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+          </Form>
+        </Modal>
         <SC.StyledSearchSortContainer>
           <SC.StyledItemMarginHorizonalRightContainer>
             <Search
