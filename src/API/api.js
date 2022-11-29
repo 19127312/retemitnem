@@ -29,6 +29,9 @@ export const PATH = {
   PRESENTATION_INFO: "presentation/viewByGroupID",
   PRESENTATION_INFO_BY_ID: "presentation/info",
   UPDATE_PRESENTATION: "presentation/update",
+  CREATE_PRESENTATION: "/presentation/add",
+  DELETE_PRESENTATIONS: "/presentation/delete",
+
 };
 
 export const refreshAccessToken = async () => {
@@ -282,6 +285,31 @@ export const viewPresentationInfoByPresentationID = async ({
 export const updatePresentation = async ({ presentation }) => {
   try {
     const response = await api.post(PATH.UPDATE_PRESENTATION, { presentation });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+
+
+export const createPresentation = async ({ title, ownerID, groupID }) => {
+  try {
+    const response = await api.post(PATH.CREATE_PRESENTATION, {
+      title,
+      ownerID,
+      groupID,
+    });
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const deletePresentations = async ({ presentationIDs }) => {
+  try {
+    const response = await api.post(PATH.DELETE_PRESENTATIONS, {
+      presentationIDs,
+    });
     return response;
   } catch (error) {
     throw Error(error.response.data);
