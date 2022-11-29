@@ -31,7 +31,6 @@ export const PATH = {
   UPDATE_PRESENTATION: "presentation/update",
   CREATE_PRESENTATION: "/presentation/add",
   DELETE_PRESENTATIONS: "/presentation/delete",
-
 };
 
 export const refreshAccessToken = async () => {
@@ -291,8 +290,6 @@ export const updatePresentation = async ({ presentation }) => {
   }
 };
 
-
-
 export const createPresentation = async ({ title, ownerID, groupID }) => {
   try {
     const response = await api.post(PATH.CREATE_PRESENTATION, {
@@ -300,6 +297,7 @@ export const createPresentation = async ({ title, ownerID, groupID }) => {
       ownerID,
       groupID,
     });
+    return response;
   } catch (error) {
     throw Error(error.response.data);
   }
