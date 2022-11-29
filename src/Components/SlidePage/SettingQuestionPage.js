@@ -26,7 +26,7 @@ function SettingQuestionPage({
         onChange={(e) => onQuestionChange(e.target.value)}
       />
       <SC.StyledQuestionInSlide>Options ?</SC.StyledQuestionInSlide>
-      {options.map((optionItem) => (
+      {options?.map((optionItem) => (
         <SingleOption
           index={optionItem.optionKey}
           option={optionItem.option}

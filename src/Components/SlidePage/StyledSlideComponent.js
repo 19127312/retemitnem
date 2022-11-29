@@ -190,3 +190,34 @@ export const StyledOptionInput = styled(Input)`
   width: 80%;
   height: 40px;
 `;
+export const StyledPresentaionContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  padding: 10px;
+`;
+export const StyledLogoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+`;
+
+export const StyledLogoName = styled.h1`
+  font-size: 2.5rem;
+  font-family: "Sora", sans-serif;
+  line-height: 2rem;
+  margin-left: 10px;
+  margin-bottom: 0px;
+  font-style: bold;
+`;
+export const StyledQuestionPresentation = styled.div`
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 20px 0px 10px 0px;
+  font-family: "Sora", sans-serif;
+`;
