@@ -26,7 +26,9 @@ export const PATH = {
   UPDATE_PASSWORD: "/user/changepassword",
   LOGOUT: "/auth/logout",
   CHECKTYPE: "/user/checkType",
-  PRESENTATION_INFO: "presentation/viewByGroupID",
+  PRESENTATION_INFO: "/presentation/viewByGroupID",
+  CREATE_PRESENTATION: "/presentation/add",
+  DELETE_PRESENTATIONS: "/presentation/delete",
 };
 
 export const refreshAccessToken = async () => {
@@ -258,6 +260,30 @@ export const checkType = async ({ userID }) => {
 export const viewPresentationInfoByGroupID = async ({ groupID }) => {
   try {
     const response = await api.get(`${PATH.PRESENTATION_INFO}/${groupID}`);
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const createPresentation = async ({ title, ownerID, groupID }) => {
+  try {
+    const response = await api.post(PATH.CREATE_PRESENTATION, {
+      title,
+      ownerID,
+      groupID,
+    });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const deletePresentations = async ({ presentationIDs }) => {
+  try {
+    const response = await api.post(PATH.DELETE_PRESENTATIONS, {
+      presentationIDs,
+    });
     return response;
   } catch (error) {
     throw Error(error.response.data);
