@@ -11,6 +11,7 @@ export function BarChart({ chartData, chartQuestion }) {
         {chartQuestion}
       </h2>
       <Bar
+        style={{ padding: "30px" }}
         data={chartData}
         options={{
           lineWidth: 0,
@@ -26,6 +27,10 @@ export function BarChart({ chartData, chartQuestion }) {
             },
             legend: {
               display: false,
+            },
+            title: {
+              display: true,
+              text: "Results",
             },
           },
           scales: {

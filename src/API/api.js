@@ -36,11 +36,14 @@ export const PATH = {
 export const refreshAccessToken = async () => {
   const refreshTokenFromStorage = localStorage.getItem("refreshToken");
   try {
-    const response = await api.post(PATH.GET_NEW_ACCESS_TOKEN, {
-      refreshToken: refreshTokenFromStorage,
-    });
-    const { accessToken } = response.data;
-    return accessToken;
+    if (refreshTokenFromStorage) {
+      const response = await api.post(PATH.GET_NEW_ACCESS_TOKEN, {
+        refreshToken: refreshTokenFromStorage,
+      });
+      const { accessToken } = response.data;
+      return accessToken;
+    }
+    return null;
   } catch (error) {
     localStorage.removeItem("refreshToken");
     return null;
