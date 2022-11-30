@@ -37,7 +37,6 @@ function SlidePage() {
       },
     ],
   });
-
   const updatePresentationMutation = useMutation(updatePresentation, {
     onError: (error) => {
       showMessage(2, error.message);
@@ -133,11 +132,16 @@ function SlidePage() {
   };
 
   const handleShare = () => {
-    console.log("share slide");
+    navigator.clipboard.writeText(`${window.location.host}/presentation/${id}`);
+    showMessage(1, "Link copied to clipboard");
   };
 
   const handlePlay = () => {
     console.log("play slide");
+    setPresentation((pre) => ({
+      ...pre,
+      playSlide: pre.currentSlide,
+    }));
   };
 
   const handleAddSlide = () => {
@@ -225,14 +229,16 @@ function SlidePage() {
               color="#196cff"
               ariaLabel="tail-spin-loading"
               radius="1"
-              wrapperStyle={{}}
+              wrapperStyle={{ marginRight: "10px" }}
               wrapperClass=""
               visible
             />
           ) : (
             <img src={Check} alt="Check" />
           )}
-          <SC.StyledTopRightSaving>Saved</SC.StyledTopRightSaving>
+          <SC.StyledTopRightSaving>
+            {updatePresentationMutation.isLoading ? "Saving..." : "Saved"}
+          </SC.StyledTopRightSaving>
           <SC.StyledButton
             icon={<ShareAltOutlined />}
             size="large"
@@ -265,11 +271,13 @@ function SlidePage() {
         <SC.StyledLeftContainer>
           {slides.map((slide, index) => (
             <SingleSlide
+              key={slide.key}
               question={slide.question}
               index={index}
               selected={selectedSlide?.key === index}
               onClick={(indexSelect) => handleSelectedSlide(slide, indexSelect)}
               onDelete={(deleteIndex) => handleDeleteSlide(deleteIndex)}
+              isPlayed={presentation?.playSlide === index}
             />
           ))}
         </SC.StyledLeftContainer>

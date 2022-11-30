@@ -159,6 +159,7 @@ export const StyledPrensatationTitle = styled.div`
   background-color: white;
   width: 90%;
   height: 90%;
+  padding: 20px;
 `;
 export const StyledSettingContainer = styled.div`
   display: flex;
@@ -254,6 +255,5 @@ export const StyledRadioContainer = styled.div`
 `;
 
 export const StyledChartContainer = styled.div`
-  length: 70%;
   width: 60%;
 `;

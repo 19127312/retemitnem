@@ -28,7 +28,6 @@ function App() {
           <Route path="/" element={<MainPage />} />
           <Route path="/group/:id" element={<GroupPage />} />
           <Route path="/slide/:id" element={<SlidePage />} />
-          {/* slide ghi thêm ID */}
         </Route>
         <Route path="/presentation/:id" element={<PresentationMemberPage />} />
         <Route path="/joinlink/:id" element={<JoinLink />} />

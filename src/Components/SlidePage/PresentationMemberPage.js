@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Radio } from "antd";
+import { useMutation } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import * as SC from "./StyledSlideComponent";
 import logo from "../../Assets/logo.png";
 import { BarChart } from "./BarChart";
+import {
+  viewPresentationInfoByPresentationID,
+  updatePresentation,
+} from "../../API/api";
+import { showMessage } from "../Message";
 
 function PresentationMemberPage() {
   const { id } = useParams();
@@ -21,45 +27,21 @@ function PresentationMemberPage() {
   });
 
   useEffect(() => {
-    console.log("id", id);
-    const data = {
-      title: "Presentation Title",
-      currentSlide: 0,
-      slides: [
-        {
-          questionType: "MCQ",
-          question: "Hello",
-          options: [
-            {
-              option: "Helo cc",
-              optionKey: 0,
-            },
-            { option: "Helo cl", optionKey: 1 },
-          ],
-          key: 0,
-          answers: [
-            { answerCount: 2, answerKey: 0 },
-            { answerCount: 21, answerKey: 1 },
-          ],
-        },
-        { question: "There", options: [], key: 1 },
-        { question: "You", options: [], key: 2 },
-        { question: "Dump", options: [], key: 3 },
-        { question: "Mortha", options: [], key: 4 },
-        { question: "", options: [], key: 5 },
-        { question: "He", options: [], key: 6 },
-        { question: "Hi", options: [], key: 7 },
-        { question: "Hu", options: [], key: 8 },
-        { question: "Ha", options: [], key: 9 },
-        { question: "Ho", options: [], key: 10 },
-        { question: "Kaa", options: [], key: 11 },
-      ],
+    const fetchData = async () => {
+      try {
+        const response = await viewPresentationInfoByPresentationID({
+          presentationID: id,
+        });
+        setPresentation(response.data);
+      } catch (error) {
+        showMessage(2, error.message);
+      }
     };
-    setPresentation(data);
-  }, []);
+    fetchData();
+  }, [id]);
 
   useEffect(() => {
-    const selectedSlide = presentation?.slides[presentation?.currentSlide];
+    const selectedSlide = presentation?.slides[presentation?.playSlide];
     if (selectedSlide?.options.length > 0) {
       setChartData({
         labels: selectedSlide.options.map((option) => option.option),
@@ -82,19 +64,41 @@ function PresentationMemberPage() {
       });
     }
   }, [presentation]);
+  const updatePresentationMutation = useMutation(updatePresentation, {
+    onError: (error) => {
+      showMessage(2, error.message);
+    },
+    onSuccess: () => {
+      showMessage(1, "Submit Success");
+    },
+  });
+  const onChangePresentation = async () => {
+    try {
+      if (presentation) {
+        await updatePresentationMutation.mutateAsync({
+          presentation,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    onChangePresentation();
+  }, [isSubmitted]);
 
   const onChange = (e) => {
     setValue(e.target.value);
     console.log(e.target.value);
   };
+
   const handleSubmit = () => {
     if (value !== null) {
-      console.log(value);
       setIsSubmitted(true);
       setPresentation((prev) => ({
         ...prev,
         slides: prev.slides.map((slide) => {
-          if (slide.key === prev.currentSlide) {
+          if (slide.key === prev.playSlide) {
             return {
               ...slide,
               answers: slide.answers.map((answer) => {
@@ -121,14 +125,14 @@ function PresentationMemberPage() {
           <BarChart
             chartData={chartData}
             chartQuestion={
-              presentation?.slides[presentation?.currentSlide].question
+              presentation?.slides[presentation?.playSlide].question
             }
           />
         </SC.StyledChartContainer>
       ) : (
         <SC.StyledRadioContainer>
           <SC.StyledQuestionPresentation>
-            {presentation?.slides[presentation?.currentSlide].question}
+            {presentation?.slides[presentation?.playSlide].question}
           </SC.StyledQuestionPresentation>
           <Radio.Group
             onChange={onChange}
@@ -141,7 +145,7 @@ function PresentationMemberPage() {
               width: "100%",
             }}
           >
-            {presentation?.slides[presentation?.currentSlide].options.map(
+            {presentation?.slides[presentation?.playSlide].options.map(
               (option) => (
                 <Radio
                   key={option.optionKey}

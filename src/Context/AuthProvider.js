@@ -1,5 +1,5 @@
 import { useEffect, createContext, useState, useMemo } from "react";
-import { getProfile, refreshAccessToken } from "../API/api";
+import { getProfile } from "../API/api";
 
 const AuthContext = createContext({});
 
@@ -17,7 +17,6 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     async function getProfileUser() {
       const accessToken = localStorage.getItem("accessToken");
-      const refreshToken = localStorage.getItem("refreshToken");
       if (accessToken) {
         try {
           const response = await getProfile();
@@ -26,18 +25,6 @@ export function AuthProvider({ children }) {
         } catch (error) {
           console.log("accessToken is expired");
           localStorage.removeItem("accessToken");
-          if (refreshToken) {
-            try {
-              const newAccessToken = await refreshAccessToken();
-              localStorage.setItem("accessToken", newAccessToken);
-              const newResponse = await getProfile();
-              const { user } = newResponse.data;
-              setAuth({ user, accessToken: newAccessToken, refreshToken });
-            } catch (e) {
-              console.log("refreshToken is expired");
-              localStorage.removeItem("refreshToken");
-            }
-          }
         }
       }
     }

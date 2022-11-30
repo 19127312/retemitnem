@@ -5,6 +5,7 @@ import useAuth from "../../Hooks/useAuth";
 export default function PrivateRoutes() {
   const { auth } = useAuth();
   const location = useLocation();
+  localStorage.setItem("from", location.pathname);
   return auth?.user ? (
     <Outlet />
   ) : (
