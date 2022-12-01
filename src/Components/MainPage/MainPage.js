@@ -30,6 +30,7 @@ import {
   changePassword,
   logout,
   checkType,
+  getRandomImagesUrl,
 } from "../../API/api";
 import * as SC from "./StyledMainPageComponents";
 import logo from "../../Assets/logo.png";
@@ -54,6 +55,16 @@ export default function MainPage() {
   const [loadingGroups, setLoadingGroups] = useState(false);
   const [type, setType] = useState("local");
   const navigate = useNavigate();
+  const [imageUrls, setImageUrls] = useState(null);
+  useEffect(() => {
+    const getImageUrls = async () => {
+      const response = await getRandomImagesUrl();
+      setImageUrls(response);
+    };
+
+    getImageUrls();
+    console.log(imageUrls);
+  }, []);
 
   useEffect(() => {
     const checkTypeMenu = async () => {
