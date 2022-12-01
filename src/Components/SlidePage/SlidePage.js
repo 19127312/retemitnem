@@ -131,7 +131,6 @@ function SlidePage() {
       ...pre,
       title: editableStr,
     }));
-    console.log(editableStr);
   }, [editableStr]);
 
   const handleSelectedSlide = (slide, indexSelect) => {
@@ -168,7 +167,6 @@ function SlidePage() {
   };
 
   const handlePlay = () => {
-    console.log("play slide");
     setPresentation((pre) => ({
       ...pre,
       playSlide: pre.currentSlide,
