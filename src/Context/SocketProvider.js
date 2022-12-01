@@ -3,7 +3,9 @@ import io from "socket.io-client";
 
 const SocketContext = createContext({});
 export function SocketProvider({ children }) {
-  const socket = io.connect(process.env.REACT_APP_URL_API);
+  const socket = io.connect(process.env.REACT_APP_URL_API, {
+    transports: ["websocket"],
+  });
 
   const value = useMemo(() => ({ socket }), [socket]);
   return (
