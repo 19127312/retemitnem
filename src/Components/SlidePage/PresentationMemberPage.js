@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Radio } from "antd";
-import { useMutation } from "@tanstack/react-query";
+// import { useMutation } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import * as SC from "./StyledSlideComponent";
 import logo from "../../Assets/logo.png";
 import { BarChart } from "./BarChart";
+import SocketContext from "../../Context/SocketProvider";
 import {
   viewPresentationInfoByPresentationID,
-  updatePresentation,
+  // updatePresentation,
 } from "../../API/api";
 import { showMessage } from "../Message";
 
 function PresentationMemberPage() {
   const { id } = useParams();
+  const { socket } = useContext(SocketContext);
   const [presentation, setPresentation] = useState(null);
   const [value, setValue] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -41,6 +43,7 @@ function PresentationMemberPage() {
       }
     };
     fetchData();
+    socket.emit("join_presentation", id);
   }, [id]);
 
   useEffect(() => {
@@ -90,29 +93,25 @@ function PresentationMemberPage() {
     }
   }, [presentation]);
 
-  const updatePresentationMutation = useMutation(updatePresentation, {
-    onError: (error) => {
-      showMessage(2, error.message);
-    },
-    onSuccess: () => {
-      showMessage(1, "Submit Success");
-    },
-  });
-  const onChangePresentation = async () => {
-    try {
-      if (presentation) {
-        await updatePresentationMutation.mutateAsync({
-          presentation,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
   useEffect(() => {
-    onChangePresentation();
+    // onChangePresentation();
+    if (presentation) {
+      socket.emit("submit_result", presentation); // Gửi lên server để cập nhật lại slide
+    }
   }, [isSubmitted]);
 
+  useEffect(() => {
+    socket.on("onSubmitResult", (data) => {
+      setPresentation((prev) => ({
+        ...prev,
+        slides: data.slides,
+      }));
+    });
+
+    return () => {
+      socket.off("onSubmitResult");
+    };
+  }, []);
   const onChange = (e) => {
     setValue(e.target.value);
     console.log(e.target.value);
