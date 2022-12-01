@@ -10,6 +10,7 @@ import playSlide from "../../Assets/playSlide.png";
 import {
   createPresentation,
   deletePresentations,
+  updatePresentation,
   viewPresentationInfoByGroupID,
 } from "../../API/api";
 import { showMessage } from "../Message";
@@ -24,8 +25,18 @@ export function GroupDashboardPage({ dashBoardPayload }) {
   const [selectedRecord, setSelectedRecord] = useState([]);
   const [search, setSearch] = useState("");
   const { auth } = useContext(AuthContext);
-  const handleClickPlay = (key) => {
-    console.log(key.name);
+  const [presentations, setPresentations] = useState(null);
+
+  const handleClickPlay = async (key) => {
+    let presentation = null;
+    for (let i = 0; i < presentations.length; i++) {
+      if (presentations[i]._id === key) {
+        presentations[i].playSlide = 0;
+        presentation = presentations[i];
+        break;
+      }
+    }
+    await updatePresentation({ presentation });
   };
   const handleNavigateSlidePage = (key) => {
     console.log("Choose presentation", key);
@@ -74,6 +85,7 @@ export function GroupDashboardPage({ dashBoardPayload }) {
       const response = await viewPresentationInfoByGroupID({
         groupID: dashBoardPayload._id,
       });
+      setPresentations(response.data);
       const presentationData = response.data.map((item) => {
         return {
           key: item._id,

@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import { Typography } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   CaretRightOutlined,
@@ -20,6 +21,8 @@ import {
 } from "../../API/api";
 import { showMessage } from "../Message";
 
+const { Paragraph } = Typography;
+
 function SlidePage() {
   const { id } = useParams();
   const { auth } = useContext(AuthContext);
@@ -28,6 +31,7 @@ function SlidePage() {
   const [slides, setSlides] = useState([]);
   const [selectedSlide, setSelectedSlide] = useState(null);
   const [chartQuestion, setChartQuestion] = useState("");
+  const [editableStr, setEditableStr] = useState("This is an editable text.");
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -63,6 +67,7 @@ function SlidePage() {
         setPresentation(response.data);
         setSlides(response.data.slides);
         setSelectedSlide(response.data.slides[response.data.currentSlide]);
+        setEditableStr(response.data.title);
       } catch (error) {
         showMessage(2, error.message);
       }
@@ -102,6 +107,14 @@ function SlidePage() {
       });
     }
   }, [selectedSlide]);
+
+  useEffect(() => {
+    setPresentation((pre) => ({
+      ...pre,
+      title: editableStr,
+    }));
+    console.log(editableStr);
+  }, [editableStr]);
 
   const handleSelectedSlide = (slide, indexSelect) => {
     setSelectedSlide(slide);
@@ -215,7 +228,18 @@ function SlidePage() {
             }}
           />
           <SC.StyledTopLeftInformation>
-            <SC.StyledTopLeftTitle>{presentation?.title}</SC.StyledTopLeftTitle>
+            <Paragraph
+              style={{
+                fontSize: "1rem",
+                fontWeight: "bold",
+                padding: "0px",
+                fontFamily: "Sora",
+                margin: "0px",
+              }}
+              editable={{ onChange: setEditableStr }}
+            >
+              {editableStr}
+            </Paragraph>
             <SC.StyledTopLeftSubTitle>
               {auth.user.email}
             </SC.StyledTopLeftSubTitle>
