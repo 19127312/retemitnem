@@ -18,6 +18,8 @@ function PresentationMemberPage() {
   const [presentation, setPresentation] = useState(null);
   const [value, setValue] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isNoQuestion, setIsNoQuestion] = useState(false);
+  const [isNoOptions, setIsNoOptions] = useState(false);
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -35,6 +37,7 @@ function PresentationMemberPage() {
           presentationID: id,
         });
         setPresentation(response.data);
+        console.log(response.data);
       } catch (error) {
         showMessage(2, error.message);
       }
@@ -66,27 +69,30 @@ function PresentationMemberPage() {
         ],
       });
     }
+
+    if (presentation?.slides[presentation?.playSlide].question === "") {
+      setIsNoQuestion(true);
+    }
+    let countFlag = 0;
+    for (
+      let i = 0;
+      i < presentation?.slides[presentation?.playSlide].options.length;
+      i++
+    ) {
+      if (
+        presentation?.slides[presentation?.playSlide].options[i].option === ""
+      ) {
+        countFlag++;
+      }
+    }
+    console.log(countFlag);
+    if (
+      countFlag === presentation?.slides[presentation?.playSlide].options.length
+    ) {
+      setIsNoOptions(true);
+    }
   }, [presentation]);
-  // const updatePresentationMutation = useMutation(updatePresentation, {
-  //   onError: (error) => {
-  //     showMessage(2, error.message);
-  //   },
-  //   onSuccess: () => {
-  //     showMessage(1, "Submit Success");
-  //     socket.emit("submit_result", presentation); // Gửi lên server để cập nhật lại slide
-  //   },
-  // });
-  // const onChangePresentation = async () => {
-  //   try {
-  //     if (presentation) {
-  //       await updatePresentationMutation.mutateAsync({
-  //         presentation,
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+
   useEffect(() => {
     // onChangePresentation();
     if (presentation) {
@@ -150,35 +156,53 @@ function PresentationMemberPage() {
         </SC.StyledChartContainer>
       ) : (
         <SC.StyledRadioContainer>
-          <SC.StyledQuestionPresentation>
-            {presentation?.slides[presentation?.playSlide].question}
-          </SC.StyledQuestionPresentation>
-          <Radio.Group
-            onChange={onChange}
-            value={value}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-              width: "100%",
-            }}
-          >
-            {presentation?.slides[presentation?.playSlide].options.map(
-              (option) => (
-                <Radio
-                  key={option.optionKey}
-                  value={option.optionKey}
-                  style={SC.radioStyled}
-                >
-                  {option.option}
-                </Radio>
-              )
-            )}
-          </Radio.Group>
-          <SC.StyledSubmitButton onClick={handleSubmit}>
-            Submit
-          </SC.StyledSubmitButton>
+          {isNoQuestion ? (
+            <SC.StyledQuestionPresentation>
+              No question title
+            </SC.StyledQuestionPresentation>
+          ) : (
+            <SC.StyledQuestionPresentation>
+              {presentation?.slides[presentation?.playSlide].question}
+            </SC.StyledQuestionPresentation>
+          )}
+          {isNoOptions ? (
+            <SC.StyledQuestionPresentation>
+              No options available
+            </SC.StyledQuestionPresentation>
+          ) : (
+            <Radio.Group
+              onChange={onChange}
+              value={value}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+                width: "100%",
+              }}
+            >
+              {presentation?.slides[presentation?.playSlide].options.map(
+                (option) => (
+                  <Radio
+                    key={option.optionKey}
+                    value={option.optionKey}
+                    style={SC.radioStyled}
+                  >
+                    {option.option}
+                  </Radio>
+                )
+              )}
+            </Radio.Group>
+          )}
+          {isNoOptions || isNoQuestion ? (
+            <SC.StyledSubmitButton disabled onClick={handleSubmit}>
+              Submit
+            </SC.StyledSubmitButton>
+          ) : (
+            <SC.StyledSubmitButton onClick={handleSubmit}>
+              Submit
+            </SC.StyledSubmitButton>
+          )}
         </SC.StyledRadioContainer>
       )}
     </SC.StyledPresentaionContainer>

@@ -316,3 +316,20 @@ export const deletePresentations = async ({ presentationIDs }) => {
     throw Error(error.response.data);
   }
 };
+
+export const getRandomImagesUrl = async () => {
+  try {
+    const imageUrlArray = [];
+    fetch(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&count=10`)
+      .then((response) => response.json())
+      .then((data) => {
+        for (let i = 0; i < data.length; i++) {
+          imageUrlArray.push(data[i].url);
+        }
+        console.log(imageUrlArray);
+      });
+    return imageUrlArray;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
