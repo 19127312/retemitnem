@@ -12,6 +12,7 @@ import SingleSlide from "./SingleSlide";
 import SettingQuestionPage from "./SettingQuestionPage";
 import backleft from "../../Assets/backleft.svg";
 import AuthContext from "../../Context/AuthProvider";
+import SocketContext from "../../Context/SocketProvider";
 import Check from "../../Assets/Check.svg";
 import { BarChart } from "./BarChart";
 import {
@@ -23,6 +24,7 @@ import { showMessage } from "../Message";
 function SlidePage() {
   const { id } = useParams();
   const { auth } = useContext(AuthContext);
+  const { socket } = useContext(SocketContext);
   const navigate = useNavigate();
   const [presentation, setPresentation] = useState(null);
   const [slides, setSlides] = useState([]);
@@ -68,8 +70,24 @@ function SlidePage() {
       }
     };
     fetchData();
+    socket.emit("join_presentation", id);
   }, [id]);
 
+  useEffect(() => {
+    socket.on("onSubmitResult", (data) => {
+      console.log("Đã lấy đc data", data);
+      setPresentation((prev) => ({
+        ...prev,
+        slides: data.slides,
+      }));
+      setSlides(data.slides);
+      setSelectedSlide(data.slides[data.currentSlide]);
+    });
+
+    return () => {
+      socket.off("onSubmitResult");
+    };
+  }, []);
   useEffect(() => {
     setPresentation((prev) => ({ ...prev, slides }));
   }, [slides]);

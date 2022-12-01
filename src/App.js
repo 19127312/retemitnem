@@ -10,6 +10,7 @@ import GroupPage from "./Components/GroupPage/GroupPage";
 import SlidePage from "./Components/SlidePage/SlidePage";
 import JoinLink from "./Components/JoinLink";
 import PresentationMemberPage from "./Components/SlidePage/PresentationMemberPage";
+import { SocketProvider } from "./Context/SocketProvider";
 
 const queryClient = new QueryClient();
 function App() {
@@ -27,9 +28,23 @@ function App() {
         <Route element={<PrivateRoutes />}>
           <Route path="/" element={<MainPage />} />
           <Route path="/group/:id" element={<GroupPage />} />
-          <Route path="/slide/:id" element={<SlidePage />} />
+          <Route
+            path="/slide/:id"
+            element={
+              <SocketProvider>
+                <SlidePage />
+              </SocketProvider>
+            }
+          />
         </Route>
-        <Route path="/presentation/:id" element={<PresentationMemberPage />} />
+        <Route
+          path="/presentation/:id"
+          element={
+            <SocketProvider>
+              <PresentationMemberPage />
+            </SocketProvider>
+          }
+        />
         <Route path="/joinlink/:id" element={<JoinLink />} />
         <Route path="*" element={<div>404</div>} />
       </Routes>
