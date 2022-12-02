@@ -26,6 +26,9 @@ export function GroupDashboardPage({ dashBoardPayload }) {
   const [search, setSearch] = useState("");
   const { auth } = useContext(AuthContext);
   const [presentations, setPresentations] = useState(null);
+  const [currentUserRoleInGroup, setCurrentUserRoleInGroup] = useState(null);
+
+  console.log(dashBoardPayload);
 
   const handleClickPlay = async (key) => {
     let presentation = null;
@@ -40,7 +43,11 @@ export function GroupDashboardPage({ dashBoardPayload }) {
   };
   const handleNavigateSlidePage = (key) => {
     console.log("Choose presentation", key);
-    navigate(`/slide/${key}`, { replace: false });
+    if (currentUserRoleInGroup === "member") {
+      navigate(`/presentation/${key}`, { replace: false });
+    } else {
+      navigate(`/slide/${key}`, { replace: false });
+    }
   };
   const columns = [
     {
@@ -49,11 +56,13 @@ export function GroupDashboardPage({ dashBoardPayload }) {
       key: "name",
       render: (_, record) => (
         <SC.StyledItemSlideListContainer>
-          <SC.StyledImagePlay
-            src={playSlide}
-            alt="playSlide"
-            onClick={() => handleClickPlay(record.key)}
-          />
+          {currentUserRoleInGroup === "member" ? null : (
+            <SC.StyledImagePlay
+              src={playSlide}
+              alt="playSlide"
+              onClick={() => handleClickPlay(record.key)}
+            />
+          )}
           <SC.StyledItemInfoSlideListContainer
             onClick={() => handleNavigateSlidePage(record.key)}
           >
@@ -103,10 +112,25 @@ export function GroupDashboardPage({ dashBoardPayload }) {
     }
   };
 
+  const checkCurrentUserRole = () => {
+    for (let i = 0; i < dashBoardPayload.members.length; i++) {
+      if (auth?.user?._id === dashBoardPayload.members[i].memberID) {
+        setCurrentUserRoleInGroup(dashBoardPayload.members[i].role);
+        break;
+      }
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    checkCurrentUserRole();
+  }, []);
+  console.log(currentUserRoleInGroup);
+
+  useEffect(() => {}, []);
   const searchData = (allData) => {
     const filteredData = [];
     for (let i = 0; i < allData.length; i++) {
@@ -228,15 +252,17 @@ export function GroupDashboardPage({ dashBoardPayload }) {
       </SC.StyledBannerContainer>
       <SC.StyledButtonDashboardContainer>
         <SC.StyledToolBarDashboardContainer>
-          <Button
-            type="primary"
-            shape="round"
-            icon={<PlusOutlined />}
-            style={{ marginBottom: 16 }}
-            onClick={() => setVisible(true)}
-          >
-            New presentation
-          </Button>
+          {currentUserRoleInGroup === "member" ? null : (
+            <Button
+              type="primary"
+              shape="round"
+              icon={<PlusOutlined />}
+              style={{ marginBottom: 16 }}
+              onClick={() => setVisible(true)}
+            >
+              New presentation
+            </Button>
+          )}
           {selectedRecord.length !== 0 ? (
             <Button
               danger
@@ -323,9 +349,9 @@ export function GroupDashboardPage({ dashBoardPayload }) {
         ) : null}
         <Table
           columns={columns}
-          rowSelection={{
-            ...rowSelection,
-          }}
+          rowSelection={
+            currentUserRoleInGroup === "member" ? null : rowSelection
+          }
           dataSource={slideData}
         />
       </SC.StyledMarginTaleDashboard>
