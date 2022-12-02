@@ -108,13 +108,17 @@ function PresentationMemberPage() {
       }));
     });
 
+    socket.on("onUpdatePresentation", (data) => {
+      setPresentation(data);
+    });
     return () => {
       socket.off("onSubmitResult");
+      socket.off("onUpdatePresentation");
     };
   }, []);
+
   const onChange = (e) => {
     setValue(e.target.value);
-    console.log(e.target.value);
   };
 
   const handleSubmit = () => {

@@ -47,6 +47,9 @@ function SlidePage() {
     onError: (error) => {
       showMessage(2, error.message);
     },
+    onSuccess: () => {
+      socket.emit("updatePresentation", presentation);
+    },
   });
   const onChangePresentation = async () => {
     try {
@@ -80,7 +83,6 @@ function SlidePage() {
 
   useEffect(() => {
     socket.on("onSubmitResult", (data) => {
-      console.log("Đã lấy đc data", data);
       setPresentation((prev) => ({
         ...prev,
         slides: data.slides,
