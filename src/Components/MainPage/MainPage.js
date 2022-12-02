@@ -56,14 +56,13 @@ export default function MainPage() {
   const [type, setType] = useState("local");
   const navigate = useNavigate();
   const [imageUrls, setImageUrls] = useState(null);
+
   useEffect(() => {
     const getImageUrls = async () => {
-      const response = await getRandomImagesUrl();
+      const response = await getRandomImagesUrl(10);
       setImageUrls(response);
     };
-
     getImageUrls();
-    console.log(imageUrls);
   }, []);
 
   useEffect(() => {
@@ -554,7 +553,14 @@ export default function MainPage() {
                 <Card
                   hoverable
                   cover={
-                    <img alt="example" src="https://picsum.photos/262/159" />
+                    <img
+                      width="262"
+                      height="159"
+                      alt="example"
+                      src={
+                        imageUrls[Math.floor(Math.random() * imageUrls.length)]
+                      }
+                    />
                   }
                   actions={[
                     <ShareAltOutlined

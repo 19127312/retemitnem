@@ -32,6 +32,10 @@ export const PATH = {
   CREATE_PRESENTATION: "/presentation/add",
   DELETE_PRESENTATIONS: "/presentation/delete",
 };
+export const BASE_URL = {
+  GET_IMAGES:
+    "https://api.nasa.gov/planetary/apod?api_key=MKbBo8HveCvt4DHggM8VbUQQYbDspW6L9v5u5Le6",
+};
 
 export const refreshAccessToken = async () => {
   const refreshTokenFromStorage = localStorage.getItem("refreshToken");
@@ -317,16 +321,15 @@ export const deletePresentations = async ({ presentationIDs }) => {
   }
 };
 
-export const getRandomImagesUrl = async () => {
+export const getRandomImagesUrl = async (quantity) => {
   try {
     const imageUrlArray = [];
-    fetch(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&count=10`)
+    fetch(`${BASE_URL.GET_IMAGES}&count=${quantity}`)
       .then((response) => response.json())
       .then((data) => {
         for (let i = 0; i < data.length; i++) {
           imageUrlArray.push(data[i].url);
         }
-        console.log(imageUrlArray);
       });
     return imageUrlArray;
   } catch (error) {
