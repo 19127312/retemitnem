@@ -339,7 +339,11 @@ function SlidePage() {
         </SC.StyledLeftContainer>
         <SC.StyledMidContainer>
           <SC.StyledPrensatationTitle>
-            <BarChart chartData={chartData} chartQuestion={chartQuestion} />
+            <BarChart
+              chartData={chartData}
+              chartQuestion={chartQuestion}
+              index={false}
+            />
           </SC.StyledPrensatationTitle>
         </SC.StyledMidContainer>
         <SC.StyledRightContainer>

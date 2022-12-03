@@ -4,12 +4,15 @@ import { Bar } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
 Chart.register(...registerables, ChartDataLabels);
-export function BarChart({ chartData, chartQuestion }) {
+
+export function BarChart({ chartData, chartQuestion, index }) {
   return (
     <div className="chart-container">
-      <h2 style={{ textAlign: "left", margin: "10px 0px 0px 10px" }}>
-        {chartQuestion}
-      </h2>
+      {index ? null : (
+        <h2 style={{ textAlign: "left", margin: "10px 0px 0px 10px" }}>
+          {chartQuestion}
+        </h2>
+      )}
       <Bar
         style={{ padding: "30px" }}
         data={chartData}
