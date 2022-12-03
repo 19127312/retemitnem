@@ -30,7 +30,6 @@ import {
   changePassword,
   logout,
   checkType,
-  getRandomImagesUrl,
 } from "../../API/api";
 import * as SC from "./StyledMainPageComponents";
 import logo from "../../Assets/logo.png";
@@ -41,7 +40,7 @@ const { Search } = Input;
 const { Meta } = Card;
 
 export default function MainPage() {
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth, setAuth, imageUrls } = useContext(AuthContext);
   const [visible, setVisible] = useState(false);
   const [visibleName, setVisibleName] = useState(false);
   const [visiblePassword, setVisiblePassword] = useState(false);
@@ -55,15 +54,6 @@ export default function MainPage() {
   const [loadingGroups, setLoadingGroups] = useState(false);
   const [type, setType] = useState("local");
   const navigate = useNavigate();
-  const [imageUrls, setImageUrls] = useState(null);
-
-  useEffect(() => {
-    const getImageUrls = async () => {
-      const response = await getRandomImagesUrl(10);
-      setImageUrls(response);
-    };
-    getImageUrls();
-  }, []);
 
   useEffect(() => {
     const checkTypeMenu = async () => {

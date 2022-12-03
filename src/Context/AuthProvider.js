@@ -1,9 +1,10 @@
 import { useEffect, createContext, useState, useMemo } from "react";
-import { getProfile } from "../API/api";
+import { getProfile, getRandomImagesUrl } from "../API/api";
 
 const AuthContext = createContext({});
 
 export function AuthProvider({ children }) {
+  const [imageUrls, setImageUrls] = useState(null);
   const [auth, setAuth] = useState({ user: null, accessToken: null });
   useEffect(() => {
     if (auth?.accessToken) {
@@ -13,6 +14,14 @@ export function AuthProvider({ children }) {
       localStorage.setItem("refreshToken", auth.refreshToken);
     }
   }, [auth]);
+
+  useEffect(() => {
+    const getImageUrls = async () => {
+      const response = await getRandomImagesUrl(20);
+      setImageUrls(response);
+    };
+    getImageUrls();
+  }, []);
 
   useEffect(() => {
     async function getProfileUser() {
@@ -30,7 +39,10 @@ export function AuthProvider({ children }) {
     }
     getProfileUser();
   }, []);
-  const value = useMemo(() => ({ auth, setAuth }), [auth, setAuth]);
+  const value = useMemo(
+    () => ({ auth, setAuth, imageUrls }),
+    [auth, setAuth, imageUrls]
+  );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
