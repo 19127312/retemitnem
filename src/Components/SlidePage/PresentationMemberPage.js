@@ -20,6 +20,7 @@ function PresentationMemberPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isNoQuestion, setIsNoQuestion] = useState(false);
   const [isNoOptions, setIsNoOptions] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -36,14 +37,19 @@ function PresentationMemberPage() {
         const response = await viewPresentationInfoByPresentationID({
           presentationID: id,
         });
-        setPresentation(response.data);
-        console.log(response.data);
+        if (response) {
+          setPresentation(response.data);
+          socket.emit("join_presentation", id);
+          console.log("co");
+        } else {
+          console.log("khong");
+        }
       } catch (error) {
         showMessage(2, error.message);
+        setIsError(true);
       }
     };
     fetchData();
-    socket.emit("join_presentation", id);
   }, [id]);
 
   useEffect(() => {
@@ -88,7 +94,6 @@ function PresentationMemberPage() {
         countFlag++;
       }
     }
-    console.log(countFlag);
     if (
       countFlag === presentation?.slides[presentation?.playSlide].options.length
     ) {
@@ -209,7 +214,7 @@ function PresentationMemberPage() {
             />
           </SC.StyledChartContainer>
         ) : (
-          <SC.StyledSubmitButton onClick={handleSubmit}>
+          <SC.StyledSubmitButton onClick={handleSubmit} disabled={isError}>
             Submit
           </SC.StyledSubmitButton>
         )}

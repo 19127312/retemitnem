@@ -139,6 +139,7 @@ export const StyledItemSlideListContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  cursor: pointer;
 `;
 
 export const StyledItemInfoSlideListContainer = styled.div`

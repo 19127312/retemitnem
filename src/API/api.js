@@ -284,7 +284,8 @@ export const viewPresentationInfoByPresentationID = async ({
     );
     return response;
   } catch (error) {
-    throw Error(error.response.data);
+    console.log(error);
+    throw Error(error.response.data.errorMessage);
   }
 };
 
