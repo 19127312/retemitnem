@@ -4,8 +4,8 @@ import { Bar } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
 Chart.register(...registerables, ChartDataLabels);
+
 export function BarChart({ chartData, chartQuestion, index }) {
-  console.log(chartData);
   return (
     <div className="chart-container">
       {index ? null : (

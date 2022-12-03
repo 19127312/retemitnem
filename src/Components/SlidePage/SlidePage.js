@@ -234,6 +234,20 @@ function SlidePage() {
     }));
   };
 
+  const handleResetResult = () => {
+    const newSlide = slides;
+    newSlide[selectedSlide.key].answers = newSlide[
+      selectedSlide.key
+    ].options.map((option) => ({
+      answerCount: 0,
+      answerKey: option.optionKey,
+    }));
+    setSelectedSlide((pre) => ({
+      ...pre,
+      answers: newSlide[selectedSlide.key].answers,
+    }));
+  };
+
   return (
     <SC.StyledPageContainer>
       <SC.StyledTopContainer>
@@ -342,6 +356,7 @@ function SlidePage() {
             }
             onOptionDelete={(index) => handleOptionDelete(index)}
             onOptionAdd={handleOptionAdd}
+            onResetResult={handleResetResult}
           />
         </SC.StyledRightContainer>
       </SC.StyledBodyContainer>

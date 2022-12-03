@@ -28,8 +28,6 @@ export function GroupDashboardPage({ dashBoardPayload }) {
   const [presentations, setPresentations] = useState(null);
   const [currentUserRoleInGroup, setCurrentUserRoleInGroup] = useState(null);
 
-  console.log(dashBoardPayload);
-
   const handleClickPlay = async (key) => {
     let presentation = null;
     for (let i = 0; i < presentations.length; i++) {
@@ -42,7 +40,6 @@ export function GroupDashboardPage({ dashBoardPayload }) {
     await updatePresentation({ presentation });
   };
   const handleNavigateSlidePage = (key) => {
-    console.log("Choose presentation", key);
     if (currentUserRoleInGroup === "member") {
       navigate(`/presentation/${key}`, { replace: false });
     } else {
@@ -128,7 +125,6 @@ export function GroupDashboardPage({ dashBoardPayload }) {
   useEffect(() => {
     checkCurrentUserRole();
   }, []);
-  console.log(currentUserRoleInGroup);
 
   useEffect(() => {}, []);
   const searchData = (allData) => {
