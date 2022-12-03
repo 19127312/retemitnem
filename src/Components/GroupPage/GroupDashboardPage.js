@@ -52,7 +52,9 @@ export function GroupDashboardPage({ dashBoardPayload }) {
       dataIndex: "name",
       key: "name",
       render: (_, record) => (
-        <SC.StyledItemSlideListContainer>
+        <SC.StyledItemSlideListContainer
+          onClick={() => handleNavigateSlidePage(record.key)}
+        >
           {currentUserRoleInGroup === "member" ? null : (
             <SC.StyledImagePlay
               src={playSlide}
@@ -60,9 +62,7 @@ export function GroupDashboardPage({ dashBoardPayload }) {
               onClick={() => handleClickPlay(record.key)}
             />
           )}
-          <SC.StyledItemInfoSlideListContainer
-            onClick={() => handleNavigateSlidePage(record.key)}
-          >
+          <SC.StyledItemInfoSlideListContainer>
             <div>{record.name}</div>
             <div>{record.number} slide</div>
           </SC.StyledItemInfoSlideListContainer>
