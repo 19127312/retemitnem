@@ -5,7 +5,6 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 
 Chart.register(...registerables, ChartDataLabels);
 export function BarChart({ chartData, chartQuestion }) {
-  console.log(chartData);
   return (
     <div className="chart-container">
       <h2 style={{ textAlign: "left", margin: "10px 0px 0px 10px" }}>

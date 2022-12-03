@@ -59,6 +59,15 @@ export const StyledRightContainer = styled.div`
 
   background-color: white;
   flex: 4;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    width: 0.3rem;
+    &-thumb {
+      background-color: ${Color.blue100};
+      width: 0.2rem;
+      border-radius: 1rem;
+    }
+  }
 `;
 export const StyledMidContainer = styled.div`
   display: flex;
@@ -171,7 +180,7 @@ export const StyledSettingContainer = styled.div`
 export const StyledQuestionInSlide = styled.div`
   font-size: 1rem;
   font-weight: bold;
-  padding: 10px 0px 0px 0px;
+  padding: 5px;
   font-family: "Sora", sans-serif;
 `;
 export const StyledInput = styled(Input)`
@@ -256,4 +265,12 @@ export const StyledRadioContainer = styled.div`
 
 export const StyledChartContainer = styled.div`
   width: 60%;
+`;
+export const StyledOptionResultContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 10px 0px;
 `;

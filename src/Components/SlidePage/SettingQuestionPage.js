@@ -1,5 +1,5 @@
 import React from "react";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, RedoOutlined } from "@ant-design/icons";
 import * as SC from "./StyledSlideComponent";
 import SingleOption from "./SingleOption";
 
@@ -10,6 +10,7 @@ function SettingQuestionPage({
   onOptionChange,
   onOptionDelete,
   onOptionAdd,
+  onResetResult,
 }) {
   const handleOptionChange = (index, value) => {
     onOptionChange(index, value);
@@ -17,6 +18,7 @@ function SettingQuestionPage({
   const handleOptionDelete = (index) => {
     onOptionDelete(index);
   };
+
   return (
     <SC.StyledSettingContainer>
       <SC.StyledQuestionInSlide>Your Question ?</SC.StyledQuestionInSlide>
@@ -25,7 +27,19 @@ function SettingQuestionPage({
         value={question}
         onChange={(e) => onQuestionChange(e.target.value)}
       />
-      <SC.StyledQuestionInSlide>Options ?</SC.StyledQuestionInSlide>
+      <SC.StyledOptionResultContainer>
+        <SC.StyledQuestionInSlide>Options ?</SC.StyledQuestionInSlide>
+        <SC.StyledButton
+          icon={<RedoOutlined />}
+          size="large"
+          onClick={onResetResult}
+          type="primary"
+          style={{ margin: "0px" }}
+          danger
+        >
+          Reset Results
+        </SC.StyledButton>
+      </SC.StyledOptionResultContainer>
       {options?.map((optionItem) => (
         <SingleOption
           key={optionItem.optionKey}
