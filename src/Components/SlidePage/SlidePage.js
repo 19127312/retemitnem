@@ -250,6 +250,33 @@ function SlidePage() {
       answers: newSlide[selectedSlide.key].answers,
     }));
   };
+  const handleSetSlideType = (type) => {
+    const newSlide = slides;
+    newSlide[selectedSlide.key].questionType = type;
+    setSelectedSlide((pre) => ({
+      ...pre,
+      questionType: type,
+    }));
+  };
+
+  const presentationRender = (slideType) => {
+    if (slideType === "Multiple Choice") {
+      return (
+        <BarChart
+          chartData={chartData}
+          chartQuestion={chartQuestion}
+          index={false}
+        />
+      );
+    }
+    if (slideType === "Heading") {
+      return <>Heading</>;
+    }
+    if (slideType === "Paragraph") {
+      return <>Paragraph</>;
+    }
+    return null;
+  };
 
   return (
     <SC.StyledPageContainer>
@@ -342,26 +369,26 @@ function SlidePage() {
           ))}
         </SC.StyledLeftContainer>
         <SC.StyledMidContainer>
-          <SC.StyledPrensatationTitle>
-            <BarChart
-              chartData={chartData}
-              chartQuestion={chartQuestion}
-              index={false}
-            />
-          </SC.StyledPrensatationTitle>
+          <SC.StyledPrensatationContainer>
+            {selectedSlide && presentationRender(selectedSlide.questionType)}
+          </SC.StyledPrensatationContainer>
         </SC.StyledMidContainer>
         <SC.StyledRightContainer>
-          <SettingQuestionPage
-            question={selectedSlide?.question}
-            onQuestionChange={handleSetQuestion}
-            options={selectedSlide?.options}
-            onOptionChange={(index, option) =>
-              handleOptionChange(index, option)
-            }
-            onOptionDelete={(index) => handleOptionDelete(index)}
-            onOptionAdd={handleOptionAdd}
-            onResetResult={handleResetResult}
-          />
+          {selectedSlide && (
+            <SettingQuestionPage
+              slideType={selectedSlide?.questionType}
+              question={selectedSlide?.question}
+              onQuestionChange={handleSetQuestion}
+              options={selectedSlide?.options}
+              onOptionChange={(index, option) =>
+                handleOptionChange(index, option)
+              }
+              onOptionDelete={(index) => handleOptionDelete(index)}
+              onOptionAdd={handleOptionAdd}
+              onResetResult={handleResetResult}
+              onChangeSlideType={(type) => handleSetSlideType(type)}
+            />
+          )}
         </SC.StyledRightContainer>
       </SC.StyledBodyContainer>
     </SC.StyledPageContainer>
