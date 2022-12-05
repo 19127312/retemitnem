@@ -154,74 +154,88 @@ function PresentationMemberPage() {
       }));
     }
   };
+  const renderPage = (slideType) => {
+    if (slideType === "Multiple Choice") {
+      return (
+        <SC.StyledRadioContainer>
+          {isNoQuestion ? (
+            <SC.StyledQuestionPresentation>
+              No question title
+            </SC.StyledQuestionPresentation>
+          ) : (
+            <SC.StyledQuestionPresentation>
+              {presentation?.slides[presentation?.playSlide].question}
+            </SC.StyledQuestionPresentation>
+          )}
+          {isNoOptions ? (
+            <SC.StyledQuestionPresentation>
+              No options available
+            </SC.StyledQuestionPresentation>
+          ) : (
+            <Radio.Group
+              disabled={isSubmitted}
+              onChange={onChange}
+              value={value}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+                width: "100%",
+              }}
+            >
+              {presentation?.slides[presentation?.playSlide].options.map(
+                (option) => (
+                  <Radio
+                    key={option.optionKey}
+                    value={option.optionKey}
+                    style={SC.radioStyled}
+                  >
+                    {option.option}
+                  </Radio>
+                )
+              )}
+            </Radio.Group>
+          )}
+          {/* eslint-disable-next-line */}
+          {isNoOptions || isNoQuestion ? (
+            <SC.StyledSubmitButton disabled onClick={handleSubmit}>
+              Submit
+            </SC.StyledSubmitButton>
+          ) : isSubmitted ? (
+            <SC.StyledChartContainer>
+              <BarChart
+                chartData={chartData}
+                chartQuestion={
+                  presentation?.slides[presentation?.playSlide].question
+                }
+                index
+              />
+            </SC.StyledChartContainer>
+          ) : (
+            <SC.StyledSubmitButton onClick={handleSubmit} disabled={isError}>
+              Submit
+            </SC.StyledSubmitButton>
+          )}
+        </SC.StyledRadioContainer>
+      );
+    }
+    if (slideType === "Heading") {
+      return <>HEADING</>;
+    }
+    if (slideType === "Paragraph") {
+      return <>Paragraph</>;
+    }
+    return null;
+  };
   return (
     <SC.StyledPresentaionContainer>
       <SC.StyledLogoContainer>
         <img src={logo} alt="logo" />
         <SC.StyledLogoName>Retemitnem</SC.StyledLogoName>
       </SC.StyledLogoContainer>
-
-      <SC.StyledRadioContainer>
-        {isNoQuestion ? (
-          <SC.StyledQuestionPresentation>
-            No question title
-          </SC.StyledQuestionPresentation>
-        ) : (
-          <SC.StyledQuestionPresentation>
-            {presentation?.slides[presentation?.playSlide].question}
-          </SC.StyledQuestionPresentation>
-        )}
-        {isNoOptions ? (
-          <SC.StyledQuestionPresentation>
-            No options available
-          </SC.StyledQuestionPresentation>
-        ) : (
-          <Radio.Group
-            disabled={isSubmitted}
-            onChange={onChange}
-            value={value}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-              width: "100%",
-            }}
-          >
-            {presentation?.slides[presentation?.playSlide].options.map(
-              (option) => (
-                <Radio
-                  key={option.optionKey}
-                  value={option.optionKey}
-                  style={SC.radioStyled}
-                >
-                  {option.option}
-                </Radio>
-              )
-            )}
-          </Radio.Group>
-        )}
-        {/* eslint-disable-next-line */}
-        {isNoOptions || isNoQuestion ? (
-          <SC.StyledSubmitButton disabled onClick={handleSubmit}>
-            Submit
-          </SC.StyledSubmitButton>
-        ) : isSubmitted ? (
-          <SC.StyledChartContainer>
-            <BarChart
-              chartData={chartData}
-              chartQuestion={
-                presentation?.slides[presentation?.playSlide].question
-              }
-              index
-            />
-          </SC.StyledChartContainer>
-        ) : (
-          <SC.StyledSubmitButton onClick={handleSubmit} disabled={isError}>
-            Submit
-          </SC.StyledSubmitButton>
-        )}
-      </SC.StyledRadioContainer>
+      {presentation &&
+        renderPage(presentation.slides[presentation.playSlide].questionType)}
     </SC.StyledPresentaionContainer>
   );
 }
