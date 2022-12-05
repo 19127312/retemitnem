@@ -111,7 +111,10 @@ function SlidePage() {
         datasets: [
           {
             data: selectedSlide.answers.map((answer) => answer.answerCount),
-            barThickness: 100,
+            barThickness:
+              selectedSlide.options.length < 7
+                ? 100
+                : 300 / selectedSlide.options.length,
           },
         ],
       });
@@ -319,6 +322,7 @@ function SlidePage() {
           icon={<PlusOutlined />}
           size="large"
           onClick={handleAddSlide}
+          style={{ marginLeft: "27px" }}
         >
           New Slide
         </SC.StyledButton>

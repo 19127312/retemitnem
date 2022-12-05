@@ -31,7 +31,7 @@ function SettingQuestionPage({
         <SC.StyledQuestionInSlide>Options ?</SC.StyledQuestionInSlide>
         <SC.StyledButton
           icon={<RedoOutlined />}
-          size="large"
+          size="middle"
           onClick={onResetResult}
           type="primary"
           style={{ margin: "0px" }}
