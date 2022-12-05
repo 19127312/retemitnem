@@ -63,7 +63,10 @@ function PresentationMemberPage() {
             backgroundColor: selectedSlide.answers.map((answer) =>
               answer.answerKey === value ? "red" : "#9BD0F5"
             ),
-            barThickness: 100,
+            barThickness:
+              selectedSlide.options.length < 7
+                ? 100
+                : 300 / selectedSlide.options.length,
           },
         ],
       });
