@@ -164,7 +164,7 @@ export const StyledTopLeftImage = styled.img`
 export const StyledButton = styled(Button)`
   margin: 0px 5px;
 `;
-export const StyledPrensatationTitle = styled.div`
+export const StyledPrensatationContainer = styled.div`
   background-color: white;
   width: 90%;
   height: 90%;
@@ -185,7 +185,6 @@ export const StyledQuestionInSlide = styled.div`
 `;
 export const StyledInput = styled(Input)`
   width: 100%;
-  margin: 10px 0px;
   height: 40px;
 `;
 export const StyledOptionContainer = styled.div`
