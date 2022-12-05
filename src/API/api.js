@@ -12,7 +12,6 @@ export const PATH = {
   GET_NEW_REFRESH_TOKEN: "/auth/refresh-token",
   GET_PROFILE: "/user/profile",
   GOOGLE_LOGIN: "/auth/google_login",
-  GOOGLE_SIGNUP: "/auth/google_signup",
   CREATE_GROUP: "/group/add",
   GROUP_INFO: "/group/info",
   USER_INFO: "/user/info",
@@ -91,21 +90,24 @@ export const login = async ({ email, password }) => {
     throw Error(error.response.data.message);
   }
 };
+
+const getGoogleUserInfo = async (token) => {
+  const response = await axios.get(
+    "https://www.googleapis.com/oauth2/v2/userinfo",
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
 export const loginGG = async (token) => {
   try {
-    console.log(token);
+    const userInfo = await getGoogleUserInfo(token);
     const response = await api.post(PATH.GOOGLE_LOGIN, {
-      token,
-    });
-    return response;
-  } catch (error) {
-    throw Error(error);
-  }
-};
-export const signupGG = async (token) => {
-  try {
-    const response = await api.post(PATH.GOOGLE_SIGNUP, {
-      token,
+      userInfo,
     });
     return response;
   } catch (error) {
