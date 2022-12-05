@@ -93,6 +93,7 @@ export const login = async ({ email, password }) => {
 };
 export const loginGG = async (token) => {
   try {
+    console.log(token);
     const response = await api.post(PATH.GOOGLE_LOGIN, {
       token,
     });
