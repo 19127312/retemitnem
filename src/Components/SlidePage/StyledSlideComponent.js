@@ -421,4 +421,3 @@ export const StyledHeadingSlidePage = styled.text`
   padding: 10px;
   width: 600px;
 `;
-
