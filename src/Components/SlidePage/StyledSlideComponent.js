@@ -165,6 +165,7 @@ export const StyledButton = styled(Button)`
   margin: 0px 5px;
 `;
 export const StyledPrensatationContainer = styled.div`
+  position: relative;
   background-color: white;
   width: 90%;
   height: 90%;
@@ -272,4 +273,46 @@ export const StyledOptionResultContainer = styled.div`
   align-items: center;
   width: 100%;
   margin: 10px 0px;
+`;
+export const StyledBottomChatContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+`;
+export const StyledChatItemReceiver = styled.div`
+  max-width: 80%;
+  overflow-wrap: break-word;
+  padding: 0.5rem 1rem;
+  margin: 0.25rem;
+  font-size: 1rem;
+  border-radius: 1rem;
+  color: black;
+  background-color: ${Color.gray300};
+`;
+export const StyledChatItemSender = styled.div`
+  max-width: 80%;
+  overflow-wrap: break-word;
+  padding: 0.5rem 1rem;
+  margin: 0.25rem;
+  font-size: 1rem;
+  border-radius: 1rem;
+  color: white;
+  background-color: ${Color.blue400};
+`;
+export const StyledChatContainerSender = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+`;
+
+export const StyledChatContainerReceiver = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 `;
