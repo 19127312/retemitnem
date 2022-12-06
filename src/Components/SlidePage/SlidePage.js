@@ -460,24 +460,6 @@ function SlidePage() {
       setGuideText(false);
     }
   };
-  const presentationRender = (slideType) => {
-    if (slideType === "Multiple Choice") {
-      return (
-        <BarChart
-          chartData={chartData}
-          chartQuestion={chartQuestion}
-          index={false}
-        />
-      );
-    }
-    if (slideType === "Heading") {
-      return <>Heading</>;
-    }
-    if (slideType === "Paragraph") {
-      return <>Paragraph</>;
-    }
-    return null;
-  };
 
   const middleRender = () => {
     return (
