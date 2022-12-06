@@ -167,6 +167,9 @@ export const StyledButton = styled(Button)`
 export const StyledPrensatationContainer = styled.div`
   position: relative;
   background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
   width: 90%;
   height: 90%;
   padding: 20px;
@@ -182,6 +185,7 @@ export const StyledQuestionInSlide = styled.div`
   font-size: 1rem;
   font-weight: bold;
   padding: 5px;
+  margin-top: 10px;
   font-family: "Sora", sans-serif;
 `;
 export const StyledInput = styled(Input)`
@@ -346,4 +350,74 @@ export const StyledCenterContainer = styled.div`
   justify-content: center;
   margin: 20px 10px 0px 10px;
   align-items: center;
+`;
+
+export const StyledLeftRightContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 200px;
+  margin: 30px 0px;
+`;
+
+export const StyledFullScreenContainer = styled.div`
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  overflow: visible;
+  background: lime;
+`;
+
+export const StyledBarContainer = styled.div`
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const StyledDragDropImage = styled.div`
+  width: 100%;
+  height: 100%;
+  border: 1px dashed blue;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+`;
+
+export const StyledDragDropImageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 10px;
+  align-items: center;
+`;
+
+export const StyledImageSetting = styled.div`
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  margin-top: 20px;
+`;
+
+export const StyledHeadingSlidePageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const StyledHeadingSlidePage = styled.text`
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 100px 0px 10px 0px;
+  font-family: "Sora", sans-serif;
+  text-align: center;
+  word-wrap: break-word;
+  padding: 10px;
+  width: 600px;
 `;

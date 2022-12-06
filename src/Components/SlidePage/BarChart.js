@@ -2,19 +2,20 @@ import { Chart, registerables } from "chart.js";
 // eslint-disable-next-line
 import { Bar } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import * as SC from "./StyledSlideComponent";
 
 Chart.register(...registerables, ChartDataLabels);
 
 export function BarChart({ chartData, chartQuestion, index }) {
   return (
-    <div className="chart-container">
+    <SC.StyledBarContainer>
       {index ? null : (
         <h2 style={{ textAlign: "left", margin: "10px 0px 0px 10px" }}>
           {chartQuestion}
         </h2>
       )}
       <Bar
-        style={{ padding: "30px" }}
+        style={{ padding: "40px" }}
         data={chartData}
         options={{
           lineWidth: 0,
@@ -58,6 +59,6 @@ export function BarChart({ chartData, chartQuestion, index }) {
           },
         }}
       />
-    </div>
+    </SC.StyledBarContainer>
   );
 }
