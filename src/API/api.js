@@ -31,6 +31,8 @@ export const PATH = {
   CREATE_PRESENTATION: "/presentation/add",
   DELETE_PRESENTATIONS: "/presentation/delete",
   CHECK_MEMBER_IN_GROUP: "/group/check",
+  INIT_CHAT: "/chat",
+  MORE_CHAT: "/chat/more",
 };
 export const BASE_URL = {
   GET_IMAGES:
@@ -347,6 +349,27 @@ export const checkMemberInGroup = async ({ groupID, memberID }) => {
     const response = await api.post(PATH.CHECK_MEMBER_IN_GROUP, {
       groupID,
       memberID,
+    });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const getChatHistoryInit = async ({ presentationID }) => {
+  try {
+    const response = await api.get(`${PATH.INIT_CHAT}/${presentationID}`);
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const getMoreChat = async ({ presentationID, lastChatID }) => {
+  try {
+    const response = await api.post(PATH.getMoreChat, {
+      presentationID,
+      lastChatID,
     });
     return response;
   } catch (error) {
