@@ -274,6 +274,7 @@ export const StyledOptionResultContainer = styled.div`
   width: 100%;
   margin: 10px 0px;
 `;
+
 export const StyledBottomChatContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -315,4 +316,34 @@ export const StyledChatContainerReceiver = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
+
+
+export const StyledGroupTitle = styled.h1`
+  font-family: Public Sans; /* Body */
+  font-size: 20px;
+  line-height: 30px;
+  color: #171a1fff;
+`;
+
+export const StyledGuideTitle = styled.p`
+  font-family: Public Sans; /* Body */
+  font-size: 14px;
+  line-height: 20px;
+  color: #171a1fff;
+`;
+
+export const StyledSelectContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 20px 25px;
+  align-items: center;
+`;
+
+export const StyledCenterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 20px 10px 0px 10px;
+  align-items: center;
 `;
