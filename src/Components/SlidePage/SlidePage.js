@@ -466,7 +466,7 @@ function SlidePage() {
             <QuestionCircleOutlined
               style={{ fontSize: "25px", cursor: "pointer" }}
             />
-            <ChatContainer chatData={chatData} />
+            <ChatContainer presentationID={id} />
           </SC.StyledBottomChatContainer>
         </SC.StyledPrensatationContainer>
       </SC.StyledMidContainer>
