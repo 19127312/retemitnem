@@ -27,93 +27,6 @@ import ChatContainer from "./ChatContainer";
 
 const { Paragraph } = Typography;
 
-const chatData = [
-  {
-    content: "Hello",
-    sentTime: "12:00",
-    isSender: true,
-  },
-  {
-    content: "Hello There",
-    sentTime: "12:01",
-    isSender: true,
-  },
-  {
-    content: "Hello sir",
-    sentTime: "12:02",
-    isSender: false,
-  },
-  {
-    content: "Hello s",
-    sentTime: "12:013",
-    isSender: true,
-  },
-  {
-    content: "Hello a",
-    sentTime: "12:014",
-    isSender: false,
-  },
-  {
-    content: "Hello e",
-    sentTime: "12:015",
-    isSender: false,
-  },
-  {
-    content: "Hello w",
-    sentTime: "12:016",
-    isSender: true,
-  },
-  {
-    content: "Hello s",
-    sentTime: "12:017",
-    isSender: false,
-  },
-  {
-    content: "Hello x",
-    sentTime: "12:018",
-    isSender: true,
-  },
-  {
-    content: "Hello q",
-    sentTime: "12:019",
-    isSender: false,
-  },
-  {
-    content: "Hello r",
-    sentTime: "12:0110",
-    isSender: false,
-  },
-  {
-    content: "Hello y",
-    sentTime: "12:0111",
-    isSender: false,
-  },
-  {
-    content: "Hello z",
-    sentTime: "12:012",
-    isSender: true,
-  },
-  {
-    content: "Hello x",
-    sentTime: "12:013",
-    isSender: true,
-  },
-  {
-    content: "Hello n",
-    sentTime: "12:014",
-    isSender: false,
-  },
-  {
-    content: "Hello v",
-    sentTime: "12:015",
-    isSender: true,
-  },
-  {
-    content: "Hello k",
-    sentTime: "12:016",
-    isSender: false,
-  },
-];
 function SlidePage() {
   const { id } = useParams();
   const { auth } = useContext(AuthContext);
@@ -580,7 +493,7 @@ function SlidePage() {
                 <QuestionCircleOutlined
                   style={{ fontSize: "25px", cursor: "pointer" }}
                 />
-                <ChatContainer chatData={chatData} />
+                <ChatContainer presentationID={id} />
               </SC.StyledBottomChatContainer>
             </FullScreen>
           </SC.StyledPrensatationContainer>
