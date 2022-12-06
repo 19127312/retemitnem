@@ -30,6 +30,7 @@ export const PATH = {
   UPDATE_PRESENTATION: "presentation/update",
   CREATE_PRESENTATION: "/presentation/add",
   DELETE_PRESENTATIONS: "/presentation/delete",
+  CHECK_MEMBER_IN_GROUP: "/group/check",
 };
 export const BASE_URL = {
   GET_IMAGES:
@@ -336,6 +337,18 @@ export const getRandomImagesUrl = async (quantity) => {
         }
       });
     return imageUrlArray;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const checkMemberInGroup = async ({ groupID, memberID }) => {
+  try {
+    const response = await api.post(PATH.CHECK_MEMBER_IN_GROUP, {
+      groupID,
+      memberID,
+    });
+    return response;
   } catch (error) {
     throw Error(error.response.data);
   }

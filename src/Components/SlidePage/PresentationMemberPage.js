@@ -7,10 +7,12 @@ import logo from "../../Assets/logo.png";
 import { BarChart } from "./BarChart";
 import SocketContext from "../../Context/SocketProvider";
 import {
+  checkMemberInGroup,
   viewPresentationInfoByPresentationID,
   // updatePresentation,
 } from "../../API/api";
 import { showMessage } from "../Message";
+import AuthContext from "../../Context/AuthProvider";
 
 function PresentationMemberPage() {
   const { id } = useParams();
@@ -30,6 +32,8 @@ function PresentationMemberPage() {
       },
     ],
   });
+  const [isVisible, setIsVisible] = useState(true);
+  const { auth } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -128,6 +132,35 @@ function PresentationMemberPage() {
     };
   }, []);
 
+  useEffect(() => {
+    const checkMemberExistInGroup = async () => {
+      try {
+        const response = await checkMemberInGroup({
+          groupID: presentation.groupID,
+          memberID: auth.user._id,
+        });
+        if (response.data.includes("not")) {
+          setIsVisible(false);
+        } else {
+          setIsVisible(true);
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+    if (presentation) {
+      if (auth.user === null) {
+        if (presentation.isPrivate === true) {
+          setIsVisible(false);
+        } else {
+          setIsVisible(true);
+        }
+      } else {
+        checkMemberExistInGroup();
+      }
+    }
+  }, [presentation]);
+
   const onChange = (e) => {
     setValue(e.target.value);
   };
@@ -155,7 +188,14 @@ function PresentationMemberPage() {
     }
   };
   const renderPage = (slideType) => {
-    if (slideType === "Multiple Choice") {
+    if (!isVisible) {
+      return (
+        <SC.StyledQuestionPresentation>
+          This is a private presentation
+        </SC.StyledQuestionPresentation>
+      );
+    }
+    if (isVisible && slideType === "Multiple Choice") {
       return (
         <SC.StyledRadioContainer>
           {isNoQuestion ? (
@@ -220,10 +260,10 @@ function PresentationMemberPage() {
         </SC.StyledRadioContainer>
       );
     }
-    if (slideType === "Heading") {
+    if (isVisible && slideType === "Heading") {
       return <>HEADING</>;
     }
-    if (slideType === "Paragraph") {
+    if (isVisible && slideType === "Paragraph") {
       return <>Paragraph</>;
     }
     return null;

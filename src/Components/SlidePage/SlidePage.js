@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Typography } from "antd";
+import { Typography, Modal, Button, Select } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   CaretRightOutlined,
@@ -8,6 +8,7 @@ import {
 } from "@ant-design/icons";
 import { TailSpin } from "react-loader-spinner";
 import { useMutation } from "@tanstack/react-query";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import * as SC from "./StyledSlideComponent";
 import SingleSlide from "./SingleSlide";
 import SettingQuestionPage from "./SettingQuestionPage";
@@ -34,6 +35,9 @@ function SlidePage() {
   const [selectedSlide, setSelectedSlide] = useState(null);
   const [chartQuestion, setChartQuestion] = useState("");
   const [editableStr, setEditableStr] = useState("This is an editable text.");
+  const [open, setOpen] = useState(false);
+  const [guideText, setGuideText] = useState(null);
+  console.log(presentation);
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -62,7 +66,7 @@ function SlidePage() {
       console.log(error);
     }
   };
-
+  const handle = useFullScreenHandle();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -73,6 +77,7 @@ function SlidePage() {
         setSlides(response.data.slides);
         setSelectedSlide(response.data.slides[response.data.currentSlide]);
         setEditableStr(response.data.title);
+        setGuideText(response.data.isPrivate);
       } catch (error) {
         showMessage(2, error.message);
       }
@@ -166,9 +171,12 @@ function SlidePage() {
     setSlides(newSlide);
   };
 
+  const showModal = () => {
+    setOpen(true);
+  };
+
   const handleShare = () => {
-    navigator.clipboard.writeText(`${window.location.host}/presentation/${id}`);
-    showMessage(1, "Link copied to clipboard");
+    showModal();
   };
 
   const handlePlay = () => {
@@ -176,6 +184,16 @@ function SlidePage() {
       ...pre,
       playSlide: pre.currentSlide,
     }));
+    handle.enter();
+  };
+
+  const handleClickHere = () => {
+    if (presentation) {
+      navigator.clipboard.writeText(
+        `${window.location.host}/joinLink/${presentation.groupID}`
+      );
+      showMessage(1, "Link copied to clipboard");
+    }
   };
 
   const handleAddSlide = () => {
@@ -278,6 +296,32 @@ function SlidePage() {
     return null;
   };
 
+  const handleOk = () => {
+    navigator.clipboard.writeText(`${window.location.host}/presentation/${id}`);
+    showMessage(1, "Link copied to clipboard");
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+  };
+
+  const handleChange = (value) => {
+    if (value === "private") {
+      console.log(value);
+      setPresentation((prev) => ({
+        ...prev,
+        isPrivate: true,
+      }));
+      setGuideText(true);
+    } else {
+      console.log(value);
+      setPresentation((prev) => ({
+        ...prev,
+        isPrivate: false,
+      }));
+      setGuideText(false);
+    }
+  };
   return (
     <SC.StyledPageContainer>
       <SC.StyledTopContainer>
@@ -369,8 +413,81 @@ function SlidePage() {
           ))}
         </SC.StyledLeftContainer>
         <SC.StyledMidContainer>
+          <Modal
+            open={open}
+            onOk={handleOk}
+            onCancel={handleCancel}
+            footer={[
+              <Button
+                // key="submit"
+                type="primary"
+                // loading={loading}
+                onClick={handleOk}
+              >
+                Copy Presentation Link
+              </Button>,
+              <Button key="back" onClick={handleCancel}>
+                Done
+              </Button>,
+            ]}
+          >
+            <SC.StyledGroupTitle>Share Presentation</SC.StyledGroupTitle>
+            <SC.StyledSelectContainer>
+              <SC.StyledGuideTitle>Visibility options</SC.StyledGuideTitle>
+              {presentation && (
+                <Select
+                  defaultValue={presentation.isPrivate ? "private" : "public"}
+                  style={{ width: 220 }}
+                  onChange={handleChange}
+                  options={[
+                    {
+                      value: "private",
+                      label: "Private",
+                    },
+                    {
+                      value: "public",
+                      label: "Public",
+                    },
+                  ]}
+                />
+              )}
+            </SC.StyledSelectContainer>
+            <SC.StyledCenterContainer>
+              {guideText === true ? (
+                <>
+                  <SC.StyledGuideTitle>
+                    Shared with specific people on a group.
+                  </SC.StyledGuideTitle>
+                  <SC.StyledGuideTitle>
+                    Click{" "}
+                    <span
+                      style={{
+                        cursor: "pointer",
+                        color: "#33a9d4",
+                        fontWeight: "bold",
+                      }}
+                      onClick={() => {
+                        handleClickHere();
+                      }}
+                      aria-hidden="true"
+                    >
+                      here
+                    </span>{" "}
+                    to copy group invitation link.
+                  </SC.StyledGuideTitle>
+                </>
+              ) : (
+                <SC.StyledGuideTitle>
+                  Anyone who has the link can access. No sign-in required
+                </SC.StyledGuideTitle>
+              )}
+            </SC.StyledCenterContainer>
+          </Modal>
+
           <SC.StyledPrensatationContainer>
-            {selectedSlide && presentationRender(selectedSlide.questionType)}
+            <FullScreen handle={handle}>
+              {selectedSlide && presentationRender(selectedSlide.questionType)}
+            </FullScreen>
           </SC.StyledPrensatationContainer>
         </SC.StyledMidContainer>
         <SC.StyledRightContainer>
