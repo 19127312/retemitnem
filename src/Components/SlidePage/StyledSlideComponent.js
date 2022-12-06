@@ -316,7 +316,7 @@ export const StyledChatContainerReceiver = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-
+`;
 
 export const StyledGroupTitle = styled.h1`
   font-family: Public Sans; /* Body */

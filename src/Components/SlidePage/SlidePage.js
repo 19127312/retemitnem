@@ -574,17 +574,15 @@ function SlidePage() {
           </Modal>
 
           <SC.StyledPrensatationContainer>
-
             <FullScreen handle={handle}>
               {selectedSlide && presentationRender(selectedSlide.questionType)}
               <SC.StyledBottomChatContainer>
-              <QuestionCircleOutlined
-                style={{ fontSize: "25px", cursor: "pointer" }}
-              />
-              <ChatContainer chatData={chatData} />
-            </SC.StyledBottomChatContainer>
+                <QuestionCircleOutlined
+                  style={{ fontSize: "25px", cursor: "pointer" }}
+                />
+                <ChatContainer chatData={chatData} />
+              </SC.StyledBottomChatContainer>
             </FullScreen>
-
           </SC.StyledPrensatationContainer>
         </SC.StyledMidContainer>
         <SC.StyledRightContainer>
