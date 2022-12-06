@@ -291,6 +291,8 @@ function SlidePage() {
       options: [{ option: "", optionKey: 0 }],
       key: slides.length,
       answers: [{ answerCount: 0, answerKey: 0 }],
+      subHeading: "",
+      image: "",
     };
     setSlides([...slides, newSlide]);
   };
@@ -299,6 +301,18 @@ function SlidePage() {
     const newSlide = slides;
     newSlide[selectedSlide.key].question = question;
     setSelectedSlide((pre) => ({ ...pre, question }));
+  };
+
+  const handleSetSubheading = (subHeading) => {
+    const newSlide = slides;
+    newSlide[selectedSlide.key].subHeading = subHeading;
+    setSelectedSlide((pre) => ({ ...pre, subHeading }));
+  };
+
+  const handleSetImage = (image) => {
+    const newSlide = slides;
+    newSlide[selectedSlide.key].image = image;
+    setSelectedSlide((pre) => ({ ...pre, image }));
   };
 
   const handleOptionChange = (index, value) => {
@@ -377,7 +391,17 @@ function SlidePage() {
       );
     }
     if (slideType === "Heading") {
-      return <>Heading</>;
+      return (
+        <SC.StyledHeadingSlidePageContainer>
+          <SC.StyledHeadingSlidePage>
+            {selectedSlide.question}
+          </SC.StyledHeadingSlidePage>
+          <div>{selectedSlide.subHeading}</div>
+          {selectedSlide.image ? (
+            <img src={selectedSlide.image} alt="" height={300} width={300} />
+          ) : null}
+        </SC.StyledHeadingSlidePageContainer>
+      );
     }
     if (slideType === "Paragraph") {
       return <>Paragraph</>;
@@ -592,6 +616,10 @@ function SlidePage() {
               question={selectedSlide?.question}
               onQuestionChange={handleSetQuestion}
               options={selectedSlide?.options}
+              subHeading={selectedSlide?.subHeading}
+              onSubheadingChange={handleSetSubheading}
+              onImageChange={handleSetImage}
+              image={selectedSlide?.image}
               onOptionChange={(index, option) =>
                 handleOptionChange(index, option)
               }
