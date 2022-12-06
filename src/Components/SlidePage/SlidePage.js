@@ -105,29 +105,31 @@ function SlidePage() {
 
   useEffect(() => {
     setChartQuestion(selectedSlide?.question);
-    if (selectedSlide?.options.length > 0) {
-      setChartData({
-        labels: selectedSlide.options.map((option) => option.option),
-        datasets: [
-          {
-            data: selectedSlide.answers.map((answer) => answer.answerCount),
-            barThickness:
-              selectedSlide.options.length < 7
-                ? 100
-                : 300 / selectedSlide.options.length,
-          },
-        ],
-      });
-    } else {
-      setChartData({
-        labels: [],
-        datasets: [
-          {
-            data: [],
-            barThickness: 100,
-          },
-        ],
-      });
+    if (selectedSlide?.questionType === "Multiple Choice") {
+      if (selectedSlide?.options.length > 0) {
+        setChartData({
+          labels: selectedSlide.options.map((option) => option.option),
+          datasets: [
+            {
+              data: selectedSlide.answers.map((answer) => answer.answerCount),
+              barThickness:
+                selectedSlide.options.length < 7
+                  ? 100
+                  : 300 / selectedSlide.options.length,
+            },
+          ],
+        });
+      } else {
+        setChartData({
+          labels: [],
+          datasets: [
+            {
+              data: [],
+              barThickness: 100,
+            },
+          ],
+        });
+      }
     }
   }, [selectedSlide]);
 
@@ -184,6 +186,8 @@ function SlidePage() {
       options: [{ option: "", optionKey: 0 }],
       key: slides.length,
       answers: [{ answerCount: 0, answerKey: 0 }],
+      subHeading: "",
+      image: [],
     };
     setSlides([...slides, newSlide]);
   };
@@ -192,6 +196,19 @@ function SlidePage() {
     const newSlide = slides;
     newSlide[selectedSlide.key].question = question;
     setSelectedSlide((pre) => ({ ...pre, question }));
+  };
+
+  const handleSetSubheading = (subHeading) => {
+    const newSlide = slides;
+    newSlide[selectedSlide.key].subHeading = subHeading;
+    setSelectedSlide((pre) => ({ ...pre, subHeading }));
+  };
+
+  const handleSetImage = (image) => {
+    console.log(image);
+    const newSlide = slides;
+    newSlide[selectedSlide.key].image = image;
+    setSelectedSlide((pre) => ({ ...pre, image }));
   };
 
   const handleOptionChange = (index, value) => {
@@ -270,7 +287,26 @@ function SlidePage() {
       );
     }
     if (slideType === "Heading") {
-      return <>Heading</>;
+      let thumbs = null;
+      try {
+        thumbs = selectedSlide.image.map((file) => (
+          <img
+            key={file.name}
+            src={file.preview}
+            alt=""
+            style={{ width: "100px", height: "100px" }}
+          />
+        ));
+      } catch (e) {
+        console.log(e);
+      }
+      return (
+        <>
+          <div>{selectedSlide.question}</div>
+          <div>{selectedSlide.subHeading}</div>
+          <div>{thumbs}</div>
+        </>
+      );
     }
     if (slideType === "Paragraph") {
       return <>Paragraph</>;
@@ -380,6 +416,10 @@ function SlidePage() {
               question={selectedSlide?.question}
               onQuestionChange={handleSetQuestion}
               options={selectedSlide?.options}
+              subHeading={selectedSlide?.subHeading}
+              onSubheadingChange={handleSetSubheading}
+              onImageChange={handleSetImage}
+              image={selectedSlide?.image}
               onOptionChange={(index, option) =>
                 handleOptionChange(index, option)
               }

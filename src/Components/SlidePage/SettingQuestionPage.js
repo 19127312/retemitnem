@@ -1,8 +1,11 @@
 import React from "react";
 import { PlusOutlined, RedoOutlined } from "@ant-design/icons";
-import { Select } from "antd";
+import { Select, Input } from "antd";
+import { useDropzone } from "react-dropzone";
 import * as SC from "./StyledSlideComponent";
 import SingleOption from "./SingleOption";
+
+const { TextArea } = Input;
 
 function SettingQuestionPage({
   question,
@@ -14,8 +17,12 @@ function SettingQuestionPage({
   onResetResult,
   slideType,
   onChangeSlideType,
+  subHeading,
+  onSubheadingChange,
+  onImageChange,
 }) {
-  console.log(slideType);
+  const [files, setFiles] = React.useState();
+
   const handleOptionChange = (index, value) => {
     onOptionChange(index, value);
   };
@@ -25,6 +32,37 @@ function SettingQuestionPage({
   const handleChangeSlideType = (value) => {
     onChangeSlideType(value);
   };
+
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: "image/*",
+    onDrop: (acceptedFile) => {
+      onImageChange(
+        acceptedFile.map((file) =>
+          Object.assign(file, { preview: URL.createObjectURL(file) })
+        )
+      );
+      setFiles(
+        acceptedFile.map((file) =>
+          Object.assign(file, { preview: URL.createObjectURL(file) })
+        )
+      );
+    },
+    multiple: false,
+  });
+
+  let thumbs = null;
+  try {
+    thumbs = files.map((file) => (
+      <img
+        key={file.name}
+        src={file.preview}
+        alt=""
+        style={{ width: "100px", height: "100px" }}
+      />
+    ));
+  } catch (e) {
+    console.log(e);
+  }
 
   const slideRender = () => {
     if (slideType === "Multiple Choice") {
@@ -75,7 +113,36 @@ function SettingQuestionPage({
       );
     }
     if (slideType === "Heading") {
-      return <>Heading</>;
+      return (
+        <>
+          <SC.StyledQuestionInSlide style={{ marginTop: 10 }}>
+            Your Question ?
+          </SC.StyledQuestionInSlide>
+          <SC.StyledInput
+            placeholder="Your heading"
+            value={question}
+            onChange={(e) => onQuestionChange(e.target.value)}
+          />
+
+          <SC.StyledQuestionInSlide>Subheading</SC.StyledQuestionInSlide>
+          <TextArea
+            style={{ width: "100%" }}
+            maxLength={500}
+            autoSize={{ minRows: 5, maxRows: 100 }}
+            placeholder="Your subheading"
+            value={subHeading}
+            showCount
+            onChange={(e) => onSubheadingChange(e.target.value)}
+          />
+          <SC.StyledDragDropImage>
+            <div {...getRootProps()}>
+              <input {...getInputProps()} />
+              Drag drop some files here, or click to select files
+            </div>
+          </SC.StyledDragDropImage>
+          <SC.StyledImageSetting>{thumbs}</SC.StyledImageSetting>
+        </>
+      );
     }
     if (slideType === "Paragraph") {
       return <>Paragraph</>;

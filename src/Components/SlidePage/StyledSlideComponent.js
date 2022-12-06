@@ -187,6 +187,7 @@ export const StyledInput = styled(Input)`
   width: 100%;
   height: 40px;
 `;
+
 export const StyledOptionContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -265,6 +266,7 @@ export const StyledRadioContainer = styled.div`
 export const StyledChartContainer = styled.div`
   width: 60%;
 `;
+
 export const StyledOptionResultContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -272,4 +274,23 @@ export const StyledOptionResultContainer = styled.div`
   align-items: center;
   width: 100%;
   margin: 10px 0px;
+`;
+
+export const StyledDragDropImage = styled.div`
+  width: 100%;
+  height: 100%;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  border: 1px dashed blue;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+`;
+
+export const StyledImageSetting = styled.div`
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  margin-top: 20px;
 `;
