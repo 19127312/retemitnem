@@ -6,9 +6,9 @@ import * as SC from "./StyledSlideComponent";
 
 Chart.register(...registerables, ChartDataLabels);
 
-export function BarChart({ chartData, chartQuestion, index }) {
+export function BarChart({ chartData, chartQuestion, index, fullWidth }) {
   return (
-    <SC.StyledBarContainer>
+    <SC.StyledBarContainer fullWidth={fullWidth}>
       {index ? null : (
         <h2 style={{ textAlign: "left", margin: "10px 0px 0px 10px" }}>
           {chartQuestion}

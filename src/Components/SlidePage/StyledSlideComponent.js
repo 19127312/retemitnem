@@ -170,6 +170,7 @@ export const StyledPrensatationContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  align-items: center;
   width: 90%;
   height: 90%;
   padding: 20px;
@@ -205,20 +206,19 @@ export const StyledOptionInput = styled(Input)`
   height: 40px;
 `;
 export const StyledPresentaionContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
   justify-content: center;
   align-items: center;
   background-color: white;
-  padding: 10px;
 `;
 export const StyledLogoContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 50px;
 `;
 
 export const StyledLogoName = styled.h1`
@@ -232,9 +232,9 @@ export const StyledLogoName = styled.h1`
 export const StyledQuestionPresentation = styled.div`
   font-size: 1.5rem;
   font-weight: bold;
-  padding: 20px 0px 10px 0px;
   font-family: "Sora", sans-serif;
   margin-bottom: 20px;
+  margin-top: 10px;
 `;
 export const StyledSubmitButton = styled(Button)`
   margin-top: 20px;
@@ -263,12 +263,12 @@ export const StyledRadioContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  length: 100%;
   width: 100%;
 `;
 
 export const StyledChartContainer = styled.div`
-  width: 60%;
+  width: 100%;
+  height: 100%;
 `;
 export const StyledOptionResultContainer = styled.div`
   display: flex;
@@ -283,8 +283,8 @@ export const StyledBottomChatContainer = styled.div`
   display: flex;
   flex-direction: row;
   position: absolute;
-  bottom: 40px;
-  right: 40px;
+  bottom: 50px;
+  right: ${(props) => (props.show === "Member" ? "150px" : "40px")};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -300,26 +300,38 @@ export const StyledChatItemReceiver = styled.div`
   color: black;
   background-color: ${Color.gray300};
 `;
-export const StyledChatItemSender = styled.div`
+
+export const StyledChatItem = styled.div`
   max-width: 80%;
   overflow-wrap: break-word;
   padding: 0.5rem 1rem;
   margin: 0.25rem;
   font-size: 1rem;
   border-radius: 1rem;
-  color: white;
-  background-color: ${Color.blue400};
+  color: ${(props) => {
+    if (props.isTeacher) {
+      return "white";
+    }
+    if (props.isSender) {
+      return "white";
+    }
+    return "black";
+  }};
+  background-color: ${(props) => {
+    if (props.isTeacher) {
+      return Color.orange;
+    }
+    if (props.isSender) {
+      return Color.blue400;
+    }
+    return Color.gray300;
+  }};
 `;
-export const StyledChatContainerSender = styled.div`
+export const StyledChatContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-`;
-
-export const StyledChatContainerReceiver = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  justify-content: ${(props) =>
+    props.isTeacher || !props.isSender ? "flex-start" : "flex-end"};
 `;
 
 export const StyledGroupTitle = styled.h1`
@@ -353,12 +365,13 @@ export const StyledCenterContainer = styled.div`
 `;
 
 export const StyledLeftRightContainer = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  gap: 200px;
-  margin: 30px 0px;
+  justify-content: space-between;
+  width: 50%;
+  margin: 0px 0px 20px 0px;
 `;
 
 export const StyledFullScreenContainer = styled.div`
@@ -373,6 +386,8 @@ export const StyledFullScreenContainer = styled.div`
 `;
 
 export const StyledBarContainer = styled.div`
+  flex: 10;
+  width: ${(props) => (props.fullWidth ? "100%" : "60%")};
   height: 90%;
   display: flex;
   flex-direction: column;
@@ -395,6 +410,7 @@ export const StyledDragDropImageContainer = styled.div`
   justify-content: space-between;
   margin-top: 10px;
   align-items: center;
+  width: 100%;
 `;
 
 export const StyledImageSetting = styled.div`
@@ -405,6 +421,8 @@ export const StyledImageSetting = styled.div`
 `;
 
 export const StyledHeadingSlidePageContainer = styled.div`
+  flex: 10;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -420,4 +438,60 @@ export const StyledHeadingSlidePage = styled.text`
   word-wrap: break-word;
   padding: 10px;
   width: 600px;
+`;
+
+export const StyledChatIconContainer = styled.div`
+  position: relative;
+  width: 25px;
+  height: 25px;
+`;
+
+export const StyledTitleModal = styled.div`
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: "Sora", sans-serif;
+  padding: 0 10px 10px 10px;
+  self-align: flex-start;
+`;
+export const StyledNoQuestion = styled.div`
+  font-size: 1rem;
+  font-weight: light;
+  font-family: "Sora", sans-serif;
+`;
+
+export const StyledModalQuestionContainer = styled(StyledRadioContainer)`
+  margin: 0px 0px 0px 0px;
+  padding: 10px;
+`;
+
+export const StyledButtonModalQuestion = styled(Button)`
+  margin-top: 20px;
+  width: 100%;
+  height: 40px;
+  background-color: ${Color.blue400};
+  color: white;
+  border-radius: 10px;
+`;
+
+export const StyledModalQuestionItemContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0px 0px 0px 0px;
+  padding: 10px;
+  height: 80px;
+  border-bottom: 1px solid ${Color.gray300};
+`;
+export const StyledModalQuestionItemContent = styled.div`
+  font-size: 1rem;
+  font-weight: light;
+  font-family: "Public Sans", sans-serif;
+`;
+
+export const StyledLikeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
