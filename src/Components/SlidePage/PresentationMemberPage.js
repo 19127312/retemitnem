@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { Radio } from "antd";
 // import { useMutation } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import * as SC from "./StyledSlideComponent";
 import logo from "../../Assets/logo.png";
 import { BarChart } from "./BarChart";
@@ -13,6 +14,8 @@ import {
 } from "../../API/api";
 import { showMessage } from "../Message";
 import AuthContext from "../../Context/AuthProvider";
+import ChatContainer from "./ChatContainer";
+import ModalQuestionMember from "./ModalQuestionMember";
 
 function PresentationMemberPage() {
   const { id } = useParams();
@@ -23,6 +26,7 @@ function PresentationMemberPage() {
   const [isNoQuestion, setIsNoQuestion] = useState(false);
   const [isNoOptions, setIsNoOptions] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [openQuestion, setOpenQuestion] = useState(false);
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -243,15 +247,14 @@ function PresentationMemberPage() {
               Submit
             </SC.StyledSubmitButton>
           ) : isSubmitted ? (
-            <SC.StyledChartContainer>
-              <BarChart
-                chartData={chartData}
-                chartQuestion={
-                  presentation?.slides[presentation?.playSlide].question
-                }
-                index
-              />
-            </SC.StyledChartContainer>
+            <BarChart
+              chartData={chartData}
+              chartQuestion={
+                presentation?.slides[presentation?.playSlide].question
+              }
+              index
+              fullWidth={false}
+            />
           ) : (
             <SC.StyledSubmitButton onClick={handleSubmit} disabled={isError}>
               Submit
@@ -270,12 +273,23 @@ function PresentationMemberPage() {
   };
   return (
     <SC.StyledPresentaionContainer>
+      <ModalQuestionMember
+        open={openQuestion}
+        handleCancel={() => setOpenQuestion(false)}
+      />
       <SC.StyledLogoContainer>
         <img src={logo} alt="logo" />
         <SC.StyledLogoName>Retemitnem</SC.StyledLogoName>
       </SC.StyledLogoContainer>
       {presentation &&
         renderPage(presentation.slides[presentation.playSlide].questionType)}
+      <SC.StyledBottomChatContainer show="Member">
+        <QuestionCircleOutlined
+          style={{ fontSize: "25px", cursor: "pointer" }}
+          onClick={() => setOpenQuestion(true)}
+        />
+        <ChatContainer presentationID={id} chatSide="Member" />
+      </SC.StyledBottomChatContainer>
     </SC.StyledPresentaionContainer>
   );
 }
