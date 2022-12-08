@@ -102,8 +102,19 @@ export const StyledNumberSlide = styled.p`
   text-align: center;
   overflow: hidden;
   text-overflow: ellipsis;
+  word-wrap: break-word;
+  width: 100px;
+  height: 100px;
   overflow: hidden;
 `;
+
+export const StyledHeadingTextSlidePageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
 export const StyledInsideSlideContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -111,7 +122,6 @@ export const StyledInsideSlideContainer = styled.div`
   width: 90%;
   justify-content: center;
   transition: 0.5s ease-in-out;
-
   align-items: center;
   border: ${(props) =>
     props.selected
@@ -421,22 +431,54 @@ export const StyledImageSetting = styled.div`
 `;
 
 export const StyledHeadingSlidePageContainer = styled.div`
-  flex: 10;
-
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
+  flex: 10;
 `;
 
 export const StyledHeadingSlidePage = styled.text`
   font-size: 2rem;
   font-weight: bold;
-  margin: 100px 0px 10px 0px;
-  font-family: "Sora", sans-serif;
+  margin: 0px 0px 10px 0px;
+  font-family: "Public Sans", sans-serif;
   text-align: center;
   word-wrap: break-word;
   padding: 10px;
+  width: 600px;
+`;
+
+export const StyledParagraphSlidePage = styled.text`
+  font-size: 1rem;
+  font-weight: light;
+  margin: -25px 0px 10px 0px;
+  text-align: center;
+  font-family: "Public Sans", sans-serif;
+  word-wrap: break-word;
+  width: 550px;
+  height: 50px;
+`;
+
+export const StyledHeadingSlidePageSub = styled.text`
+  font-size: 0.7rem;
+  font-weight: light;
+  margin: -25px 0px 10px 0px;
+  text-align: center;
+  font-family: "Public Sans", sans-serif;
+  word-wrap: break-word;
+  width: 550px;
+  height: 50px;
+`;
+
+export const StyledQuestionMemberPresentation = styled.text`
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0px 0px 10px 0px;
+  font-family: "Public Sans", sans-serif;
+  text-align: center;
+  word-wrap: break-word;
+  padding: 15px;
   width: 600px;
 `;
 
@@ -505,4 +547,9 @@ export const StyledEscapeButtonContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+export const StyledRemoveImageButton = styled(Button)`
+  margin-top: 10px;
+  margin-left: 230px;
 `;
