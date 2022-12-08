@@ -51,7 +51,9 @@ function SettingQuestionPage({
     },
     multiple: false,
   });
-
+  const handleRemoveImage = () => {
+    onImageChange("");
+  };
   const slideRender = () => {
     if (slideType === "Multiple Choice") {
       return (
@@ -129,23 +131,82 @@ function SettingQuestionPage({
               <input {...getInputProps()} />
               Drag drop some files here, or click to select files
             </SC.StyledDragDropImage>
+
             {image ? (
-              <SC.StyledImageSetting>
-                <img
-                  src={image}
-                  alt=""
-                  height={100}
-                  width={100}
-                  padding={1000}
-                />
-              </SC.StyledImageSetting>
+              <>
+                <SC.StyledRemoveImageButton
+                  danger
+                  type="text"
+                  onClick={handleRemoveImage}
+                >
+                  Remove
+                </SC.StyledRemoveImageButton>
+                <SC.StyledImageSetting>
+                  <img
+                    src={image}
+                    alt=""
+                    height={100}
+                    width={100}
+                    style={{ marginLeft: "110px" }}
+                  />
+                </SC.StyledImageSetting>
+              </>
             ) : null}
           </SC.StyledDragDropImageContainer>
         </>
       );
     }
     if (slideType === "Paragraph") {
-      return <>Paragraph</>;
+      return (
+        <>
+          <SC.StyledQuestionInSlide style={{ marginTop: 10 }}>
+            Heading
+          </SC.StyledQuestionInSlide>
+          <SC.StyledInput
+            maxLength={60}
+            placeholder="Your heading"
+            value={question}
+            onChange={(e) => onQuestionChange(e.target.value)}
+          />
+
+          <SC.StyledQuestionInSlide>Paragraph</SC.StyledQuestionInSlide>
+          <TextArea
+            style={{ width: "100%" }}
+            maxLength={500}
+            autoSize={{ minRows: 5, maxRows: 100 }}
+            placeholder="Your paragraph"
+            value={subHeading}
+            showCount
+            onChange={(e) => onSubheadingChange(e.target.value)}
+          />
+          <SC.StyledDragDropImageContainer>
+            <SC.StyledDragDropImage {...getRootProps()}>
+              <input {...getInputProps()} />
+              Drag drop some files here, or click to select files
+            </SC.StyledDragDropImage>
+            {image ? (
+              <>
+                <SC.StyledRemoveImageButton
+                  danger
+                  type="text"
+                  onClick={handleRemoveImage}
+                >
+                  Remove
+                </SC.StyledRemoveImageButton>
+                <SC.StyledImageSetting>
+                  <img
+                    src={image}
+                    alt=""
+                    height={100}
+                    width={100}
+                    style={{ marginLeft: "110px" }}
+                  />
+                </SC.StyledImageSetting>
+              </>
+            ) : null}
+          </SC.StyledDragDropImageContainer>
+        </>
+      );
     }
     return null;
   };

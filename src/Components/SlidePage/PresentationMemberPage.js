@@ -261,10 +261,62 @@ function PresentationMemberPage() {
       );
     }
     if (isVisible && slideType === "Heading") {
-      return <>HEADING</>;
+      return (
+        <SC.StyledRadioContainer>
+          {isNoQuestion ? (
+            <SC.StyledQuestionPresentation>
+              No question title
+            </SC.StyledQuestionPresentation>
+          ) : (
+            <>
+              {presentation?.slides[presentation?.playSlide].image ? (
+                <img
+                  src={presentation?.slides[presentation?.playSlide].image}
+                  alt="img"
+                  style={{ width: "550px", height: "400px", marginTop: "10px" }}
+                />
+              ) : null}
+              <SC.StyledQuestionMemberPresentation>
+                {presentation?.slides[presentation?.playSlide].question}
+              </SC.StyledQuestionMemberPresentation>
+              <SC.StyledParagraphSlidePage style={{ color: "gray" }}>
+                {presentation?.slides[presentation?.playSlide].subHeading}
+              </SC.StyledParagraphSlidePage>
+            </>
+          )}
+        </SC.StyledRadioContainer>
+      );
     }
     if (isVisible && slideType === "Paragraph") {
-      return <>Paragraph</>;
+      return (
+        <SC.StyledRadioContainer>
+          {isNoQuestion ? (
+            <SC.StyledQuestionPresentation>
+              No question title
+            </SC.StyledQuestionPresentation>
+          ) : (
+            <>
+              {presentation?.slides[presentation?.playSlide].image ? (
+                <img
+                  src={presentation?.slides[presentation?.playSlide].image}
+                  alt="img"
+                  style={{
+                    width: "550px",
+                    height: "400px",
+                    marginTop: "10px",
+                  }}
+                />
+              ) : null}
+              <SC.StyledQuestionMemberPresentation>
+                {presentation?.slides[presentation?.playSlide].question}
+              </SC.StyledQuestionMemberPresentation>
+              <SC.StyledParagraphSlidePage style={{ color: "gray" }}>
+                {presentation?.slides[presentation?.playSlide].subHeading}
+              </SC.StyledParagraphSlidePage>
+            </>
+          )}
+        </SC.StyledRadioContainer>
+      );
     }
     return null;
   };
