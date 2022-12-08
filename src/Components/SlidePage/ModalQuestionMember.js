@@ -238,7 +238,7 @@ function ModalQuestionMember({ open, handleCancel, presentationID }) {
       <>
         <SC.StyledTitleModal>Questions from audience</SC.StyledTitleModal>
         <SC.StyledModalQuestionContainer>
-          {data.length === 0 ? (
+          {data.filter((item) => item.isAnswered === false).length === 0 ? (
             <SC.StyledNoQuestion>
               Do you have a question for the presenter? Be the first one to ask!
             </SC.StyledNoQuestion>
