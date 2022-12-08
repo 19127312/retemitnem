@@ -72,6 +72,7 @@ function ChatContainer({ presentationID, chatSide }) {
       setLastChatID(chats[chats.length - 1]._id);
     };
     getChatHistory();
+    console.log(socket);
     socket.emit("joinRoom", { _id: `${presentationID}CHAT` });
   }, [presentationID]);
   useEffect(() => {
@@ -131,7 +132,6 @@ function ChatContainer({ presentationID, chatSide }) {
     }
   };
   const content = () => {
-    console.log("render");
     return (
       <SC.StyledRadioContainer>
         <div

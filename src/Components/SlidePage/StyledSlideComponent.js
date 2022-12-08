@@ -134,7 +134,7 @@ export const StyledTopSmallContainer = styled.div`
   display: flex;
   flex-direction: row;
   height: 100%;
-  justify-content: center;
+
   align-items: center;
 `;
 
@@ -536,6 +536,154 @@ export const StyledLikeContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+export const StyledQuestionContainer = styled(StyledTopSmallContainer)`
+  height: 80vh;
+  width: 100%;
+`;
+export const StyledLeftQuestionContainer = styled(StyledLikeContainer)`
+  flex: 3;
+  height: 100%;
+  border: 1px solid ${Color.gray300};
+`;
+export const StyledRightQuestionContainer = styled(StyledLikeContainer)`
+  flex: 8;
+  height: 100%;
+  border: 1px solid ${Color.gray300};
+`;
+export const StyledQuestionItemContainer = styled.div``;
+
+export const StyledLeftTopQuestionContainer = styled.div`
+  flex: 8;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 0.3rem;
+    &-thumb {
+      background-color: ${Color.blue100};
+      width: 0.2rem;
+      border-radius: 1rem;
+    }
+  }
+`;
+export const StyledLeftBottomQuestionContainer = styled(
+  StyledLeftTopQuestionContainer
+)`
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex: 1;
+  border-top: 1px solid ${Color.gray300};
+`;
+
+export const StyledBottomItem = styled.div`
+  font-size: 0.8rem;
+  font-weight: ${(props) => (props.isSelected ? "bold" : "light")};
+  font-family: "Public Sans", sans-serif;
+  cursor: pointer;
+`;
+
+export const StyledQuestionItem = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  width: 100%;
+  border-bottom: 1px solid ${Color.gray300};
+`;
+
+export const StyledQuestionItemContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+export const StyledQuestionTitle = styled.div`
+  font-size: 0.9rem;
+  font-weight: bold;
+  font-family: "Sora", sans-serif;
+  color: ${(props) => (props.isSelected ? Color.blue400 : Color.gray700)};
+  cursor: pointer;
+`;
+export const StyledQuestionSubTitle = styled.div`
+  font-size: 0.7rem;
+  font-weight: light;
+  font-family: "Public Sans", sans-serif;
+  color: ${Color.gray500};
+  margin-bottom: 5px;
+  cursor: pointer;
+`;
+
+export const StyledNavigationContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex: 2;
+`;
+export const StyledMainQuestionContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 10;
+`;
+
+export const StyledMainQuestion = styled.div`
+  font-size: 2.5rem;
+  font-weight: bold;
+  font-family: "Sora", sans-serif;
+  text-align: center;
+`;
+
+export const StyledLikeModifyContainer = styled(StyledLikeContainer)`
+  flex-direction: row;
+`;
+export const StyledLikeNumber = styled.div`
+  font-size: 1.5rem;
+  font-weight: normal;
+  font-family: "Public Sans", sans-serif;
+  padding: 10px 10px 0 10px;
+`;
+export const StyledAnswerButton = styled.div`
+  font-size: 1rem;
+  font-weight: normal;
+  padding: 10px 20px;
+  margin: 20px;
+  font-family: "Sora", sans-serif;
+  border: 1px solid ${Color.blue400};
+  border-radius: 10px;
+  cursor: pointer;
+  color: ${Color.blue400};
+  background-color: ${Color.blue100};
+`;
+
+export const StyledAlreadyAnswer = styled(StyledAnswerButton)`
+  border: 1px solid ${Color.gray500};
+  color: ${Color.gray500};
+  background-color: white;
+`;
+export const StyledDeleteContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  border-bottom: 1px solid ${Color.gray300};
+  font-size: 1rem;
+  font-weight: normal;
+  font-family: "Sora", sans-serif;
+  cursor: pointer;
+  color: ${Color.error200};
 `;
 
 export const StyledEscapeButtonContainer = styled.div`

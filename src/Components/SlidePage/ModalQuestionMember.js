@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import Draggable from "react-draggable";
 import { Modal, Input } from "antd";
 import { useMutation } from "@tanstack/react-query";
@@ -8,10 +8,12 @@ import * as SC from "./StyledSlideComponent";
 import { Color } from "../../Constants/Constant";
 import { getQuestions, updateQuestion, sendQuestion } from "../../API/api";
 import { showMessage } from "../Message";
+import SocketContext from "../../Context/SocketProvider";
 
 const { TextArea } = Input;
 
 function ModalQuestionMember({ open, handleCancel, presentationID }) {
+  const { socket } = useContext(SocketContext);
   const [data, setData] = useState([]);
   const [askState, setAskState] = useState(false);
   const [question, setQuestion] = useState("");
@@ -31,14 +33,45 @@ function ModalQuestionMember({ open, handleCancel, presentationID }) {
       const newQuestions = questions.map((item) => {
         return { ...item, isLiked: false };
       });
-      newQuestions.filter((item) => item.isAnswered === false);
+
       setData(newQuestions);
     };
     getInitQuestions();
+    socket.emit("joinQuestionRoom", { _id: `${presentationID}QUESTION` });
   }, [presentationID]);
+
+  useEffect(() => {
+    socket.on("onReceiveQuestion", (receiveQuestion) => {
+      setData((prev) => [receiveQuestion, ...prev]);
+    });
+
+    socket.on("onUpdateQuestion", (updateQuestionItem) => {
+      updateQuestionItem.isLiked = false;
+      setData((prev) => {
+        const newData = prev.map((item) => {
+          if (item._id === updateQuestionItem._id) {
+            if (item.isLiked) {
+              updateQuestionItem.isLiked = true;
+            }
+            return updateQuestionItem;
+          }
+
+          return item;
+        });
+        return newData;
+      });
+    });
+    return () => {
+      socket.off("onReceiveQuestion");
+      socket.off("onUpdateQuestion");
+    };
+  }, []);
   const updateQuestionMutation = useMutation(updateQuestion, {
-    onSuccess: () => {
-      console.log("success");
+    onSuccess: (updateQuestionItem) => {
+      socket.emit("updateQuestion", {
+        _id: `${presentationID}QUESTION`,
+        data: updateQuestionItem.question,
+      });
     },
   });
   const onUpdateQuestions = async (questionItem) => {
@@ -59,9 +92,14 @@ function ModalQuestionMember({ open, handleCancel, presentationID }) {
           content: response.question.content,
           countLike: 0,
           isLiked: false,
+          isAnswered: false,
         },
         ...prev,
       ]);
+      socket.emit("sentQuestion", {
+        _id: `${presentationID}QUESTION`,
+        data: response.question,
+      });
     },
     onError: (error) => {
       showMessage(1, error);
@@ -115,7 +153,6 @@ function ModalQuestionMember({ open, handleCancel, presentationID }) {
     };
     onCreateQuestion(newQuestion);
   };
-
   const listRender = (
     <div
       id="scrollableDiv"
@@ -132,30 +169,32 @@ function ModalQuestionMember({ open, handleCancel, presentationID }) {
       }}
     >
       <InfiniteScroll dataLength={data.length} scrollableTarget="scrollableDiv">
-        {data.map((item) => {
-          return (
-            <SC.StyledModalQuestionItemContainer>
-              <SC.StyledModalQuestionItemContent>
-                {item.content}
-              </SC.StyledModalQuestionItemContent>
-              <SC.StyledLikeContainer>
-                {item.isLiked ? (
-                  <LikeTwoTone
-                    style={{ fontSize: "25px" }}
-                    onClick={() => handleClickLike(item._id)}
-                  />
-                ) : (
-                  <LikeOutlined
-                    style={{ fontSize: "25px" }}
-                    onClick={() => handleClickLike(item._id)}
-                  />
-                )}
+        {data
+          .filter((item) => item.isAnswered === false)
+          .map((item) => {
+            return (
+              <SC.StyledModalQuestionItemContainer key={item._id}>
+                <SC.StyledModalQuestionItemContent>
+                  {item.content}
+                </SC.StyledModalQuestionItemContent>
+                <SC.StyledLikeContainer>
+                  {item.isLiked ? (
+                    <LikeTwoTone
+                      style={{ fontSize: "25px" }}
+                      onClick={() => handleClickLike(item._id)}
+                    />
+                  ) : (
+                    <LikeOutlined
+                      style={{ fontSize: "25px" }}
+                      onClick={() => handleClickLike(item._id)}
+                    />
+                  )}
 
-                {item.countLike}
-              </SC.StyledLikeContainer>
-            </SC.StyledModalQuestionItemContainer>
-          );
-        })}
+                  {item.countLike}
+                </SC.StyledLikeContainer>
+              </SC.StyledModalQuestionItemContainer>
+            );
+          })}
       </InfiniteScroll>
     </div>
   );

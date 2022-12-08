@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { Radio } from "antd";
 // import { useMutation } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
@@ -27,6 +27,7 @@ function PresentationMemberPage() {
   const [isNoOptions, setIsNoOptions] = useState(false);
   const [isError, setIsError] = useState(false);
   const [openQuestion, setOpenQuestion] = useState(false);
+  const playSlideRef = useRef(null);
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -47,7 +48,9 @@ function PresentationMemberPage() {
         });
         if (response) {
           setPresentation(response.data);
+          playSlideRef.current = response.data.playSlide;
           socket.emit("join_presentation", id);
+          console.log("SET PLAYSIDE", response.data.playSlide);
         }
       } catch (error) {
         showMessage(2, error.message);
@@ -125,6 +128,11 @@ function PresentationMemberPage() {
     });
 
     socket.on("onUpdatePresentation", (data) => {
+      if (data.playSlide !== playSlideRef.current) {
+        playSlideRef.current = data.playSlide;
+        setValue(null);
+        setIsSubmitted(false);
+      }
       setPresentation(data);
     });
     return () => {
@@ -186,6 +194,9 @@ function PresentationMemberPage() {
           return slide;
         }),
       }));
+      setPresentation((prev) => {
+        return prev;
+      });
     }
   };
   const renderPage = (slideType) => {
@@ -240,7 +251,7 @@ function PresentationMemberPage() {
           )}
           {/* eslint-disable-next-line */}
           {isNoOptions || isNoQuestion ? (
-            <SC.StyledSubmitButton disabled onClick={handleSubmit}>
+            <SC.StyledSubmitButton disabled onClick={() => handleSubmit()}>
               Submit
             </SC.StyledSubmitButton>
           ) : isSubmitted ? (
@@ -253,7 +264,10 @@ function PresentationMemberPage() {
               fullWidth={false}
             />
           ) : (
-            <SC.StyledSubmitButton onClick={handleSubmit} disabled={isError}>
+            <SC.StyledSubmitButton
+              onClick={() => handleSubmit()}
+              disabled={isError}
+            >
               Submit
             </SC.StyledSubmitButton>
           )}
