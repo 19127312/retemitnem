@@ -48,9 +48,6 @@ function PresentationMemberPage() {
         if (response) {
           setPresentation(response.data);
           socket.emit("join_presentation", id);
-          console.log("co");
-        } else {
-          console.log("khong");
         }
       } catch (error) {
         showMessage(2, error.message);
@@ -276,6 +273,7 @@ function PresentationMemberPage() {
       <ModalQuestionMember
         open={openQuestion}
         handleCancel={() => setOpenQuestion(false)}
+        presentationID={id}
       />
       <SC.StyledLogoContainer>
         <img src={logo} alt="logo" />

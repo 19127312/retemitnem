@@ -422,7 +422,6 @@ export const StyledImageSetting = styled.div`
 
 export const StyledHeadingSlidePageContainer = styled.div`
   flex: 10;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
