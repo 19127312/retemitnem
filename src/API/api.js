@@ -33,6 +33,8 @@ export const PATH = {
   CHECK_MEMBER_IN_GROUP: "/group/check",
   INIT_CHAT: "/chat",
   MORE_CHAT: "/chat/more",
+  GET_QUESTIONS: "/question",
+  UPDATE_QUESTION: "/question/update",
 };
 export const BASE_URL = {
   GET_IMAGES:
@@ -385,6 +387,36 @@ export const sendChat = async ({ presentationID, isSender, content }) => {
       content,
     });
     return response.data;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const getQuestions = async ({ presentationID }) => {
+  try {
+    const response = await api.get(`${PATH.GET_QUESTIONS}/${presentationID}`);
+    return response.data;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const sendQuestion = async ({ presentationID, content }) => {
+  try {
+    const response = await api.post(PATH.GET_QUESTIONS, {
+      presentationID,
+      content,
+    });
+    return response.data;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const updateQuestion = async ({ question }) => {
+  try {
+    const response = await api.post(PATH.UPDATE_QUESTION, { question });
+    return response;
   } catch (error) {
     throw Error(error.response.data);
   }

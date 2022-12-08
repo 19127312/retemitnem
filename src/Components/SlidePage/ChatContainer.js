@@ -52,6 +52,11 @@ function ChatContainer({ presentationID, chatSide }) {
         presentationID,
       });
       // setChatList(response.data);
+      if (chats.length === 0) {
+        setHasMoreChat(false);
+        setLoading(false);
+        return;
+      }
       if (chatSide === "Member") {
         const newChats = chats.map((chat) => {
           if (chat.isSender) {
@@ -104,6 +109,7 @@ function ChatContainer({ presentationID, chatSide }) {
     }
   };
   const handleSendChat = async () => {
+    if (chatInput === "") return;
     const chatItem = {
       isSender: chatSide !== "Member",
       content: chatInput,
