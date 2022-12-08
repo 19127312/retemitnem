@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Typography } from "antd";
+import { Typography, Button } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   CaretRightOutlined,
@@ -9,6 +9,7 @@ import {
   LeftOutlined,
   RightOutlined,
   ExclamationCircleFilled,
+  FullscreenExitOutlined,
 } from "@ant-design/icons";
 import { TailSpin } from "react-loader-spinner";
 import { useMutation } from "@tanstack/react-query";
@@ -328,19 +329,50 @@ function SlidePage() {
     if (slideType === "Heading") {
       return (
         <SC.StyledHeadingSlidePageContainer>
-          <SC.StyledHeadingSlidePage>
-            {selectedSlide.question}
-          </SC.StyledHeadingSlidePage>
-          <div>{selectedSlide.subHeading}</div>
+          <SC.StyledHeadingTextSlidePageContainer>
+            <SC.StyledHeadingSlidePage>
+              {selectedSlide.question}
+            </SC.StyledHeadingSlidePage>
+            <SC.StyledHeadingSlidePageSub>
+              {selectedSlide.subHeading}
+            </SC.StyledHeadingSlidePageSub>
+          </SC.StyledHeadingTextSlidePageContainer>
           {selectedSlide.image ? (
-            <img src={selectedSlide.image} alt="" height={300} width={300} />
+            <img
+              src={selectedSlide.image}
+              alt="uploadImage"
+              height={250}
+              width={250}
+              style={{ marginTop: "70px" }}
+            />
           ) : null}
         </SC.StyledHeadingSlidePageContainer>
       );
     }
     if (slideType === "Paragraph") {
-      return <>Paragraph</>;
+      return (
+        <SC.StyledHeadingSlidePageContainer>
+          <SC.StyledHeadingTextSlidePageContainer>
+            <SC.StyledHeadingSlidePage>
+              {selectedSlide.question}
+            </SC.StyledHeadingSlidePage>
+            <SC.StyledParagraphSlidePage>
+              {selectedSlide.subHeading}
+            </SC.StyledParagraphSlidePage>
+          </SC.StyledHeadingTextSlidePageContainer>
+          {selectedSlide.image ? (
+            <img
+              src={selectedSlide.image}
+              alt="uploadImage"
+              height={250}
+              width={250}
+              style={{ marginTop: "70px" }}
+            />
+          ) : null}
+        </SC.StyledHeadingSlidePageContainer>
+      );
     }
+
     return null;
   };
 
@@ -379,6 +411,17 @@ function SlidePage() {
         />
         <SC.StyledPrensatationContainer>
           {selectedSlide && presentationRender(selectedSlide.questionType)}
+          {isFullScreen ? (
+            <SC.StyledEscapeButtonContainer>
+              <Button
+                type="primary"
+                shape="circle"
+                icon={<FullscreenExitOutlined />}
+                onClick={() => setIsFullScreen(false)}
+              />
+            </SC.StyledEscapeButtonContainer>
+          ) : null}
+
           <SC.StyledLeftRightContainer>
             <LeftOutlined
               onClick={() => {
