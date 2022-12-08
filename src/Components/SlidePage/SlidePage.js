@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Typography } from "antd";
+import { Typography, Button } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   CaretRightOutlined,
@@ -8,6 +8,7 @@ import {
   QuestionCircleOutlined,
   LeftOutlined,
   RightOutlined,
+  FullscreenExitOutlined,
 } from "@ant-design/icons";
 import { TailSpin } from "react-loader-spinner";
 import { useMutation } from "@tanstack/react-query";
@@ -375,6 +376,17 @@ function SlidePage() {
         />
         <SC.StyledPrensatationContainer>
           {selectedSlide && presentationRender(selectedSlide.questionType)}
+          {isFullScreen ? (
+            <SC.StyledEscapeButtonContainer>
+              <Button
+                type="primary"
+                shape="circle"
+                icon={<FullscreenExitOutlined />}
+                onClick={() => setIsFullScreen(false)}
+              />
+            </SC.StyledEscapeButtonContainer>
+          ) : null}
+
           <SC.StyledLeftRightContainer>
             <LeftOutlined
               onClick={() => {

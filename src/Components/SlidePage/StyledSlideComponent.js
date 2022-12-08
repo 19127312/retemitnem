@@ -495,3 +495,14 @@ export const StyledLikeContainer = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+export const StyledEscapeButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  top: 50px;
+  right: ${(props) => (props.show === "Member" ? "150px" : "40px")};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
