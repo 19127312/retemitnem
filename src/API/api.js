@@ -35,6 +35,7 @@ export const PATH = {
   MORE_CHAT: "/chat/more",
   GET_QUESTIONS: "/question",
   UPDATE_QUESTION: "/question/update",
+  DELETE_QUESTION: "/question/delete",
 };
 export const BASE_URL = {
   GET_IMAGES:
@@ -416,6 +417,17 @@ export const sendQuestion = async ({ presentationID, content }) => {
 export const updateQuestion = async ({ question }) => {
   try {
     const response = await api.post(PATH.UPDATE_QUESTION, { question });
+    return response.data;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const deleteQuestions = async ({ questionsIDs }) => {
+  try {
+    const response = await api.post(PATH.DELETE_QUESTION, {
+      questionsIDs,
+    });
     return response;
   } catch (error) {
     throw Error(error.response.data);

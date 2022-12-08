@@ -8,6 +8,7 @@ import {
   QuestionCircleOutlined,
   LeftOutlined,
   RightOutlined,
+  ExclamationCircleFilled,
 } from "@ant-design/icons";
 import { TailSpin } from "react-loader-spinner";
 import { useMutation } from "@tanstack/react-query";
@@ -45,6 +46,7 @@ function SlidePage() {
   const [openShare, setOpenShare] = useState(false);
   const [openQuestion, setOpenQuestion] = useState(false);
   const [guideText, setGuideText] = useState(null);
+  const [qaNotification, setQANotification] = useState(false);
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -372,6 +374,8 @@ function SlidePage() {
         <ModalQuestionHost
           open={openQuestion}
           handleCancel={() => setOpenQuestion(false)}
+          presentationID={id}
+          setQANotification={setQANotification}
         />
         <SC.StyledPrensatationContainer>
           {selectedSlide && presentationRender(selectedSlide.questionType)}
@@ -388,10 +392,25 @@ function SlidePage() {
             />
           </SC.StyledLeftRightContainer>
           <SC.StyledBottomChatContainer show="Host">
-            <QuestionCircleOutlined
-              style={{ fontSize: "25px", cursor: "pointer" }}
-              onClick={() => setOpenQuestion(true)}
-            />
+            <SC.StyledChatIconContainer
+              onClick={() => setQANotification(false)}
+            >
+              <QuestionCircleOutlined
+                style={{ fontSize: "25px", cursor: "pointer" }}
+                onClick={() => setOpenQuestion(true)}
+              />
+              {qaNotification && (
+                <ExclamationCircleFilled
+                  style={{
+                    fontSize: "15px",
+                    color: "red",
+                    position: "absolute",
+                    top: -5,
+                    right: -5,
+                  }}
+                />
+              )}
+            </SC.StyledChatIconContainer>
             <ChatContainer presentationID={id} chatSide="Host" />
           </SC.StyledBottomChatContainer>
         </SC.StyledPrensatationContainer>
