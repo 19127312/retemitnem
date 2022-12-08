@@ -151,6 +151,23 @@ function SlidePage() {
     }));
   }, [editableStr]);
 
+  useEffect(() => {
+    const keyDownHandler = (event) => {
+      console.log("User pressed: ", event.key);
+
+      if (event.key === "Escape") {
+        event.preventDefault();
+
+        setIsFullScreen(false);
+      }
+    };
+    // clean up event listener
+    document.addEventListener("keydown", keyDownHandler);
+    return () => {
+      document.removeEventListener("keydown", keyDownHandler);
+    };
+  }, []);
+
   const handleSelectedSlide = (slide, indexSelect) => {
     setSelectedSlide(slide);
     setPresentation((pre) => ({
@@ -190,6 +207,7 @@ function SlidePage() {
     }));
     // handle.enter();
     setIsFullScreen(true);
+    showMessage(1, "Press ESC to escape full screen");
   };
 
   const handleLeft = () => {
