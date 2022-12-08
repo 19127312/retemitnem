@@ -215,8 +215,8 @@ function SettingQuestionPage({
     <SC.StyledSettingContainer>
       <SC.StyledQuestionInSlide>Slide Type</SC.StyledQuestionInSlide>
       <Select
-        defaultValue={slideType}
         onChange={handleChangeSlideType}
+        value={slideType}
         style={{ width: "100%" }}
         options={[
           {
