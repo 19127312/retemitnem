@@ -89,6 +89,7 @@ function PresentationMemberPage() {
         ],
       });
     }
+    setIsNoQuestion(false);
 
     if (presentation?.slides[presentation?.playSlide].question === "") {
       setIsNoQuestion(true);
