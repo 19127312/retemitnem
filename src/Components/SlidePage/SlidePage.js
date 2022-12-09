@@ -155,8 +155,6 @@ function SlidePage() {
 
   useEffect(() => {
     const keyDownHandler = (event) => {
-      console.log("User pressed: ", event.key);
-
       if (event.key === "Escape") {
         event.preventDefault();
 
@@ -179,20 +177,39 @@ function SlidePage() {
   };
   const handleDeleteSlide = (index) => {
     const newSlide = slides.filter((slide) => slide.key !== index);
-    if (index < selectedSlide.key) {
+    const keySelected = selectedSlide.key;
+    const playSelected = presentation.playSlide;
+    // console.log("index delete before", index);
+    if (index < keySelected) {
       setPresentation((pre) => ({
         ...pre,
         currentSlide: pre.currentSlide - 1,
       }));
     }
+
+    if (index < playSelected) {
+      setPresentation((pre) => ({
+        ...pre,
+        playSlide: pre.playSlide - 1,
+      }));
+    }
     for (let i = index; i < newSlide.length; i++) {
       newSlide[i].key -= 1;
     }
-    if (selectedSlide.key === index) {
+
+    // console.log("index delete after", index);
+
+    if (keySelected === index) {
       setSelectedSlide(newSlide[0]);
       setPresentation((pre) => ({
         ...pre,
         currentSlide: 0,
+      }));
+    }
+    if (playSelected === index) {
+      setPresentation((pre) => ({
+        ...pre,
+        playSlide: 0,
       }));
     }
     setSlides(newSlide);
