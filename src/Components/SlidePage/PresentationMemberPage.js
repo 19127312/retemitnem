@@ -105,6 +105,7 @@ function PresentationMemberPage() {
         countFlag++;
       }
     }
+    setIsNoOptions(false);
     if (
       countFlag === presentation?.slides[presentation?.playSlide].options.length
     ) {
