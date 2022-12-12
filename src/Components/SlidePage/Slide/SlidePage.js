@@ -14,22 +14,22 @@ import {
 import { TailSpin } from "react-loader-spinner";
 import { useMutation } from "@tanstack/react-query";
 // import { FullScreen, useFullScreenHandle } from "react-full-screen";
-import * as SC from "./StyledSlideComponent";
+import * as SC from "../StyledSlideComponent";
 import SingleSlide from "./SingleSlide";
 import SettingQuestionPage from "./SettingQuestionPage";
-import backleft from "../../Assets/backleft.svg";
-import AuthContext from "../../Context/AuthProvider";
-import SocketContext from "../../Context/SocketProvider";
-import Check from "../../Assets/Check.svg";
-import { BarChart } from "./BarChart";
+import backleft from "../../../Assets/backleft.svg";
+import AuthContext from "../../../Context/AuthProvider";
+import SocketContext from "../../../Context/SocketProvider";
+import Check from "../../../Assets/Check.svg";
+import { BarChart } from "../Utility/BarChart";
 import {
   viewPresentationInfoByPresentationID,
   updatePresentation,
-} from "../../API/api";
-import { showMessage } from "../Message";
-import ChatContainer from "./ChatContainer";
-import ModalShare from "./ModalShare";
-import ModalQuestionHost from "./ModalQuestionHost";
+} from "../../../API/api";
+import { showMessage } from "../../Message";
+import ChatContainer from "../Chat/ChatContainer";
+import ModalShare from "../Utility/ModalShare";
+import ModalQuestionHost from "../Question/ModalQuestionHost";
 
 const { Paragraph } = Typography;
 

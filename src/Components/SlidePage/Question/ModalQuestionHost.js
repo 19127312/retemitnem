@@ -6,9 +6,13 @@ import {
   DownCircleTwoTone,
 } from "@ant-design/icons";
 import { useMutation } from "@tanstack/react-query";
-import * as SC from "./StyledSlideComponent";
-import { getQuestions, updateQuestion, deleteQuestions } from "../../API/api";
-import SocketContext from "../../Context/SocketProvider";
+import * as SC from "../StyledSlideComponent";
+import {
+  getQuestions,
+  updateQuestion,
+  deleteQuestions,
+} from "../../../API/api";
+import SocketContext from "../../../Context/SocketProvider";
 
 function ModalQuestionHost({
   open,
@@ -66,7 +70,6 @@ function ModalQuestionHost({
       setShowData(questions.filter((item) => !item.isAnswered));
     };
     getInitQuestions();
-    socket.emit("joinQuestionRoom", { _id: `${presentationID}QUESTION` });
   }, [presentationID]);
 
   useEffect(() => {
@@ -80,7 +83,7 @@ function ModalQuestionHost({
   const updateQuestionMutation = useMutation(updateQuestion, {
     onSuccess: (updateQuestionItem) => {
       socket.emit("updateQuestion", {
-        _id: `${presentationID}QUESTION`,
+        _id: `${presentationID}`,
         data: updateQuestionItem.question,
       });
     },
@@ -163,7 +166,10 @@ function ModalQuestionHost({
       );
     return showData.map((item) => {
       return (
-        <SC.StyledQuestionItem onClick={() => handleClickItem(item)}>
+        <SC.StyledQuestionItem
+          onClick={() => handleClickItem(item)}
+          key={item._id}
+        >
           <SC.StyledQuestionItemContent>
             <SC.StyledQuestionTitle
               onClick={(e) => {

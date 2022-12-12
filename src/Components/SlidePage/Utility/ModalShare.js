@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, Button, Select } from "antd";
-import * as SC from "./StyledSlideComponent";
-import { showMessage } from "../Message";
+import * as SC from "../StyledSlideComponent";
+import { showMessage } from "../../Message";
 
 function ModalShare({
   id,

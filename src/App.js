@@ -7,9 +7,9 @@ import SingupPage from "./Components/AuthPage/SignupPage";
 import CheckingAuthRoutes from "./Components/RoutesChecking/CheckingAuthRoutes";
 import MainPage from "./Components/MainPage/MainPage";
 import GroupPage from "./Components/GroupPage/GroupPage";
-import SlidePage from "./Components/SlidePage/SlidePage";
+import SlidePage from "./Components/SlidePage/Slide/SlidePage";
 import JoinLink from "./Components/JoinLink";
-import PresentationMemberPage from "./Components/SlidePage/PresentationMemberPage";
+import PresentationMemberPage from "./Components/SlidePage/Slide/PresentationMemberPage";
 import { SocketProvider } from "./Context/SocketProvider";
 
 const queryClient = new QueryClient();

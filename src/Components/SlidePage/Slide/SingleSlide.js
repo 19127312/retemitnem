@@ -1,8 +1,8 @@
 import React from "react";
 import { Dropdown } from "antd";
 import { CaretRightOutlined } from "@ant-design/icons";
-import { Color } from "../../Constants/Constant";
-import * as SC from "./StyledSlideComponent";
+import { Color } from "../../../Constants/Constant";
+import * as SC from "../StyledSlideComponent";
 
 function SingleSlide({
   index,

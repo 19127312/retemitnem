@@ -2,7 +2,7 @@ import { Chart, registerables } from "chart.js";
 // eslint-disable-next-line
 import { Bar } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import * as SC from "./StyledSlideComponent";
+import * as SC from "../StyledSlideComponent";
 
 Chart.register(...registerables, ChartDataLabels);
 
