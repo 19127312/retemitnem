@@ -1,6 +1,6 @@
 import React from "react";
 import { CloseOutlined } from "@ant-design/icons";
-import * as SC from "./StyledSlideComponent";
+import * as SC from "../StyledSlideComponent";
 
 function SingleOption({ index, option, onOptionDelete, onOptionChange }) {
   const handleDeleteOption = () => {

@@ -3,19 +3,19 @@ import { Radio } from "antd";
 // import { useMutation } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import * as SC from "./StyledSlideComponent";
-import logo from "../../Assets/logo.png";
-import { BarChart } from "./BarChart";
-import SocketContext from "../../Context/SocketProvider";
+import * as SC from "../StyledSlideComponent";
+import logo from "../../../Assets/logo.png";
+import { BarChart } from "../Utility/BarChart";
+import SocketContext from "../../../Context/SocketProvider";
 import {
   checkMemberInGroup,
   viewPresentationInfoByPresentationID,
   // updatePresentation,
-} from "../../API/api";
-import { showMessage } from "../Message";
-import AuthContext from "../../Context/AuthProvider";
-import ChatContainer from "./ChatContainer";
-import ModalQuestionMember from "./ModalQuestionMember";
+} from "../../../API/api";
+import { showMessage } from "../../Message";
+import AuthContext from "../../../Context/AuthProvider";
+import ChatContainer from "../Chat/ChatContainer";
+import ModalQuestionMember from "../Question/ModalQuestionMember";
 
 function PresentationMemberPage() {
   const { id } = useParams();

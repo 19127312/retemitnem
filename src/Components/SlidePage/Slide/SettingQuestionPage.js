@@ -2,7 +2,7 @@ import React from "react";
 import { PlusOutlined, RedoOutlined } from "@ant-design/icons";
 import { Select, Input } from "antd";
 import { useDropzone } from "react-dropzone";
-import * as SC from "./StyledSlideComponent";
+import * as SC from "../StyledSlideComponent";
 import SingleOption from "./SingleOption";
 
 const { TextArea } = Input;

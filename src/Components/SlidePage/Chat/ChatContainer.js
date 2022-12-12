@@ -3,9 +3,9 @@ import { Popover, Input, Button, Divider } from "antd";
 import { useMutation } from "@tanstack/react-query";
 import { CommentOutlined, ExclamationCircleFilled } from "@ant-design/icons";
 import InfiniteScroll from "react-infinite-scroll-component";
-import * as SC from "./StyledSlideComponent";
-import { getChatHistoryInit, getMoreChat, sendChat } from "../../API/api";
-import SocketContext from "../../Context/SocketProvider";
+import * as SC from "../StyledSlideComponent";
+import { getChatHistoryInit, getMoreChat, sendChat } from "../../../API/api";
+import SocketContext from "../../../Context/SocketProvider";
 
 function ChatContainer({ presentationID, chatSide }) {
   const { socket } = useContext(SocketContext);
@@ -72,7 +72,6 @@ function ChatContainer({ presentationID, chatSide }) {
       setLastChatID(chats[chats.length - 1]._id);
     };
     getChatHistory();
-    socket.emit("joinRoom", { _id: `${presentationID}CHAT` });
   }, [presentationID]);
   useEffect(() => {
     socket.on("onReceiveMessage", (chat) => {
@@ -93,7 +92,7 @@ function ChatContainer({ presentationID, chatSide }) {
   const sendMessageMutation = useMutation(sendChat, {
     onSuccess: ({ chat }) => {
       socket.emit("sentMessage", {
-        _id: `${chat.presentationID}CHAT`,
+        _id: `${chat.presentationID}`,
         ...chat,
       });
     },

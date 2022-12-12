@@ -4,11 +4,11 @@ import { Modal, Input } from "antd";
 import { useMutation } from "@tanstack/react-query";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { LikeOutlined, LikeTwoTone } from "@ant-design/icons";
-import * as SC from "./StyledSlideComponent";
-import { Color } from "../../Constants/Constant";
-import { getQuestions, updateQuestion, sendQuestion } from "../../API/api";
-import { showMessage } from "../Message";
-import SocketContext from "../../Context/SocketProvider";
+import * as SC from "../StyledSlideComponent";
+import { Color } from "../../../Constants/Constant";
+import { getQuestions, updateQuestion, sendQuestion } from "../../../API/api";
+import { showMessage } from "../../Message";
+import SocketContext from "../../../Context/SocketProvider";
 
 const { TextArea } = Input;
 
@@ -37,7 +37,6 @@ function ModalQuestionMember({ open, handleCancel, presentationID }) {
       setData(newQuestions);
     };
     getInitQuestions();
-    socket.emit("joinQuestionRoom", { _id: `${presentationID}QUESTION` });
   }, [presentationID]);
 
   useEffect(() => {
@@ -69,7 +68,7 @@ function ModalQuestionMember({ open, handleCancel, presentationID }) {
   const updateQuestionMutation = useMutation(updateQuestion, {
     onSuccess: (updateQuestionItem) => {
       socket.emit("updateQuestion", {
-        _id: `${presentationID}QUESTION`,
+        _id: `${presentationID}`,
         data: updateQuestionItem.question,
       });
     },
@@ -97,7 +96,7 @@ function ModalQuestionMember({ open, handleCancel, presentationID }) {
         ...prev,
       ]);
       socket.emit("sentQuestion", {
-        _id: `${presentationID}QUESTION`,
+        _id: `${presentationID}`,
         data: response.question,
       });
     },
