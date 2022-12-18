@@ -12,7 +12,7 @@ import {
   deletePresentations,
   updatePresentation,
   viewPresentationInfoByGroupID,
-} from "../../API/api";
+} from "../../API/presentationApi";
 import { showMessage } from "../Message";
 import AuthContext from "../../Context/AuthProvider";
 

@@ -4,7 +4,11 @@ import { useMutation } from "@tanstack/react-query";
 import { CommentOutlined, ExclamationCircleFilled } from "@ant-design/icons";
 import InfiniteScroll from "react-infinite-scroll-component";
 import * as SC from "../StyledSlideComponent";
-import { getChatHistoryInit, getMoreChat, sendChat } from "../../../API/api";
+import {
+  getChatHistoryInit,
+  getMoreChat,
+  sendChat,
+} from "../../../API/chatApi";
 import SocketContext from "../../../Context/SocketProvider";
 
 function ChatContainer({ presentationID, chatSide }) {

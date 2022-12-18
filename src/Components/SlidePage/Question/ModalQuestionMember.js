@@ -6,7 +6,11 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { LikeOutlined, LikeTwoTone } from "@ant-design/icons";
 import * as SC from "../StyledSlideComponent";
 import { Color } from "../../../Constants/Constant";
-import { getQuestions, updateQuestion, sendQuestion } from "../../../API/api";
+import {
+  getQuestions,
+  updateQuestion,
+  sendQuestion,
+} from "../../../API/questionApi";
 import { showMessage } from "../../Message";
 import SocketContext from "../../../Context/SocketProvider";
 
