@@ -1,11 +1,10 @@
 import axios from "axios";
-// import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_URL_API,
 });
 
-export const PATH = {
+const PATH = {
   LOGIN: "/auth/login",
   REGISTER: "/auth/register",
   GET_NEW_ACCESS_TOKEN: "/auth/access-token",
@@ -25,17 +24,6 @@ export const PATH = {
   UPDATE_PASSWORD: "/user/changepassword",
   LOGOUT: "/auth/logout",
   CHECKTYPE: "/user/checkType",
-  PRESENTATION_INFO: "presentation/viewByGroupID",
-  PRESENTATION_INFO_BY_ID: "presentation/info",
-  UPDATE_PRESENTATION: "presentation/update",
-  CREATE_PRESENTATION: "/presentation/add",
-  DELETE_PRESENTATIONS: "/presentation/delete",
-  CHECK_MEMBER_IN_GROUP: "/group/check",
-  INIT_CHAT: "/chat",
-  MORE_CHAT: "/chat/more",
-  GET_QUESTIONS: "/question",
-  UPDATE_QUESTION: "/question/update",
-  DELETE_QUESTION: "/question/delete",
 };
 export const BASE_URL = {
   GET_IMAGES:
@@ -275,62 +263,6 @@ export const checkType = async ({ userID }) => {
   }
 };
 
-export const viewPresentationInfoByGroupID = async ({ groupID }) => {
-  try {
-    const response = await api.get(`${PATH.PRESENTATION_INFO}/${groupID}`);
-    return response;
-  } catch (error) {
-    throw Error(error.response.data);
-  }
-};
-
-export const viewPresentationInfoByPresentationID = async ({
-  presentationID,
-}) => {
-  try {
-    const response = await api.get(
-      `${PATH.PRESENTATION_INFO_BY_ID}/${presentationID}`
-    );
-    return response;
-  } catch (error) {
-    console.log(error);
-    throw Error(error.response.data.errorMessage);
-  }
-};
-
-export const updatePresentation = async ({ presentation }) => {
-  try {
-    const response = await api.post(PATH.UPDATE_PRESENTATION, { presentation });
-    return response;
-  } catch (error) {
-    throw Error(error.response.data);
-  }
-};
-
-export const createPresentation = async ({ title, ownerID, groupID }) => {
-  try {
-    const response = await api.post(PATH.CREATE_PRESENTATION, {
-      title,
-      ownerID,
-      groupID,
-    });
-    return response;
-  } catch (error) {
-    throw Error(error.response.data);
-  }
-};
-
-export const deletePresentations = async ({ presentationIDs }) => {
-  try {
-    const response = await api.post(PATH.DELETE_PRESENTATIONS, {
-      presentationIDs,
-    });
-    return response;
-  } catch (error) {
-    throw Error(error.response.data);
-  }
-};
-
 export const getRandomImagesUrl = async (quantity) => {
   try {
     const imageUrlArray = [];
@@ -347,89 +279,4 @@ export const getRandomImagesUrl = async (quantity) => {
   }
 };
 
-export const checkMemberInGroup = async ({ groupID, memberID }) => {
-  try {
-    const response = await api.post(PATH.CHECK_MEMBER_IN_GROUP, {
-      groupID,
-      memberID,
-    });
-    return response;
-  } catch (error) {
-    throw Error(error.response.data);
-  }
-};
-
-export const getChatHistoryInit = async ({ presentationID }) => {
-  try {
-    const response = await api.get(`${PATH.INIT_CHAT}/${presentationID}`);
-    return response.data;
-  } catch (error) {
-    throw Error(error.response.data);
-  }
-};
-
-export const getMoreChat = async ({ presentationID, lastChatID }) => {
-  try {
-    const response = await api.post(PATH.MORE_CHAT, {
-      presentationID,
-      lastChatID,
-    });
-    return response.data;
-  } catch (error) {
-    throw Error(error.response.data);
-  }
-};
-
-export const sendChat = async ({ presentationID, isSender, content }) => {
-  try {
-    const response = await api.post(PATH.INIT_CHAT, {
-      presentationID,
-      isSender,
-      content,
-    });
-    return response.data;
-  } catch (error) {
-    throw Error(error.response.data);
-  }
-};
-
-export const getQuestions = async ({ presentationID }) => {
-  try {
-    const response = await api.get(`${PATH.GET_QUESTIONS}/${presentationID}`);
-    return response.data;
-  } catch (error) {
-    throw Error(error.response.data);
-  }
-};
-
-export const sendQuestion = async ({ presentationID, content }) => {
-  try {
-    const response = await api.post(PATH.GET_QUESTIONS, {
-      presentationID,
-      content,
-    });
-    return response.data;
-  } catch (error) {
-    throw Error(error.response.data);
-  }
-};
-
-export const updateQuestion = async ({ question }) => {
-  try {
-    const response = await api.post(PATH.UPDATE_QUESTION, { question });
-    return response.data;
-  } catch (error) {
-    throw Error(error.response.data);
-  }
-};
-
-export const deleteQuestions = async ({ questionsIDs }) => {
-  try {
-    const response = await api.post(PATH.DELETE_QUESTION, {
-      questionsIDs,
-    });
-    return response;
-  } catch (error) {
-    throw Error(error.response.data);
-  }
-};
+export default api;

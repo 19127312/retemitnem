@@ -7,11 +7,8 @@ import * as SC from "../StyledSlideComponent";
 import logo from "../../../Assets/logo.png";
 import { BarChart } from "../Utility/BarChart";
 import SocketContext from "../../../Context/SocketProvider";
-import {
-  checkMemberInGroup,
-  viewPresentationInfoByPresentationID,
-  // updatePresentation,
-} from "../../../API/api";
+import { viewPresentationInfoByPresentationID } from "../../../API/presentationApi";
+import { checkMemberInGroup } from "../../../API/groupApi";
 import { showMessage } from "../../Message";
 import AuthContext from "../../../Context/AuthProvider";
 import ChatContainer from "../Chat/ChatContainer";

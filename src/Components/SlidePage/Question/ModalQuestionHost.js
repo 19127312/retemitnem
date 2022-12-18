@@ -11,7 +11,7 @@ import {
   getQuestions,
   updateQuestion,
   deleteQuestions,
-} from "../../../API/api";
+} from "../../../API/questionApi";
 import SocketContext from "../../../Context/SocketProvider";
 
 function ModalQuestionHost({

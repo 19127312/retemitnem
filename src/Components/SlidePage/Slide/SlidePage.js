@@ -25,7 +25,7 @@ import { BarChart } from "../Utility/BarChart";
 import {
   viewPresentationInfoByPresentationID,
   updatePresentation,
-} from "../../../API/api";
+} from "../../../API/presentationApi";
 import { showMessage } from "../../Message";
 import ChatContainer from "../Chat/ChatContainer";
 import ModalShare from "../Utility/ModalShare";

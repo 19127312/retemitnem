@@ -10,7 +10,6 @@ import logo from "../../Assets/logo.png";
 import { showMessage } from "../Message";
 import { viewGroupInfo } from "../../API/api";
 
-// Chỉnh lại lấy data từ id, k chuyền state
 export function GroupPage() {
   const { id } = useParams();
   const [group, setGroup] = useState(null);
