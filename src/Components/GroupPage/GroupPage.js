@@ -8,7 +8,7 @@ import GroupDashboardPage from "./GroupDashboardPage";
 import * as SC from "./StyledGroupPageComponents";
 import logo from "../../Assets/logo.png";
 import { showMessage } from "../Message";
-import { viewGroupInfo } from "../../API/api";
+import { viewGroupInfo } from "../../API/groupApi";
 
 export function GroupPage() {
   const { id } = useParams();

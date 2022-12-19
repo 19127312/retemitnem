@@ -1,5 +1,6 @@
 import { useEffect, createContext, useState, useMemo } from "react";
-import { getProfile, getRandomImagesUrl } from "../API/api";
+import { getRandomImagesUrl } from "../API/utilityApi";
+import { getProfile } from "../API/userApi";
 
 const AuthContext = createContext({});
 

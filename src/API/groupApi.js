@@ -22,3 +22,77 @@ export const checkMemberInGroup = async ({ groupID, memberID }) => {
     throw Error(error.response.data);
   }
 };
+export const viewGroupInfo = async ({ groupID }) => {
+  try {
+    const respone = await api.get(`${PATH.GROUP_DETAIL}/${groupID}`);
+    return respone;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const groupInfo = async () => {
+  try {
+    const response = await api.get(PATH.GROUP_INFO);
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const createGroup = async ({ groupName, creatorID }) => {
+  try {
+    const response = await api.post(PATH.CREATE_GROUP, {
+      groupName,
+      creatorID,
+    });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+export const changeRole = async ({ groupID, memberID, role }) => {
+  try {
+    const response = await api.post(PATH.CHANGE_ROLE, {
+      groupID,
+      memberID,
+      role,
+    });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+export const deleteMember = async ({ groupID, memberID }) => {
+  try {
+    const response = await api.post(PATH.DELETE_MEMBER, {
+      groupID,
+      memberID,
+    });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+export const sendlinktoemail = async ({ groupID, emailList }) => {
+  try {
+    const response = await api.post(PATH.SEND_LINK_TO_EMAIL, {
+      groupID,
+      emailList,
+    });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+export const addMember = async ({ groupID, memberID }) => {
+  try {
+    const response = await api.post(PATH.ADD_MEMBER, {
+      groupID,
+      memberID,
+    });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
