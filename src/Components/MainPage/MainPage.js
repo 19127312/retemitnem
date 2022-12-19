@@ -22,15 +22,9 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useMutation } from "@tanstack/react-query";
 import { ColorRing } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
-import {
-  createGroup,
-  groupInfo,
-  addMember,
-  changeFullname,
-  changePassword,
-  logout,
-  checkType,
-} from "../../API/api";
+import { logout } from "../../API/authApi";
+import { groupInfo, createGroup, addMember } from "../../API/groupApi";
+import { changeFullname, changePassword, checkType } from "../../API/userApi";
 import * as SC from "./StyledMainPageComponents";
 import logo from "../../Assets/logo.png";
 import AuthContext from "../../Context/AuthProvider";

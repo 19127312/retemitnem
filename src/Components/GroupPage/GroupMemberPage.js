@@ -5,7 +5,7 @@ import { Button, Dropdown, Popconfirm, Table, Space, Menu, Modal } from "antd";
 import { useMutation } from "@tanstack/react-query";
 import { PlusOutlined, DownOutlined } from "@ant-design/icons";
 import { ColorRing } from "react-loader-spinner";
-import { changeRole, sendlinktoemail, deleteMember } from "../../API/api";
+import { changeRole, deleteMember, sendlinktoemail } from "../../API/groupApi";
 import * as SC from "./StyledGroupPageComponents";
 import "react-multi-email/style.css";
 import AuthContext from "../../Context/AuthProvider";

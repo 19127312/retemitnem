@@ -8,7 +8,7 @@ import { eyeOff } from "react-icons-kit/feather/eyeOff";
 import { useMutation } from "@tanstack/react-query";
 import { useGoogleLogin } from "@react-oauth/google";
 import * as SC from "./StyledAuthComponents";
-import { login, loginGG } from "../../API/api";
+import { login, loginGG } from "../../API/authApi";
 import logo from "../../Assets/logo.png";
 import loginPagePicture from "../../Assets/loginPagePicture.png";
 import { Color } from "../../Constants/Constant";
