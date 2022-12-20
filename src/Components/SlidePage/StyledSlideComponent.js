@@ -582,12 +582,22 @@ export const StyledLeftBottomQuestionContainer = styled(
   flex: 1;
   border-top: 1px solid ${Color.gray300};
 `;
-
+export const StyledLeftBottomSortQuestionContainer = styled(
+  StyledLeftBottomQuestionContainer
+)`
+  flex: 0.5;
+`;
 export const StyledBottomItem = styled.div`
   font-size: 0.8rem;
   font-weight: ${(props) => (props.isSelected ? "bold" : "light")};
   font-family: "Public Sans", sans-serif;
   cursor: pointer;
+`;
+export const StyledBottomSortItem = styled(StyledBottomItem)`
+  font-size: 0.7rem;
+  font-weight: ${(props) => (props.isSelected ? "bold" : "light")};
+  color: ${(props) => (props.isSelected ? Color.blue400 : Color.gray700)};
+  font-family: "Sora", sans-serif;
 `;
 
 export const StyledQuestionItem = styled.div`
