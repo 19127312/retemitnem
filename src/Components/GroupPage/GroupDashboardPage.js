@@ -202,7 +202,7 @@ export function GroupDashboardPage({ dashBoardPayload }) {
     onError: (error) => {
       setVisible(false);
       form.resetFields();
-      console.log(error);
+
       if (
         error.toString().includes("presentation name has already been used")
       ) {

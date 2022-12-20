@@ -6,6 +6,7 @@ const PATH = {
   REGISTER: "/auth/register",
   GOOGLE_LOGIN: "/auth/google_login",
   LOGOUT: "/auth/logout",
+  FORGOT_PASSWORD: "/auth/forgot_password",
 };
 
 const getGoogleUserInfo = async (token) => {
@@ -55,6 +56,16 @@ export const logout = async ({ refreshToken }) => {
   try {
     const response = await api.post(PATH.LOGOUT, {
       refreshToken,
+    });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+export const forgotPassword = async ({ email }) => {
+  try {
+    const response = await api.post(PATH.FORGOT_PASSWORD, {
+      email,
     });
     return response;
   } catch (error) {

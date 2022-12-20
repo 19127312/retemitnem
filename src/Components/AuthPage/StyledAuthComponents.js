@@ -15,6 +15,18 @@ export const StyledButton = styled.button`
 
   margin: ${(props) => props.marginSize || 0}rem 0 1rem 0;
 `;
+
+export const StyledForgotPasswordButton = styled.button`
+  margin-left: 270px;
+  margin-bottom: 10px;
+  color: blue;
+  border: none;
+  border-radius: 6px;
+  background-color: white;
+  font-family: "Public Sans", sans-serif;
+  cursor: pointer;
+`;
+
 export const StyledRadioItem = styled.label`
   font-family: "Public Sans", sans-serif;
   font-weight: 200;
@@ -209,4 +221,10 @@ export const StyledSignMode = styled(StyledQuestionSignUp)`
   cursor: pointer;
   margin: 0;
   text-decoration: underline;
+`;
+export const StyledGroupTitle = styled.h1`
+  font-family: Public Sans; /* Body */
+  font-size: 20px;
+  line-height: 30px;
+  color: #171a1fff;
 `;
