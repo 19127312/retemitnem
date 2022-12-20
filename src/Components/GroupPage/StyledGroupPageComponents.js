@@ -43,6 +43,8 @@ export const StyledTabContainer = styled.div`
 `;
 
 export const StyledIconShare = styled.div`
+  display: flex;
+  justify-content: space-between;
   margin-top: 20px;
   margin-right: 20px;
 `;

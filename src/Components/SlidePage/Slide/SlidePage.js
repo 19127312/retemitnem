@@ -10,6 +10,7 @@ import {
   RightOutlined,
   ExclamationCircleFilled,
   FullscreenExitOutlined,
+  UsergroupAddOutlined,
 } from "@ant-design/icons";
 import { TailSpin } from "react-loader-spinner";
 import { useMutation } from "@tanstack/react-query";
@@ -30,6 +31,7 @@ import { showMessage } from "../../Message";
 import ChatContainer from "../Chat/ChatContainer";
 import ModalShare from "../Utility/ModalShare";
 import ModalQuestionHost from "../Question/ModalQuestionHost";
+import ModalCollaboration from "../Utility/ModalCollaboration";
 
 const { Paragraph } = Typography;
 
@@ -45,6 +47,7 @@ function SlidePage() {
   const [editableStr, setEditableStr] = useState("This is an editable text.");
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [openShare, setOpenShare] = useState(false);
+  const [openCollaboration, setOpenCollaboration] = useState(false);
   const [openQuestion, setOpenQuestion] = useState(false);
   const [guideText, setGuideText] = useState(null);
   const [qaNotification, setQANotification] = useState(false);
@@ -213,6 +216,10 @@ function SlidePage() {
       }));
     }
     setSlides(newSlide);
+  };
+
+  const handleCollaboration = () => {
+    setOpenCollaboration(true);
   };
 
   const handleShare = () => {
@@ -438,6 +445,13 @@ function SlidePage() {
           handleCancel={() => setOpenShare(false)}
           handleChange={handleChange}
         />
+        <ModalCollaboration
+          id={id}
+          presentation={presentation}
+          open={openCollaboration}
+          handleCancel={() => setOpenCollaboration(false)}
+          handleChange={handleChange}
+        />
         <ModalQuestionHost
           open={openQuestion}
           handleCancel={() => setOpenQuestion(false)}
@@ -543,6 +557,13 @@ function SlidePage() {
           <SC.StyledTopRightSaving>
             {updatePresentationMutation.isLoading ? "Saving..." : "Saved"}
           </SC.StyledTopRightSaving>
+          <SC.StyledButton
+            icon={<UsergroupAddOutlined />}
+            size="large"
+            onClick={handleCollaboration}
+          >
+            Add Collaborators
+          </SC.StyledButton>
           <SC.StyledButton
             icon={<ShareAltOutlined />}
             size="large"
