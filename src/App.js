@@ -9,6 +9,7 @@ import MainPage from "./Components/MainPage/MainPage";
 import GroupPage from "./Components/GroupPage/GroupPage";
 import SlidePage from "./Components/SlidePage/Slide/SlidePage";
 import JoinLink from "./Components/JoinLink";
+import ResetPassword from "./Components/AuthPage/ResetPassword";
 import PresentationMemberPage from "./Components/SlidePage/Slide/PresentationMemberPage";
 import { SocketProvider } from "./Context/SocketProvider";
 
@@ -46,6 +47,7 @@ function App() {
           }
         />
         <Route path="/joinlink/:id" element={<JoinLink />} />
+        <Route path="/resetpassword/:id" element={<ResetPassword />} />
         <Route path="*" element={<div>404</div>} />
       </Routes>
     </QueryClientProvider>

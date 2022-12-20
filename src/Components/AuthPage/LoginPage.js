@@ -1,19 +1,21 @@
 import React, { useState, useContext } from "react";
-import { ThreeDots } from "react-loader-spinner";
+import { ThreeDots, ColorRing } from "react-loader-spinner";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Icon } from "react-icons-kit";
 import { eye } from "react-icons-kit/feather/eye";
 import { eyeOff } from "react-icons-kit/feather/eyeOff";
+import { Modal, Form, Space, Input } from "antd";
 import { useMutation } from "@tanstack/react-query";
 import { useGoogleLogin } from "@react-oauth/google";
 import * as SC from "./StyledAuthComponents";
-import { login, loginGG } from "../../API/authApi";
+import { login, loginGG, forgotPassword } from "../../API/authApi";
 import logo from "../../Assets/logo.png";
 import loginPagePicture from "../../Assets/loginPagePicture.png";
 import { Color } from "../../Constants/Constant";
 import AuthContext from "../../Context/AuthProvider";
 import GoogleLoginBtn from "../../Assets/GoogleLoginBtn.png";
+import { showMessage } from "../Message";
 
 export default function LoginPage() {
   const { state } = useLocation();
@@ -32,6 +34,10 @@ export default function LoginPage() {
 
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(eyeOff);
+  const [forgotPasswordPopup, setForgotPasswordPopup] = useState(false);
+  const [loadingForgotPassword, setLoadingForgotPassword] = useState(false);
+
+  const [form] = Form.useForm();
 
   const handleToggle = () => {
     if (type === "password") {
@@ -67,6 +73,44 @@ export default function LoginPage() {
   };
   const gotoSignup = () => {
     navigate("/register", { replace: true });
+  };
+  const handleForgotPassword = () => {
+    setForgotPasswordPopup(true);
+  };
+  const handleCancelForgotPassword = () => {
+    setForgotPasswordPopup(false);
+  };
+  const forgotPasswordMutation = useMutation(forgotPassword, {
+    onError: (error) => {
+      setForgotPasswordPopup(false);
+      form.resetFields();
+      console.log(error.toString());
+      if (error.toString().includes("This account is login with Google")) {
+        showMessage(2, "This account is login with Google");
+      } else if (error.toString().includes("Email is not exist")) {
+        showMessage(2, "Email is not exist");
+      } else {
+        showMessage(2, "Reset fail. Unknown error");
+      }
+      setLoadingForgotPassword(false);
+    },
+    onSuccess: () => {
+      setForgotPasswordPopup(false);
+      form.resetFields();
+      showMessage(0, "Please check your email to reset password");
+      setLoadingForgotPassword(false);
+    },
+  });
+
+  const onSubmitForgotPassword = async (values) => {
+    setLoadingForgotPassword(true);
+    try {
+      await forgotPasswordMutation.mutateAsync({
+        email: values.title,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const loginWithGoogle = useGoogleLogin({
@@ -111,7 +155,6 @@ export default function LoginPage() {
               <SC.StyledErrorMessage>Invalid Email</SC.StyledErrorMessage>
             )}
           </SC.StyledInputBox>
-
           <SC.StyledInputBox>
             <SC.StyledErrorBox hasError={errors.password}>
               <SC.StyledLabel htmlFor="password">Password</SC.StyledLabel>
@@ -156,7 +199,59 @@ export default function LoginPage() {
             </SC.StyledButton>
           )}
         </SC.AuthFormContainer>
-
+        <SC.StyledForgotPasswordButton onClick={handleForgotPassword}>
+          Forgot password ?
+        </SC.StyledForgotPasswordButton>
+        <Modal
+          open={forgotPasswordPopup}
+          onOk={form.submit}
+          onCancel={handleCancelForgotPassword}
+        >
+          <Form
+            form={form}
+            onFinish={onSubmitForgotPassword}
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
+          >
+            <Form.Item>
+              <SC.StyledGroupTitle>Forgot Password</SC.StyledGroupTitle>
+            </Form.Item>
+            <Form.Item label="Your email">
+              <Space>
+                <Form.Item
+                  name="title"
+                  noStyle
+                  rules={[
+                    {
+                      required: true,
+                      pattern: /^\S+@\S+$/i,
+                      message: "Please check your input",
+                    },
+                  ]}
+                >
+                  <Input style={{ width: 160 }} placeholder="Please input" />
+                </Form.Item>
+                {loadingForgotPassword ? (
+                  <ColorRing
+                    visible
+                    height="25"
+                    width="25"
+                    ariaLabel="blocks-loading"
+                    wrapperStyle={{}}
+                    wrapperClass="blocks-wrapper"
+                    colors={[
+                      "#e15b64",
+                      "#f47e60",
+                      "#f8b26a",
+                      "#abbd81",
+                      "#849b87",
+                    ]}
+                  />
+                ) : null}
+              </Space>
+            </Form.Item>
+          </Form>
+        </Modal>
         <SC.StyledQuestionSignUp>
           Already have an account ?
         </SC.StyledQuestionSignUp>

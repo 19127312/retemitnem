@@ -7,6 +7,7 @@ const PATH = {
   UPDATE_NAME: "/user/changename",
   UPDATE_PASSWORD: "/user/changepassword",
   CHECKTYPE: "/user/checkType",
+  RESET_PASSWORD: "/user/resetPassword",
 };
 
 export const getProfile = async () => {
@@ -54,6 +55,18 @@ export const changePassword = async ({ userID, oldPassword, newPassword }) => {
 export const checkType = async ({ userID }) => {
   try {
     const response = await api.post(PATH.CHECKTYPE, { userID });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const resetPassword = async ({ userID, newPassword }) => {
+  try {
+    const response = await api.post(PATH.RESET_PASSWORD, {
+      userID,
+      newPassword,
+    });
     return response;
   } catch (error) {
     throw Error(error.response.data);
