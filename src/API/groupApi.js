@@ -9,6 +9,7 @@ const PATH = {
   DELETE_MEMBER: "/group/deletemember",
   ADD_MEMBER: "/group/addmember",
   CHECK_MEMBER_IN_GROUP: "/group/check",
+  DELETE: "group/delete",
 };
 
 export const checkMemberInGroup = async ({ groupID, memberID }) => {
@@ -90,6 +91,17 @@ export const addMember = async ({ groupID, memberID }) => {
     const response = await api.post(PATH.ADD_MEMBER, {
       groupID,
       memberID,
+    });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const deleteGroup = async ({ groupID }) => {
+  try {
+    const response = await api.post(PATH.DELETE, {
+      groupID,
     });
     return response;
   } catch (error) {
