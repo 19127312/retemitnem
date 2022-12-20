@@ -251,7 +251,7 @@ export function GroupListPage() {
         id="scrollableDiv"
         style={{
           boxSizing: "border-box",
-          height: "1000px",
+          height: "100%",
           margin: "0px 35px 20px 35px",
           maxWidth: "100%",
           overflowX: "hidden",

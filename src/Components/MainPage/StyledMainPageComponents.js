@@ -4,10 +4,9 @@ import { Tabs } from "antd";
 export const StyledPageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
   width: 100vw;
   max-width: 100%;
-  overflow-x: hidden;
 `;
 
 export const StyledIconContainer = styled.div`
@@ -44,7 +43,6 @@ export const StyledImageContainer = styled.img`
 `;
 
 export const StyledUtilitiesContainer = styled.div`
-  margin-top: 25px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -121,11 +119,12 @@ export const StyledLogoName = styled.h1`
 `;
 
 export const StyledTabContainer = styled.div`
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100vw;
+  width: 100%;
+  height: 100%;
+  flex: 1;
 `;
 
 export const StyledTabs = styled(Tabs)`

@@ -7,11 +7,13 @@ import { useNavigate } from "react-router-dom";
 import { ColorRing } from "react-loader-spinner";
 import * as SC from "./StyledGroupPageComponents";
 import playSlide from "../../Assets/playSlide.png";
+import playingBtn from "../../Assets/playingBtn.png";
 import {
   createPresentation,
   deletePresentations,
   updatePresentation,
   viewPresentationInfoByGroupID,
+  setPlayingPresentation,
 } from "../../API/presentationApi";
 import { showMessage } from "../Message";
 import AuthContext from "../../Context/AuthProvider";
@@ -33,10 +35,15 @@ export function GroupDashboardPage({ dashBoardPayload }) {
     for (let i = 0; i < presentations.length; i++) {
       if (presentations[i]._id === key) {
         presentations[i].playSlide = 0;
+        presentations[i].isPlayingInGroup = true;
         presentation = presentations[i];
         break;
       }
     }
+    await setPlayingPresentation({
+      presentationID: key,
+      groupID: dashBoardPayload._id,
+    });
     await updatePresentation({ presentation });
   };
   const handleNavigateSlidePage = (key) => {
@@ -57,7 +64,7 @@ export function GroupDashboardPage({ dashBoardPayload }) {
         >
           {currentUserRoleInGroup === "member" ? null : (
             <SC.StyledImagePlay
-              src={playSlide}
+              src={record.isPlayingInGroup ? playingBtn : playSlide}
               alt="playSlide"
               onClick={() => handleClickPlay(record.key)}
             />
@@ -99,6 +106,7 @@ export function GroupDashboardPage({ dashBoardPayload }) {
           owner: item.ownerName,
           created: item.createdDate.toString().split("T")[0],
           number: item.slides.length,
+          isPlayingInGroup: item.isPlayingInGroup,
         };
       });
       setRawData(presentationData);
