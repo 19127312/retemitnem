@@ -26,6 +26,7 @@ import { BarChart } from "../Utility/BarChart";
 import {
   viewPresentationInfoByPresentationID,
   updatePresentation,
+  setPlayingPresentation,
 } from "../../../API/presentationApi";
 import { showMessage } from "../../Message";
 import ChatContainer from "../Chat/ChatContainer";
@@ -226,13 +227,17 @@ function SlidePage() {
     setOpenShare(true);
   };
 
-  const handlePlay = () => {
+  const handlePlay = async () => {
     setPresentation((pre) => ({
       ...pre,
       playSlide: pre.currentSlide,
     }));
     // handle.enter();
     setIsFullScreen(true);
+    await setPlayingPresentation({
+      presentationID: id,
+      groupID: presentation.groupID,
+    });
     showMessage(1, "Press ESC to escape full screen");
   };
 

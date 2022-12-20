@@ -7,6 +7,7 @@ const PATH = {
   CREATE_PRESENTATION: "/presentation/add",
   DELETE_PRESENTATIONS: "/presentation/delete",
   PRESENTATION_INFO_BY_USER_ID: "presentation/viewByCurrentLoggedInUser",
+  SET_PLAYING_PRESENTATION: "/presentation/setPlayingInGroup",
 };
 
 export const viewPresentationInfoByGroupID = async ({ groupID }) => {
@@ -70,6 +71,19 @@ export const viewPresentationInfoByCurrentLoggedInUser = async ({ userID }) => {
     const response = await api.get(
       `${PATH.PRESENTATION_INFO_BY_USER_ID}/${userID}`
     );
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const setPlayingPresentation = async ({ groupID, presentationID }) => {
+  console.log(groupID, presentationID);
+  try {
+    const response = await api.post(PATH.SET_PLAYING_PRESENTATION, {
+      groupID,
+      presentationID,
+    });
     return response;
   } catch (error) {
     throw Error(error.response.data);

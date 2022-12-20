@@ -193,7 +193,7 @@ export default function MainPage() {
           size="large"
           centered
           style={{
-            width: "80%",
+            width: "90%",
           }}
           items={items}
         />
