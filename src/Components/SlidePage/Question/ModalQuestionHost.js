@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Modal } from "antd";
 import {
   LikeTwoTone,
@@ -23,9 +23,12 @@ function ModalQuestionHost({
   const { socket } = useContext(SocketContext);
 
   const [selectedMode, setSelectedMode] = useState("Questions");
+  const [selectedSort, setSelectedSort] = useState("Newest");
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [data, setData] = useState([]);
   const [showData, setShowData] = useState([]);
+  const selectedSortRef = useRef("Newest");
+
   useEffect(() => {
     socket.on("onReceiveQuestion", (receiveQuestion) => {
       setQANotification(true);
@@ -33,12 +36,22 @@ function ModalQuestionHost({
         if (prev.length === 0) {
           setSelectedQuestion(receiveQuestion);
         }
+        if (selectedSortRef.current === "Newest") {
+          console.log("new");
+
+          return [receiveQuestion, ...prev];
+        }
+        if (selectedSortRef.current === "Liked") {
+          console.log("like");
+          return [receiveQuestion, ...prev].sort(
+            (a, b) => b.countLike - a.countLike
+          );
+        }
         return [receiveQuestion, ...prev];
       });
     });
 
     socket.on("onUpdateQuestion", (updateQuestionItem) => {
-      console.log(updateQuestionItem);
       setData((prev) => {
         const newData = prev.map((item) => {
           if (item._id === updateQuestionItem._id) {
@@ -79,6 +92,23 @@ function ModalQuestionHost({
       setShowData(data.filter((item) => item.isAnswered));
     }
   }, [selectedMode, data]);
+  useEffect(() => {
+    if (selectedSort === "Newest") {
+      selectedSortRef.current = "Newest";
+      setData((prev) => {
+        const newData = [...prev];
+        newData.sort((a, b) => new Date(b.sentTime) - new Date(a.sentTime));
+        return newData;
+      });
+    } else {
+      selectedSortRef.current = "Liked";
+      setData((prev) => {
+        const newData = [...prev];
+        newData.sort((a, b) => b.countLike - a.countLike);
+        return newData;
+      });
+    }
+  }, [selectedSort]);
 
   const updateQuestionMutation = useMutation(updateQuestion, {
     onSuccess: (updateQuestionItem) => {
@@ -268,6 +298,20 @@ function ModalQuestionHost({
             )}
             {listQuestionRender()}
           </SC.StyledLeftTopQuestionContainer>
+          <SC.StyledLeftBottomSortQuestionContainer>
+            <SC.StyledBottomSortItem
+              isSelected={selectedSort === "Newest"}
+              onClick={() => setSelectedSort("Newest")}
+            >
+              Newest
+            </SC.StyledBottomSortItem>
+            <SC.StyledBottomSortItem
+              isSelected={selectedSort === "Liked"}
+              onClick={() => setSelectedSort("Liked")}
+            >
+              Most Liked
+            </SC.StyledBottomSortItem>
+          </SC.StyledLeftBottomSortQuestionContainer>
           <SC.StyledLeftBottomQuestionContainer>
             <SC.StyledBottomItem
               isSelected={selectedMode === "Questions"}
