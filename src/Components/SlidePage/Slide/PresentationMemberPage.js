@@ -35,6 +35,8 @@ function PresentationMemberPage() {
     ],
   });
   const [isVisible, setIsVisible] = useState(true);
+  const [isVisiblePlaying, setIsVisiblePlaying] = useState(true);
+
   const { auth } = useContext(AuthContext);
 
   useEffect(() => {
@@ -47,7 +49,6 @@ function PresentationMemberPage() {
           setPresentation(response.data);
           playSlideRef.current = response.data.playSlide;
           socket.emit("join_presentation", id);
-          console.log("SET PLAYSIDE", response.data.playSlide);
         }
       } catch (error) {
         showMessage(2, error.message);
@@ -134,9 +135,20 @@ function PresentationMemberPage() {
       }
       setPresentation(data);
     });
+    socket.on("onPausePresentation", () => {
+      setPresentation((pre) => {
+        return { ...pre, isPlayingInGroup: false };
+      });
+    });
+    socket.on("onPlayPresentation", () => {
+      setPresentation((pre) => {
+        return { ...pre, isPlayingInGroup: true };
+      });
+    });
     return () => {
       socket.off("onSubmitResult");
       socket.off("onUpdatePresentation");
+      socket.off("onPausePresentation");
     };
   }, []);
 
@@ -151,6 +163,11 @@ function PresentationMemberPage() {
           setIsVisible(false);
         } else {
           setIsVisible(true);
+          if (presentation.isPlayingInGroup === false) {
+            setIsVisiblePlaying(false);
+          } else {
+            setIsVisiblePlaying(true);
+          }
         }
       } catch (error) {
         console.error(error.message);
@@ -198,7 +215,15 @@ function PresentationMemberPage() {
       });
     }
   };
+
   const renderPage = (slideType) => {
+    if (isVisiblePlaying === false) {
+      return (
+        <SC.StyledQuestionPresentation>
+          This presentation is not playing in group
+        </SC.StyledQuestionPresentation>
+      );
+    }
     if (!isVisible) {
       return (
         <SC.StyledQuestionPresentation>
@@ -206,6 +231,7 @@ function PresentationMemberPage() {
         </SC.StyledQuestionPresentation>
       );
     }
+
     if (isVisible && slideType === "Multiple Choice") {
       return (
         <SC.StyledRadioContainer>

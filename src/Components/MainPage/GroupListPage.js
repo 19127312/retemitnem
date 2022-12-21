@@ -44,6 +44,17 @@ export function GroupListPage() {
     }
     return false;
   };
+  const fetchData = async () => {
+    try {
+      setLoadingGroups(true);
+      const response = await groupInfo();
+      setRawData(response.data);
+      setLoadingGroups(false);
+      // filterAndSearchData();
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
   const filterAndSearchData = (allData) => {
     const filteredData = [];
     for (let i = 0; i < allData.length; i++) {
@@ -74,23 +85,13 @@ export function GroupListPage() {
             groupID,
             memberID: auth?.user?._id,
           });
+          fetchData();
         }
       } catch (error) {
         console.log(error);
       }
     };
 
-    const fetchData = async () => {
-      try {
-        setLoadingGroups(true);
-        const response = await groupInfo();
-        setRawData(response.data);
-        setLoadingGroups(false);
-        // filterAndSearchData();
-      } catch (error) {
-        console.error(error.message);
-      }
-    };
     joinGroupID();
     fetchData();
   }, []);
@@ -132,11 +133,6 @@ export function GroupListPage() {
       setVisible(false);
       form.resetFields();
       showMessage(0, "Create group successfully");
-      const fetchData = async () => {
-        const response = await groupInfo();
-        setRawData(response.data);
-      };
-
       fetchData();
       setLoadingGroups(false);
     },

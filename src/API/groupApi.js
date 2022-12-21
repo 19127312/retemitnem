@@ -10,6 +10,7 @@ const PATH = {
   ADD_MEMBER: "/group/addmember",
   CHECK_MEMBER_IN_GROUP: "/group/check",
   DELETE: "group/delete",
+  GROUP_INFO_BY_OWNER: "/group/infoOwner",
 };
 
 export const checkMemberInGroup = async ({ groupID, memberID }) => {
@@ -104,6 +105,16 @@ export const deleteGroup = async ({ groupID }) => {
       groupID,
     });
     return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+export const viewAllGroupOfOwnerPresentation = async ({ ownerID }) => {
+  try {
+    const response = await api.post(PATH.GROUP_INFO_BY_OWNER, {
+      ownerID,
+    });
+    return response.data;
   } catch (error) {
     throw Error(error.response.data);
   }

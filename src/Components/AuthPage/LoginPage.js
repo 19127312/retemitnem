@@ -18,8 +18,7 @@ import GoogleLoginBtn from "../../Assets/GoogleLoginBtn.png";
 import { showMessage } from "../Message";
 
 export default function LoginPage() {
-  const { state } = useLocation();
-  const { message } = state;
+  const message = useLocation().state?.message;
 
   const { setAuth } = useContext(AuthContext);
   const {

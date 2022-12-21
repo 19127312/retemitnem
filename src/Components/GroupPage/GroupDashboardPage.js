@@ -17,9 +17,11 @@ import {
 } from "../../API/presentationApi";
 import { showMessage } from "../Message";
 import AuthContext from "../../Context/AuthProvider";
+import SocketContext from "../../Context/SocketProvider";
 
 export function GroupDashboardPage({ dashBoardPayload }) {
   const navigate = useNavigate();
+  const { socket } = useContext(SocketContext);
   const { Search } = Input;
   const [loadingPresentation, setLoadingPresentation] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -29,8 +31,13 @@ export function GroupDashboardPage({ dashBoardPayload }) {
   const { auth } = useContext(AuthContext);
   const [presentations, setPresentations] = useState(null);
   const [currentUserRoleInGroup, setCurrentUserRoleInGroup] = useState(null);
+  const [slideData, setSlideData] = useState([]);
+  const [rawData, setRawData] = useState([]);
 
-  const handleClickPlay = async (key) => {
+  const handleClickPlay = async (key, name) => {
+    if (currentUserRoleInGroup === "member") {
+      return;
+    }
     let presentation = null;
     for (let i = 0; i < presentations.length; i++) {
       if (presentations[i]._id === key) {
@@ -40,11 +47,22 @@ export function GroupDashboardPage({ dashBoardPayload }) {
         break;
       }
     }
+    for (let i = 0; i < presentations.length; i++) {
+      socket.emit("pausePresentation", {
+        _id: presentations[i]._id,
+      });
+    }
     await setPlayingPresentation({
       presentationID: key,
       groupID: dashBoardPayload._id,
     });
     await updatePresentation({ presentation });
+    socket.emit("playPresentation", {
+      _id: dashBoardPayload._id,
+      presentationID: key,
+      name,
+    });
+    navigate(`/slide/${key}`, { replace: false });
   };
   const handleNavigateSlidePage = (key) => {
     if (currentUserRoleInGroup === "member") {
@@ -62,13 +80,15 @@ export function GroupDashboardPage({ dashBoardPayload }) {
         <SC.StyledItemSlideListContainer
           onClick={() => handleNavigateSlidePage(record.key)}
         >
-          {currentUserRoleInGroup === "member" ? null : (
-            <SC.StyledImagePlay
-              src={record.isPlayingInGroup ? playingBtn : playSlide}
-              alt="playSlide"
-              onClick={() => handleClickPlay(record.key)}
-            />
-          )}
+          <SC.StyledImagePlay
+            src={record.isPlayingInGroup ? playingBtn : playSlide}
+            alt="playSlide"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClickPlay(record.key, record.name);
+            }}
+          />
+
           <SC.StyledItemInfoSlideListContainer>
             <div>{record.name}</div>
             <div>{record.number} slide</div>
@@ -89,8 +109,6 @@ export function GroupDashboardPage({ dashBoardPayload }) {
       width: "25%",
     },
   ];
-  const [slideData, setSlideData] = useState([]);
-  const [rawData, setRawData] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -125,16 +143,6 @@ export function GroupDashboardPage({ dashBoardPayload }) {
       }
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    checkCurrentUserRole();
-  }, []);
-
-  useEffect(() => {}, []);
   const searchData = (allData) => {
     const filteredData = [];
     for (let i = 0; i < allData.length; i++) {
@@ -144,10 +152,39 @@ export function GroupDashboardPage({ dashBoardPayload }) {
     }
     setSlideData(filteredData);
   };
+  useEffect(() => {
+    fetchData();
+    checkCurrentUserRole();
+  }, [dashBoardPayload]);
+
+  useEffect(() => {
+    socket.emit("enterGroup", dashBoardPayload._id);
+  }, [dashBoardPayload]);
 
   useEffect(() => {
     searchData(rawData);
   }, [search, rawData]);
+
+  useEffect(() => {
+    socket.on("onPlayPresentation", (data) => {
+      setRawData((prev) => {
+        const newData = prev.map((item) => {
+          if (item.key === data._id) {
+            return {
+              ...item,
+              isPlayingInGroup: true,
+            };
+          }
+          return { ...item, isPlayingInGroup: false };
+        });
+        return newData;
+      });
+      showMessage(0, `${data.name} is playing at the moment`);
+    });
+    return () => {
+      socket.off("onPlayPresentation");
+    };
+  }, []);
 
   // rowSelection objects indicates the need for row selection
   const rowSelection = {

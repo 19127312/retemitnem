@@ -28,7 +28,14 @@ function App() {
 
         <Route element={<PrivateRoutes />}>
           <Route path="/" element={<MainPage />} />
-          <Route path="/group/:id" element={<GroupPage />} />
+          <Route
+            path="/group/:id"
+            element={
+              <SocketProvider>
+                <GroupPage />
+              </SocketProvider>
+            }
+          />
           <Route
             path="/slide/:id"
             element={
