@@ -63,7 +63,6 @@ function ModalShare({
   //     showMessage(1, "Link copied to clipboard");
   //   }
   // };
-  console.log("options", options);
   return (
     <Modal
       open={open}
