@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Button, Select } from "antd";
 import * as SC from "../StyledSlideComponent";
 import { showMessage } from "../../Message";
+import { viewAllGroupOfOwnerPresentation } from "../../../API/groupApi";
 
 function ModalShare({
   id,
@@ -9,24 +10,60 @@ function ModalShare({
   open,
   handleCancel,
   handleChange,
+  handleChangeGroupID,
   guideText,
 }) {
   if (!presentation) {
     return null;
   }
+  const [options, setOptions] = useState([]);
+  const [defaultOption, setDefaultOption] = useState("Pick a group");
+  useEffect(() => {
+    // const options = [];
+    // const groups = JSON.parse(localStorage.getItem("groups"));
+    // groups.forEach((group) => {
+    //   options.push({
+    //     value: group.groupID,
+    //     label: group.groupName,
+    //   });
+    // });
+    // setOptions(options);
+    const fetchData = async () => {
+      try {
+        const response = await viewAllGroupOfOwnerPresentation({
+          ownerID: presentation.ownerID,
+        });
+        const initialOptions = [];
+        response.forEach((group) => {
+          initialOptions.push({
+            value: group._id,
+            label: group.groupName,
+          });
+          if (presentation.groupID === group._id) {
+            setDefaultOption(group.groupName);
+          }
+        });
+        setOptions(initialOptions);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [presentation]);
+
   const handleOk = () => {
     navigator.clipboard.writeText(`${window.location.host}/presentation/${id}`);
     showMessage(1, "Link copied to clipboard");
   };
-  const handleClickHere = () => {
-    if (presentation) {
-      navigator.clipboard.writeText(
-        `${window.location.host}/joinLink/${presentation.groupID}`
-      );
-      showMessage(1, "Link copied to clipboard");
-    }
-  };
-
+  // const handleClickHere = () => {
+  //   if (presentation) {
+  //     navigator.clipboard.writeText(
+  //       `${window.location.host}/joinLink/${presentation.groupID}`
+  //     );
+  //     showMessage(1, "Link copied to clipboard");
+  //   }
+  // };
+  console.log("options", options);
   return (
     <Modal
       open={open}
@@ -71,23 +108,15 @@ function ModalShare({
             <SC.StyledGuideTitle>
               Shared with specific people on a group.
             </SC.StyledGuideTitle>
-            <SC.StyledGuideTitle>
-              Click{" "}
-              <span
-                style={{
-                  cursor: "pointer",
-                  color: "#33a9d4",
-                  fontWeight: "bold",
-                }}
-                onClick={() => {
-                  handleClickHere();
-                }}
-                aria-hidden="true"
-              >
-                here
-              </span>{" "}
-              to copy group invitation link.
-            </SC.StyledGuideTitle>
+            <SC.StyledSelectContainer style={{ width: "90%" }}>
+              <SC.StyledGuideTitle>Choose Group</SC.StyledGuideTitle>
+              <Select
+                defaultValue={options.length > 0 ? defaultOption : "No group"}
+                style={{ width: 220 }}
+                onChange={handleChangeGroupID}
+                options={options}
+              />
+            </SC.StyledSelectContainer>
           </>
         ) : (
           <SC.StyledGuideTitle>

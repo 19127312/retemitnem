@@ -356,22 +356,25 @@ export const StyledGuideTitle = styled.p`
   font-size: 14px;
   line-height: 20px;
   color: #171a1fff;
+  margin: 0px;
 `;
 
 export const StyledSelectContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin: 20px 25px;
   align-items: center;
+  margin: 20px 25px;
 `;
 
 export const StyledCenterContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 20px 10px 0px 10px;
+  margin-top: 20px 10px 20px 10px;
+
   align-items: center;
+  width: 100%;
 `;
 
 export const StyledLeftRightContainer = styled.div`

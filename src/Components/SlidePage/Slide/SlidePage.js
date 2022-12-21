@@ -27,6 +27,7 @@ import {
   viewPresentationInfoByPresentationID,
   updatePresentation,
   setPlayingPresentation,
+  viewPresentationInfoByGroupID,
 } from "../../../API/presentationApi";
 import { showMessage } from "../../Message";
 import ChatContainer from "../Chat/ChatContainer";
@@ -232,12 +233,21 @@ function SlidePage() {
       ...pre,
       playSlide: pre.currentSlide,
     }));
-    // handle.enter();
     setIsFullScreen(true);
     await setPlayingPresentation({
       presentationID: id,
       groupID: presentation.groupID,
     });
+    const response = await viewPresentationInfoByGroupID({
+      groupID: presentation.groupID,
+    });
+    for (let i = 0; i < response.data.length; i++) {
+      if (response.data[i]._id !== id) {
+        socket.emit("pausePresentation", { _id: response.data[i]._id });
+      }
+    }
+    socket.emit("playPresentation", { _id: id, name: presentation.title });
+
     showMessage(1, "Press ESC to escape full screen");
   };
 
@@ -438,6 +448,12 @@ function SlidePage() {
       setGuideText(false);
     }
   };
+  const handleChangeGroupID = (value) => {
+    setPresentation((prev) => ({
+      ...prev,
+      groupID: value,
+    }));
+  };
 
   const middleRender = () => {
     return (
@@ -449,6 +465,7 @@ function SlidePage() {
           guideText={guideText}
           handleCancel={() => setOpenShare(false)}
           handleChange={handleChange}
+          handleChangeGroupID={handleChangeGroupID}
         />
         <ModalCollaboration
           id={id}
@@ -569,10 +586,12 @@ function SlidePage() {
           >
             Add Collaborators
           </SC.StyledButton>
+
           <SC.StyledButton
             icon={<ShareAltOutlined />}
             size="large"
             onClick={handleShare}
+            disabled={auth.user._id !== presentation?.ownerID}
           >
             Share
           </SC.StyledButton>
