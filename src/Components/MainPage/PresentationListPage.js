@@ -69,7 +69,6 @@ export function PresentationListPage() {
     },
   });
   const handleDelete = async (record) => {
-    console.log(record.id);
     setLoadingPresentation(true);
     await deletePresentationsMutation.mutateAsync({
       presentationIDs: [record.key],

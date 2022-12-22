@@ -714,3 +714,14 @@ export const StyledRemoveImageButton = styled(Button)`
   margin-top: 10px;
   margin-left: 230px;
 `;
+
+export const StyledDashboardContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const StyledAddCollabContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;

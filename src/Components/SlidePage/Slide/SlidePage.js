@@ -455,6 +455,26 @@ function SlidePage() {
     }));
   };
 
+  const handleCollab = (value) => {
+    setPresentation((prev) => ({
+      ...prev,
+      collaborators: [...prev.collaborators, value],
+    }));
+  };
+
+  const handleDeleteCollab = (value) => {
+    const newCollaborators = presentation.collaborators;
+    const index = newCollaborators.indexOf(value);
+    if (index > -1) {
+      newCollaborators.splice(index, 1);
+    }
+    setPresentation((prev) => ({
+      ...prev,
+      collaborators: newCollaborators,
+    }));
+    showMessage(0, "Delete Collaborator successfully");
+  };
+
   const middleRender = () => {
     return (
       <SC.StyledMidContainer>
@@ -472,7 +492,8 @@ function SlidePage() {
           presentation={presentation}
           open={openCollaboration}
           handleCancel={() => setOpenCollaboration(false)}
-          handleChange={handleChange}
+          handleCollab={handleCollab}
+          handleDeleteCollab={handleDeleteCollab}
         />
         <ModalQuestionHost
           open={openQuestion}
@@ -583,6 +604,7 @@ function SlidePage() {
             icon={<UsergroupAddOutlined />}
             size="large"
             onClick={handleCollaboration}
+            disabled={auth.user._id !== presentation?.ownerID}
           >
             Add Collaborators
           </SC.StyledButton>

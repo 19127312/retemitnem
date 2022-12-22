@@ -8,6 +8,9 @@ const PATH = {
   DELETE_PRESENTATIONS: "/presentation/delete",
   PRESENTATION_INFO_BY_USER_ID: "presentation/viewByCurrentLoggedInUser",
   SET_PLAYING_PRESENTATION: "/presentation/setPlayingInGroup",
+  VIEW_COLLABORATORS: "/presentation/collaborator",
+  VALID_COLLABORATORS: "presentation/isValidCollaborator",
+  KICK_PRESENTATIONS: "/presentation/kick",
 };
 
 export const viewPresentationInfoByGroupID = async ({ groupID }) => {
@@ -83,6 +86,44 @@ export const setPlayingPresentation = async ({ groupID, presentationID }) => {
     const response = await api.post(PATH.SET_PLAYING_PRESENTATION, {
       groupID,
       presentationID,
+    });
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const viewCollaborators = async ({ presentationID }) => {
+  try {
+    const response = await api.get(
+      `${PATH.VIEW_COLLABORATORS}/${presentationID}`
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw Error(error.response.data.errorMessage);
+  }
+};
+
+export const isValidCollaborator = async ({
+  email,
+  currentUserEmail,
+  presentationID,
+}) => {
+  try {
+    const response = await api.get(
+      `${PATH.VALID_COLLABORATORS}/${email}/${currentUserEmail}/${presentationID}`
+    );
+    return response;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const kickPresentations = async ({ presentationIDs }) => {
+  try {
+    const response = await api.post(PATH.KICK_PRESENTATIONS, {
+      presentationIDs,
     });
     return response;
   } catch (error) {
