@@ -10,10 +10,10 @@ import playSlide from "../../Assets/playSlide.png";
 import playingBtn from "../../Assets/playingBtn.png";
 import {
   createPresentation,
-  deletePresentations,
   updatePresentation,
   viewPresentationInfoByGroupID,
   setPlayingPresentation,
+  kickPresentations,
 } from "../../API/presentationApi";
 import { showMessage } from "../Message";
 import AuthContext from "../../Context/AuthProvider";
@@ -208,15 +208,15 @@ export function GroupDashboardPage({ dashBoardPayload }) {
     setSearch(value);
   };
 
-  const deletePresentationsMutation = useMutation(deletePresentations, {
+  const deletePresentationsMutation = useMutation(kickPresentations, {
     onError: (error) => {
       console.log(error);
-      showMessage(2, "Delete failed. Unknown error");
+      showMessage(2, "Remove failed. Unknown error");
       setLoadingPresentation(false);
     },
     onSuccess: () => {
       setVisible(false);
-      showMessage(0, "Delete selected presentations successfully");
+      showMessage(0, "Remove selected presentations successfully");
       fetchData();
       setSelectedRecord([]);
       setLoadingPresentation(false);
@@ -313,7 +313,7 @@ export function GroupDashboardPage({ dashBoardPayload }) {
               style={{ marginLeft: 16 }}
               onClick={() => onSubmitDeletePresentations()}
             >
-              Delete
+              Remove From Group
             </Button>
           ) : null}
         </SC.StyledToolBarDashboardContainer>

@@ -21,12 +21,17 @@ import { ColorRing } from "react-loader-spinner";
 import { showMessage } from "../Message";
 import { groupInfo, createGroup, addMember } from "../../API/groupApi";
 import * as SC from "./StyledMainPageComponents";
+import image1 from "../../Assets/Background/1.jpg";
+import image2 from "../../Assets/Background/2.jpg";
+import image3 from "../../Assets/Background/3.jpg";
+import image4 from "../../Assets/Background/4.jpg";
+import image5 from "../../Assets/Background/5.jpg";
 import AuthContext from "../../Context/AuthProvider";
 
 const { Search } = Input;
 const { Meta } = Card;
 export function GroupListPage() {
-  const { auth, imageUrls } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
@@ -35,6 +40,7 @@ export function GroupListPage() {
   const [filter, setFilter] = useState("All Groups");
   const [loadingGroups, setLoadingGroups] = useState(false);
   const navigate = useNavigate();
+  const images = [image1, image2, image3, image4, image5];
 
   const checkExist = (element, userID) => {
     for (let i = 0; i < element.members.length; i++) {
@@ -295,9 +301,10 @@ export function GroupListPage() {
                       width="262"
                       height="159"
                       alt="example"
-                      src={
-                        imageUrls[Math.floor(Math.random() * imageUrls.length)]
-                      }
+                      // src={
+                      //   imageUrls[Math.floor(Math.random() * imageUrls.length)]
+                      // }
+                      src={images[Math.floor(Math.random() * images.length)]}
                     />
                   }
                   actions={[
@@ -320,7 +327,11 @@ export function GroupListPage() {
                   }}
                 >
                   <Meta
-                    avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
+                    avatar={
+                      <Avatar
+                        src={images[Math.floor(Math.random() * images.length)]}
+                      />
+                    }
                     title={item.groupName}
                     description={item.creatorName}
                   />
