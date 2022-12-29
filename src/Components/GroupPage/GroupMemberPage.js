@@ -1,11 +1,16 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { ReactMultiEmail } from "react-multi-email";
 import "antd/dist/antd.min.css";
 import { Button, Dropdown, Popconfirm, Table, Space, Menu, Modal } from "antd";
 import { useMutation } from "@tanstack/react-query";
 import { PlusOutlined, DownOutlined } from "@ant-design/icons";
 import { ColorRing } from "react-loader-spinner";
-import { changeRole, deleteMember, sendlinktoemail } from "../../API/groupApi";
+import {
+  changeRole,
+  checkMemberRoleInGroup,
+  deleteMember,
+  sendlinktoemail,
+} from "../../API/groupApi";
 import * as SC from "./StyledGroupPageComponents";
 import "react-multi-email/style.css";
 import AuthContext from "../../Context/AuthProvider";
@@ -17,7 +22,21 @@ export function GroupMemberPage({ memberPayload }) {
   const [visible, setVisible] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const { auth } = useContext(AuthContext);
-
+  const [currentRole, setCurrentRole] = useState("");
+  useEffect(() => {
+    const checkMemberRole = async () => {
+      try {
+        const response = await checkMemberRoleInGroup({
+          groupID: memberPayload._id,
+          memberID: auth.user._id,
+        });
+        setCurrentRole(response.data.role);
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+    checkMemberRole();
+  }, []);
   const members = memberPayload.members.map((item) => {
     return {
       name: item.memberName,
@@ -133,9 +152,13 @@ export function GroupMemberPage({ memberPayload }) {
             title="Sure to delete?"
             onConfirm={() => handleDelete(record)}
           >
-            {record.role === "owner" ? null : <a href="null">Delete</a>}
+            {record.role === "member" ||
+            (currentRole === "owner" && record.role === "co-owner") ? (
+              <a href="null">Delete</a>
+            ) : null}
           </Popconfirm>
-          {record.role === "owner" ? null : (
+          {record.role === "member" ||
+          (currentRole === "owner" && record.role === "co-owner") ? (
             <Dropdown overlay={menu(record)} trigger={["click"]}>
               <a
                 href="null"
@@ -145,7 +168,7 @@ export function GroupMemberPage({ memberPayload }) {
                 Change role <DownOutlined />
               </a>
             </Dropdown>
-          )}
+          ) : null}
           {changeRoleMutation.isLoading && record.id === selectedRow ? (
             <ColorRing
               visible

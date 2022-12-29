@@ -11,6 +11,7 @@ const PATH = {
   CHECK_MEMBER_IN_GROUP: "/group/check",
   DELETE: "group/delete",
   GROUP_INFO_BY_OWNER: "/group/infoOwner",
+  CHECK_CURRENT_ROLE: "group/checkRole",
 };
 
 export const checkMemberInGroup = async ({ groupID, memberID }) => {
@@ -115,6 +116,18 @@ export const viewAllGroupOfOwnerPresentation = async ({ ownerID }) => {
       ownerID,
     });
     return response.data;
+  } catch (error) {
+    throw Error(error.response.data);
+  }
+};
+
+export const checkMemberRoleInGroup = async ({ groupID, memberID }) => {
+  try {
+    const response = await api.post(PATH.CHECK_CURRENT_ROLE, {
+      groupID,
+      memberID,
+    });
+    return response;
   } catch (error) {
     throw Error(error.response.data);
   }
