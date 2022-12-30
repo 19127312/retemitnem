@@ -28,6 +28,7 @@ function ModalQuestionHost({
   const [data, setData] = useState([]);
   const [showData, setShowData] = useState([]);
   const selectedSortRef = useRef("Newest");
+  const selectedQuestionRef = useRef(null);
 
   useEffect(() => {
     socket.on("onReceiveQuestion", (receiveQuestion) => {
@@ -35,14 +36,12 @@ function ModalQuestionHost({
       setData((prev) => {
         if (prev.length === 0) {
           setSelectedQuestion(receiveQuestion);
+          selectedQuestionRef.current = receiveQuestion;
         }
         if (selectedSortRef.current === "Newest") {
-          console.log("new");
-
           return [receiveQuestion, ...prev];
         }
         if (selectedSortRef.current === "Liked") {
-          console.log("like");
           return [receiveQuestion, ...prev].sort(
             (a, b) => b.countLike - a.countLike
           );
@@ -61,6 +60,12 @@ function ModalQuestionHost({
         });
         return newData;
       });
+      console.log(selectedQuestionRef.current);
+      console.log(updateQuestionItem);
+      if (selectedQuestionRef.current._id === updateQuestionItem._id) {
+        setSelectedQuestion(updateQuestionItem);
+        selectedQuestionRef.current = updateQuestionItem;
+      }
     });
     return () => {
       socket.off("onReceiveQuestion");
@@ -78,6 +83,7 @@ function ModalQuestionHost({
 
       if (numberNotAnswered > 0) {
         setSelectedQuestion(questions[0]);
+        selectedQuestionRef.current = questions[0];
       }
       setData(questions);
       setShowData(questions.filter((item) => !item.isAnswered));
@@ -149,6 +155,7 @@ function ModalQuestionHost({
   };
   const handleClickItem = (item) => {
     setSelectedQuestion(item);
+    selectedQuestionRef.current = item;
   };
   const handleMarkAsAnswered = (item) => {
     setData((prev) => {
@@ -168,9 +175,11 @@ function ModalQuestionHost({
     if (index === 0) return;
     if (index === -1) {
       setSelectedQuestion(showData[0]);
+      selectedQuestionRef.current = showData[0];
       return;
     }
     setSelectedQuestion(showData[index - 1]);
+    selectedQuestionRef.current = showData[index - 1];
   };
   const handleDown = () => {
     const index = showData.findIndex(
@@ -180,9 +189,12 @@ function ModalQuestionHost({
     if (index === showData.length - 1) return;
     if (index === -1) {
       setSelectedQuestion(showData[0]);
+      selectedQuestionRef.current = showData[0];
+
       return;
     }
     setSelectedQuestion(showData[index + 1]);
+    selectedQuestionRef.current = showData[index + 1];
   };
 
   const listQuestionRender = () => {

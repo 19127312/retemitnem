@@ -21,6 +21,7 @@ module.exports = {
     },
   },
   rules: {
+    "prefer-destructuring": ["error", { object: true, array: false }],
     "react/jsx-props-no-spreading": "off",
     "import/extensions": "off",
     "prettier/prettier": [
